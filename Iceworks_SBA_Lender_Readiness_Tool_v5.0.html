@@ -1,0 +1,2963 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Iceworks SBA / Lender Readiness Tool v5.0</title>
+  <style>
+    :root {
+      --bg: #f3f7fb;
+      --surface: #ffffff;
+      --surface-2: #f7fbfd;
+      --ink: #13213b;
+      --muted: #65758b;
+      --line: #d8e4ed;
+      --brand: #087d90;
+      --brand-dark: #06465a;
+      --brand-soft: #e6f6f8;
+      --accent: #2f6bff;
+      --good: #0f8b5f;
+      --good-bg: #e8f7f1;
+      --warn: #b7791f;
+      --warn-bg: #fff5dd;
+      --bad: #bd3039;
+      --bad-bg: #fff0f1;
+      --neutral: #536782;
+      --neutral-bg: #eef3f7;
+      --purple: #6f52ed;
+      --orange: #f97316;
+      --navy: #101b33;
+      --shadow: 0 16px 38px rgba(19, 33, 59, 0.08);
+      --radius: 18px;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at top left, rgba(8, 125, 144, 0.18), transparent 35rem),
+        linear-gradient(180deg, #eff6fa 0%, var(--bg) 35%, #ffffff 100%);
+    }
+    header {
+      color: #fff;
+      background: linear-gradient(135deg, #063645 0%, #087d90 72%);
+      padding: 34px 28px 76px;
+      border-bottom-left-radius: 28px;
+      border-bottom-right-radius: 28px;
+      box-shadow: var(--shadow);
+    }
+    .topbar {
+      max-width: 1500px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 22px;
+    }
+    h1 {
+      margin: 0;
+      font-size: clamp(30px, 4vw, 50px);
+      line-height: 0.98;
+      letter-spacing: -0.055em;
+      font-weight: 950;
+    }
+    .subtitle {
+      margin-top: 12px;
+      max-width: 900px;
+      color: rgba(255, 255, 255, 0.86);
+      font-size: 16px;
+      line-height: 1.45;
+      font-weight: 650;
+    }
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 9px 13px;
+      border-radius: 999px;
+      border: 1px solid rgba(255, 255, 255, 0.22);
+      background: rgba(255, 255, 255, 0.13);
+      color: rgba(255, 255, 255, 0.94);
+      font-size: 12px;
+      font-weight: 900;
+      white-space: nowrap;
+    }
+    main {
+      max-width: 1500px;
+      margin: -54px auto 70px;
+      padding: 0 24px;
+    }
+    .card {
+      background: rgba(255, 255, 255, 0.97);
+      border: 1px solid rgba(216, 228, 237, 0.94);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+    .card + .card,
+    .section-gap { margin-top: 18px; }
+    .card-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      padding: 17px 20px;
+      border-bottom: 1px solid var(--line);
+      background: rgba(255, 255, 255, 0.8);
+    }
+    .card-head h2 {
+      margin: 0;
+      font-size: 19px;
+      letter-spacing: -0.03em;
+    }
+    .card-body { padding: 18px 20px; }
+    .stack { display: flex; flex-direction: column; gap: 14px; }
+    .small-muted {
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.4;
+      font-weight: 650;
+    }
+    .guide-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 12px;
+    }
+    .guide-step {
+      border: 1px solid var(--line);
+      background: var(--surface-2);
+      border-radius: 14px;
+      padding: 14px;
+      min-height: 96px;
+    }
+    .guide-step strong {
+      display: block;
+      font-size: 13px;
+      margin-bottom: 5px;
+    }
+    .guide-step span {
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.35;
+      font-weight: 650;
+    }
+    .scenario-shell {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 18px;
+      align-items: center;
+    }
+    .scenario-tabs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .scenario-tab {
+      border: 1px solid var(--line);
+      background: #fff;
+      color: var(--brand-dark);
+      border-radius: 999px;
+      padding: 10px 15px;
+      font-size: 13px;
+      font-weight: 950;
+      cursor: pointer;
+    }
+    .scenario-tab.is-active {
+      color: #fff;
+      background: var(--brand);
+      border-color: var(--brand);
+      box-shadow: 0 7px 18px rgba(8, 125, 144, 0.2);
+    }
+    .scenario-description {
+      margin-top: 10px;
+      max-width: 960px;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.45;
+      font-weight: 650;
+    }
+    .scenario-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      justify-content: flex-end;
+    }
+    .workspace {
+      display: grid;
+      grid-template-columns: minmax(560px, 0.95fr) minmax(650px, 1.25fr);
+      gap: 18px;
+      align-items: start;
+      margin-top: 18px;
+    }
+    .right-sticky {
+      position: sticky;
+      top: 16px;
+      z-index: 3;
+    }
+    .inputs-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+    }
+    .inputs-grid.three { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .full { grid-column: 1 / -1; }
+    label {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin: 0 0 6px;
+      color: #536782;
+      font-size: 12px;
+      line-height: 1.2;
+      font-weight: 900;
+    }
+    input, select, textarea {
+      width: 100%;
+      border: 1px solid #cbdce7;
+      border-radius: 12px;
+      background: #fff;
+      color: var(--ink);
+      outline: none;
+      font: inherit;
+      font-size: 14px;
+      transition: border-color 0.15s, box-shadow 0.15s;
+    }
+    input, select {
+      height: 42px;
+      padding: 0 12px;
+    }
+    textarea {
+      min-height: 76px;
+      padding: 10px 12px;
+      resize: vertical;
+      line-height: 1.4;
+    }
+    input:focus, select:focus, textarea:focus {
+      border-color: var(--brand);
+      box-shadow: 0 0 0 4px rgba(8, 125, 144, 0.1);
+    }
+    input[type="checkbox"] {
+      width: 17px;
+      height: 17px;
+      padding: 0;
+      margin: 0;
+    }
+    .checkbox-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 9px;
+      color: var(--ink);
+      font-size: 13px;
+      font-weight: 800;
+      line-height: 1.3;
+    }
+    .hint {
+      margin-top: 6px;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.35;
+      font-weight: 650;
+    }
+    .callout {
+      padding: 12px 14px;
+      border-radius: 14px;
+      border: 1px solid var(--line);
+      background: var(--surface-2);
+      color: #4c6079;
+      font-size: 12px;
+      line-height: 1.45;
+      font-weight: 700;
+    }
+    .callout.warn {
+      background: var(--warn-bg);
+      border-color: rgba(183, 121, 31, 0.25);
+      color: #765018;
+    }
+    .callout.good {
+      background: var(--good-bg);
+      border-color: rgba(15, 139, 95, 0.25);
+      color: #0d6e4d;
+    }
+    details.input-section {
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      background: #fff;
+      overflow: hidden;
+    }
+    details.input-section + details.input-section { margin-top: 12px; }
+    details.input-section summary {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      padding: 14px 15px;
+      cursor: pointer;
+      color: var(--brand-dark);
+      font-size: 15px;
+      font-weight: 950;
+      list-style: none;
+      border-bottom: 1px solid transparent;
+    }
+    details.input-section[open] summary {
+      border-bottom-color: var(--line);
+      background: linear-gradient(90deg, var(--brand-soft), #fff 75%);
+    }
+    details.input-section summary::-webkit-details-marker { display: none; }
+    .section-tag {
+      color: var(--muted);
+      font-size: 10px;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      font-weight: 950;
+    }
+    .inside { padding: 14px; }
+    .conditional { display: none; }
+    .conditional.is-visible { display: block; }
+    button {
+      border: 0;
+      border-radius: 999px;
+      padding: 10px 14px;
+      background: #e8f0f6;
+      color: var(--ink);
+      font-weight: 950;
+      cursor: pointer;
+      transition: transform 0.12s, opacity 0.12s, background 0.12s;
+    }
+    button:hover { transform: translateY(-1px); opacity: 0.96; }
+    button.primary { background: var(--brand); color: #fff; }
+    button.secondary { background: var(--brand-soft); color: var(--brand-dark); }
+    button.ghost { background: transparent; border: 1px solid var(--line); color: var(--brand-dark); }
+    button.danger { background: var(--bad-bg); color: var(--bad); }
+    .button-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 9px;
+      align-items: center;
+    }
+    .dashboard-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 14px;
+      padding: 18px 20px;
+      border-bottom: 1px solid var(--line);
+    }
+    .dashboard-head h2 {
+      margin: 0;
+      font-size: 20px;
+      letter-spacing: -0.035em;
+    }
+    .dashboard-controls {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+      gap: 8px;
+    }
+    .dashboard-controls select {
+      min-width: 130px;
+      height: 34px;
+      border-radius: 10px;
+      font-size: 12px;
+    }
+    .status-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 7px 10px;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      background: var(--neutral-bg);
+      color: var(--neutral);
+      font-size: 12px;
+      font-weight: 950;
+      white-space: nowrap;
+    }
+    .status-pill.good { background: var(--good-bg); color: var(--good); border-color: rgba(15,139,95,.25); }
+    .status-pill.warn { background: var(--warn-bg); color: var(--warn); border-color: rgba(183,121,31,.25); }
+    .status-pill.bad { background: var(--bad-bg); color: var(--bad); border-color: rgba(189,48,57,.25); }
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 12px;
+      padding: 18px 20px 14px;
+    }
+    .kpi {
+      min-width: 0;
+      min-height: 124px;
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 14px;
+      background: linear-gradient(180deg, #fff 0%, #f8fbfd 100%);
+    }
+    .kpi .name {
+      min-height: 30px;
+      color: #536782;
+      font-size: 12px;
+      line-height: 1.2;
+      font-weight: 950;
+    }
+    .kpi .value {
+      display: block;
+      max-width: 100%;
+      margin-top: 8px;
+      color: var(--navy);
+      font-size: clamp(20px, 2.05vw, 30px);
+      line-height: 1.02;
+      font-weight: 1000;
+      letter-spacing: -0.055em;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .kpi .value.good { color: var(--good); }
+    .kpi .value.warn { color: var(--warn); }
+    .kpi .value.bad { color: var(--bad); }
+    .kpi .note {
+      margin-top: 6px;
+      color: #5b6c83;
+      font-size: 11px;
+      line-height: 1.3;
+      font-weight: 760;
+    }
+    .chart-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      padding: 0 20px 20px;
+    }
+    .chart-card {
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 12px;
+      background: #fff;
+    }
+    .chart-title {
+      margin: 0 0 8px;
+      color: var(--brand-dark);
+      font-size: 12px;
+      font-weight: 950;
+    }
+    .chart-wrap { height: 215px; }
+    canvas { width: 100%; height: 100%; display: block; }
+    .metric-strip {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 10px;
+    }
+    .mini-metric {
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: #f8fbfd;
+      padding: 12px;
+      min-width: 0;
+    }
+    .mini-metric .label {
+      color: var(--muted);
+      font-size: 10px;
+      letter-spacing: .05em;
+      text-transform: uppercase;
+      font-weight: 950;
+    }
+    .mini-metric .number {
+      margin-top: 5px;
+      color: var(--navy);
+      font-size: 20px;
+      line-height: 1.05;
+      font-weight: 1000;
+      letter-spacing: -.04em;
+      word-break: break-word;
+    }
+    .mini-metric .sub {
+      margin-top: 4px;
+      color: var(--muted);
+      font-size: 11px;
+      line-height: 1.3;
+      font-weight: 700;
+    }
+    .split {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 18px;
+    }
+    .table-scroll {
+      overflow: auto;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: #fff;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 12px;
+    }
+    th, td {
+      padding: 10px 9px;
+      border-bottom: 1px solid var(--line);
+      text-align: right;
+      vertical-align: middle;
+      white-space: nowrap;
+    }
+    th {
+      position: sticky;
+      top: 0;
+      z-index: 1;
+      background: var(--surface-2);
+      color: var(--muted);
+      font-size: 10px;
+      letter-spacing: .04em;
+      text-transform: uppercase;
+      font-weight: 950;
+    }
+    th:first-child, td:first-child { text-align: left; }
+    tr:last-child td { border-bottom: 0; }
+    .cell-good { color: var(--good); font-weight: 950; }
+    .cell-warn { color: var(--warn); font-weight: 950; }
+    .cell-bad { color: var(--bad); font-weight: 950; }
+    .summary-list {
+      display: grid;
+      gap: 8px;
+    }
+    .summary-line {
+      display: flex;
+      justify-content: space-between;
+      gap: 15px;
+      padding: 9px 0;
+      border-bottom: 1px solid var(--line);
+      font-size: 13px;
+    }
+    .summary-line:last-child { border-bottom: 0; }
+    .summary-line span:first-child { color: var(--muted); font-weight: 750; }
+    .summary-line strong { text-align: right; }
+    .footer-note {
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.5;
+      font-weight: 650;
+    }
+    .q {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 18px;
+      height: 18px;
+      min-width: 18px;
+      border-radius: 999px;
+      border: 1px solid rgba(8, 125, 144, 0.38);
+      background: #eefbfc;
+      color: var(--brand-dark);
+      font-size: 12px;
+      font-weight: 950;
+      cursor: help;
+      user-select: none;
+    }
+    .tooltip {
+      position: fixed;
+      max-width: 340px;
+      padding: 11px 12px;
+      border-radius: 12px;
+      background: rgba(22, 30, 48, 0.96);
+      color: #fff;
+      font-size: 12px;
+      line-height: 1.4;
+      font-weight: 750;
+      box-shadow: 0 12px 30px rgba(0,0,0,.22);
+      z-index: 99999;
+      pointer-events: none;
+      opacity: 0;
+      transform: translateY(6px);
+      transition: opacity .1s, transform .1s;
+    }
+    .tooltip.show { opacity: 1; transform: translateY(0); }
+    .print-only { display: none; }
+    .report-title {
+      padding: 20px;
+      border-bottom: 1px solid var(--line);
+    }
+    .report-title h2 { margin: 0; }
+    .report-meta {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+      margin-top: 14px;
+    }
+    .report-meta div {
+      padding: 10px;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+    }
+    .report-meta span {
+      display: block;
+      color: var(--muted);
+      font-size: 9px;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      font-weight: 900;
+    }
+    .report-meta strong { display: block; margin-top: 4px; font-size: 13px; }
+
+    @media (max-width: 1220px) {
+      .workspace { grid-template-columns: 1fr; }
+      .right-sticky { position: static; }
+      .kpi-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+    }
+    @media (max-width: 920px) {
+      .guide-grid, .chart-grid, .split, .scenario-shell { grid-template-columns: 1fr; }
+      .scenario-actions { justify-content: flex-start; }
+      .kpi-grid, .metric-strip { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .inputs-grid.three { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 650px) {
+      main { padding: 0 12px; }
+      header { padding: 28px 18px 70px; }
+      .topbar { flex-direction: column; }
+      .inputs-grid, .inputs-grid.three, .kpi-grid, .metric-strip { grid-template-columns: 1fr; }
+      .dashboard-head { flex-direction: column; align-items: flex-start; }
+      .dashboard-controls { justify-content: flex-start; }
+      .report-meta { grid-template-columns: 1fr 1fr; }
+    }
+
+    /* v5.0 lender-package workflow — mirrors the Quarterly Review Tool navigation */
+    .workspace {
+      grid-template-columns: 218px minmax(520px, 0.92fr) minmax(620px, 1.18fr);
+    }
+    .lender-nav {
+      position: sticky;
+      top: 16px;
+      z-index: 7;
+      align-self: start;
+      min-width: 0;
+    }
+    .lender-nav-panel {
+      overflow: hidden;
+      border: 1px solid rgba(199,216,228,.96);
+      border-radius: 16px;
+      background: rgba(255,255,255,.96);
+      box-shadow: 0 12px 30px rgba(19,33,59,.08);
+      backdrop-filter: blur(12px);
+    }
+    .lender-nav-head {
+      padding: 14px 14px 12px;
+      border-bottom: 1px solid var(--line);
+      background: linear-gradient(180deg,#fff 0%,#f8fbfd 100%);
+    }
+    .lender-nav-kicker {
+      display:block;
+      margin-bottom:3px;
+      color:var(--muted);
+      font-size:10px;
+      font-weight:950;
+      letter-spacing:.08em;
+      text-transform:uppercase;
+    }
+    .lender-nav-title {
+      margin:0;
+      color:var(--brand-dark);
+      font-size:15px;
+      line-height:1.15;
+      letter-spacing:-.025em;
+      font-weight:950;
+    }
+    .lender-nav-list { display:flex; flex-direction:column; gap:3px; padding:8px 0; }
+    .lender-nav-item {
+      display:grid;
+      grid-template-columns:29px minmax(0,1fr);
+      align-items:center;
+      gap:8px;
+      min-height:43px;
+      margin:0 8px;
+      padding:8px 9px 8px 7px;
+      border-left:4px solid transparent;
+      border-radius:0 10px 10px 0;
+      color:#75859a;
+      text-decoration:none;
+      opacity:.78;
+      transition:all .16s ease;
+    }
+    .lender-nav-item:hover { color:#425a73; opacity:1; background:#f2f7fa; transform:translateX(1px); }
+    .lender-nav-item.is-active { color:var(--brand-dark); opacity:1; border-left-color:var(--brand); background:var(--brand-soft); }
+    .lender-nav-number {
+      display:inline-flex; align-items:center; justify-content:center;
+      width:27px; height:27px; border:1px solid #cad9e4; border-radius:9px;
+      background:#f7fafc; color:#7c8ca0; font-size:11px; font-weight:950;
+    }
+    .lender-nav-item.is-active .lender-nav-number { color:#fff; border-color:var(--brand); background:var(--brand); }
+    .lender-nav-label { min-width:0; font-size:12px; line-height:1.22; font-weight:760; letter-spacing:-.01em; }
+    details.input-section { scroll-margin-top: 24px; }
+
+    .q {
+      display:inline-flex; align-items:center; justify-content:center;
+      width:18px; height:18px; min-width:18px; border-radius:999px;
+      border:1px solid rgba(8,125,144,.38); background:#eefbfc; color:var(--brand-dark);
+      font-size:12px; font-weight:950; cursor:help; user-select:none;
+    }
+
+    .business-plan-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:12px; }
+    .business-plan-grid .full { grid-column:1 / -1; }
+    .business-plan-grid textarea { min-height:96px; }
+
+    .wc-planner {
+      margin-top:14px;
+      padding:14px;
+      border:1px solid var(--line);
+      border-radius:15px;
+      background:linear-gradient(180deg,#fbfdff 0%,#f6fbfd 100%);
+    }
+    .wc-planner-head { display:flex; align-items:flex-start; justify-content:space-between; gap:12px; margin-bottom:12px; }
+    .wc-planner-head h4 { margin:0; color:var(--navy); font-size:15px; letter-spacing:-.02em; }
+    .wc-total-pill { flex:0 0 auto; padding:7px 10px; border-radius:999px; background:var(--brand-soft); color:var(--brand-dark); font-size:11px; font-weight:950; white-space:nowrap; }
+    .wc-grid { display:grid; grid-template-columns:minmax(0,1.35fr) 120px 120px; gap:8px; align-items:center; }
+    .wc-grid .wc-head { color:var(--muted); font-size:10px; text-transform:uppercase; letter-spacing:.05em; font-weight:950; }
+    .wc-row-label { color:#536782; font-size:12px; line-height:1.25; font-weight:850; }
+    .wc-grid input { height:36px; font-size:12px; padding:0 8px; border-radius:10px; }
+    .wc-line-total { text-align:right; color:var(--navy); font-size:12px; font-weight:950; white-space:nowrap; }
+    .wc-footer { display:grid; grid-template-columns:minmax(0,1fr) auto; gap:12px; align-items:center; margin-top:12px; padding-top:12px; border-top:1px solid var(--line); }
+    .wc-footer strong { font-size:14px; color:var(--brand-dark); }
+
+    .checklist-toolbar {
+      display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:10px; margin-bottom:12px;
+    }
+    .readiness-card { border:1px solid var(--line); border-radius:14px; padding:11px 12px; background:var(--surface-2); }
+    .readiness-card .label { color:var(--muted); font-size:10px; text-transform:uppercase; letter-spacing:.05em; font-weight:950; }
+    .readiness-card .value { margin-top:5px; color:var(--navy); font-size:21px; line-height:1; font-weight:1000; letter-spacing:-.04em; }
+    .readiness-card .value.good { color:var(--good); }
+    .readiness-card .value.warn { color:var(--warn); }
+    .readiness-card .value.bad { color:var(--bad); }
+    .readiness-card .note { margin-top:5px; color:var(--muted); font-size:10px; line-height:1.3; font-weight:700; }
+
+    .package-table td:first-child, .package-table th:first-child { text-align:left; }
+    .package-table td:nth-child(2), .package-table th:nth-child(2) { text-align:left; }
+    .package-table td:nth-child(3), .package-table th:nth-child(3) { text-align:left; }
+    .package-table td:nth-child(4), .package-table th:nth-child(4) { text-align:left; }
+    .package-table select { min-width:118px; height:34px; padding:0 7px; border-radius:10px; font-size:11px; }
+    .doc-category { display:inline-flex; padding:4px 7px; border-radius:999px; background:#eef3f7; color:#536782; font-size:9px; line-height:1; font-weight:950; text-transform:uppercase; letter-spacing:.04em; }
+    .doc-owner { display:inline-flex; padding:4px 7px; border-radius:999px; background:var(--brand-soft); color:var(--brand-dark); font-size:9px; line-height:1; font-weight:950; }
+    .package-warning-list { display:grid; gap:8px; margin-top:12px; }
+    .package-warning { border-left:4px solid var(--warn); background:var(--warn-bg); border-radius:10px; padding:9px 10px; color:#765018; font-size:11px; line-height:1.35; font-weight:750; }
+
+    .lender-readiness-strip { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:10px; }
+    .business-plan-summary { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:12px; }
+    .narrative-card { border:1px solid var(--line); border-radius:14px; padding:12px; background:#fff; }
+    .narrative-card h4 { margin:0 0 5px; color:var(--brand-dark); font-size:12px; }
+    .narrative-card p { margin:0; color:var(--muted); font-size:11px; line-height:1.45; font-weight:700; white-space:pre-wrap; }
+
+    @media (max-width: 1380px) {
+      .workspace { grid-template-columns:minmax(520px,.92fr) minmax(600px,1.18fr); }
+      .lender-nav { grid-column:1 / -1; position:sticky; top:8px; z-index:20; }
+      .lender-nav-panel { border-radius:14px; }
+      .lender-nav-head { padding:9px 13px; }
+      .lender-nav-kicker { display:none; }
+      .lender-nav-list { flex-direction:row; gap:6px; overflow-x:auto; padding:7px 8px 9px; }
+      .lender-nav-item { flex:0 0 auto; grid-template-columns:26px auto; min-width:180px; min-height:40px; margin:0; padding:7px 10px; border-left:0; border-bottom:3px solid transparent; border-radius:10px; }
+      .lender-nav-item.is-active { border-bottom-color:var(--brand); }
+      details.input-section { scroll-margin-top:130px; }
+    }
+    @media (max-width: 820px) {
+      .business-plan-grid, .checklist-toolbar, .lender-readiness-strip, .business-plan-summary { grid-template-columns:1fr; }
+      .wc-grid { grid-template-columns:minmax(0,1fr) 92px 92px; }
+      .wc-planner-head { display:block; }
+      .wc-total-pill { display:inline-flex; margin-top:8px; }
+    }
+
+    @media print {
+      @page { size: letter portrait; margin: 0.45in; }
+      body { background: #fff; font-size: 10px; }
+      header {
+        border-radius: 0;
+        box-shadow: none;
+        padding: 18px 20px;
+      }
+      header h1 { font-size: 28px; }
+      header .subtitle { font-size: 11px; }
+      main { margin: 0; max-width: none; padding: 0; }
+      .no-print, .guide-card, .scenario-card, .lender-nav, .input-card, .dashboard-card, .monthly-detail { display: none !important; }
+      .print-only { display: block !important; }
+      .card { box-shadow: none; border-radius: 10px; break-inside: avoid; margin-top: 10px; }
+      .card-head, .card-body { padding: 10px 12px; }
+      .section-gap { margin-top: 10px; }
+      .metric-strip { grid-template-columns: repeat(4, 1fr); }
+      .mini-metric { padding: 8px; }
+      .mini-metric .number { font-size: 15px; }
+      table { font-size: 8px; }
+      th, td { padding: 5px 4px; }
+      th { position: static; font-size: 7px; }
+      .table-scroll { overflow: visible; }
+      .report-meta { grid-template-columns: repeat(4, 1fr); }
+      .split { gap: 10px; }
+      .footer-note { font-size: 8px; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="topbar">
+      <div>
+        <h1>Iceworks SBA / Lender Readiness Tool v5.0</h1>
+        <div class="subtitle">
+          Build a lender-ready startup package in one place: borrower profile, business-plan inputs,
+          5-year projections, six-month working capital, sources and uses, equipment financing, DSCR,
+          cash runway, scenario stress testing, and the SBA document checklist requested by the lender.
+        </div>
+      </div>
+      <div class="pill">SBA package builder · lender-ready projections · v5.0</div>
+    </div>
+  </header>
+
+  <main>
+    <section class="card guide-card">
+      <div class="card-head">
+        <h2>Underwriting Review Flow</h2>
+        <span class="small-muted">All calculations remain in this browser</span>
+      </div>
+      <div class="card-body">
+        <div class="guide-grid">
+          <div class="guide-step">
+            <strong>1. Build the borrower story.</strong>
+            <span>Capture the borrower, market, management experience, target customers, sales strategy, and revenue model.</span>
+          </div>
+          <div class="guide-step">
+            <strong>2. Build sources, uses & working capital.</strong>
+            <span>Show what the loan pays for and document a detailed six-month working-capital reserve.</span>
+          </div>
+          <div class="guide-step">
+            <strong>3. Stress the projections.</strong>
+            <span>Compare downside, base, and upside cases, then test cash, equipment debt, break-even, and DSCR.</span>
+          </div>
+          <div class="guide-step">
+            <strong>4. Finish the SBA package.</strong>
+            <span>Track lender documents, identify missing items, and print a clean projection and readiness package.</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="card scenario-card section-gap">
+      <div class="card-body">
+        <div class="scenario-shell">
+          <div>
+            <div class="scenario-tabs" role="tablist" aria-label="Projection scenarios">
+              <button class="scenario-tab" type="button" data-scenario="downside">Downside</button>
+              <button class="scenario-tab is-active" type="button" data-scenario="base">Base</button>
+              <button class="scenario-tab" type="button" data-scenario="upside">Upside</button>
+            </div>
+            <div class="scenario-description" id="scenarioDescription"></div>
+          </div>
+          <div class="scenario-actions">
+            <button class="secondary" type="button" id="resetScenarioBtn">Reset active scenario</button>
+            <button class="ghost" type="button" id="resetAllBtn">Reset all scenarios</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="workspace">
+      <aside class="lender-nav" aria-label="SBA lender package sections">
+        <nav class="lender-nav-panel" aria-label="Lender Package Sections">
+          <div class="lender-nav-head">
+            <span class="lender-nav-kicker">Package workflow</span>
+            <h2 class="lender-nav-title">SBA / Lender Sections</h2>
+          </div>
+          <div class="lender-nav-list">
+            <a class="lender-nav-item is-active" href="#section-borrower" data-lender-target="section-borrower"><span class="lender-nav-number">1</span><span class="lender-nav-label">Borrower & Loan Setup</span></a>
+            <a class="lender-nav-item" href="#section-business-plan" data-lender-target="section-business-plan"><span class="lender-nav-number">2</span><span class="lender-nav-label">Business Plan Inputs</span></a>
+            <a class="lender-nav-item" href="#section-growth" data-lender-target="section-growth"><span class="lender-nav-number">3</span><span class="lender-nav-label">Growth & Revenue</span></a>
+            <a class="lender-nav-item" href="#section-startup" data-lender-target="section-startup"><span class="lender-nav-number">4</span><span class="lender-nav-label">Uses & Working Capital</span></a>
+            <a class="lender-nav-item" href="#section-equipment" data-lender-target="section-equipment"><span class="lender-nav-number">5</span><span class="lender-nav-label">Equipment Financing</span></a>
+            <a class="lender-nav-item" href="#section-service" data-lender-target="section-service"><span class="lender-nav-number">6</span><span class="lender-nav-label">Service & Overhead</span></a>
+            <a class="lender-nav-item" href="#section-notes" data-lender-target="section-notes"><span class="lender-nav-number">7</span><span class="lender-nav-label">Assumption Support</span></a>
+            <a class="lender-nav-item" href="#section-checklist" data-lender-target="section-checklist"><span class="lender-nav-number">8</span><span class="lender-nav-label">SBA Package Checklist</span></a>
+          </div>
+        </nav>
+      </aside>
+      <section class="card input-card">
+        <div class="card-head">
+          <h2>SBA / Lender Package Inputs</h2>
+          <span class="small-muted" id="activeScenarioLabel">Base scenario</span>
+        </div>
+        <div class="card-body stack">
+          <details class="input-section" open id="section-borrower">
+            <summary>
+              <span>1. Borrower & Loan Setup <span class="q" data-help="Identify the borrower, legal business, market, projection period, and lender screen before building the financial model.">?</span></span>
+              <span class="section-tag">borrower facts</span>
+            </summary>
+            <div class="inside">
+              <div class="inputs-grid">
+                <div>
+                  <label for="borrowerName">Borrower / ownership group</label>
+                  <input id="borrowerName" value="" placeholder="Prospective franchisee" />
+                </div>
+                <div>
+                  <label for="businessLegalName">Proposed legal business name</label>
+                  <input id="businessLegalName" value="" placeholder="Borrower entity / LLC" />
+                </div>
+                <div>
+                  <label for="marketName">Market / territory</label>
+                  <input id="marketName" value="" placeholder="City or territory" />
+                </div>
+                <div>
+                  <label for="lenderName">Lender / bank</label>
+                  <input id="lenderName" value="FMS Bank" />
+                </div>
+                <div>
+                  <label for="modelStartDate">Franchise start date / inception</label>
+                  <input id="modelStartDate" type="date" value="2026-01-01" />
+                </div>
+                <div>
+                  <label for="projectionMonths">Projection period (months)</label>
+                  <input id="projectionMonths" type="number" min="60" max="180" step="1" value="60" />
+                </div>
+                <div>
+                  <label for="lenderDscrTarget">Selected lender DSCR screen</label>
+                  <input id="lenderDscrTarget" type="number" min="0.5" step="0.05" value="1.25" />
+                </div>
+                <div>
+                  <label for="preparedBy">Prepared by</label>
+                  <input id="preparedBy" value="Iceworks Franchise Group" />
+                </div>
+                <div class="full">
+                  <label for="loanPurpose">Loan purpose / request summary</label>
+                  <textarea id="loanPurpose" placeholder="Example: franchise startup costs, working capital, initial equipment, tools, licensing, and launch expenses."></textarea>
+                </div>
+              </div>
+            </div>
+          </details>
+
+          <details class="input-section" open id="section-business-plan">
+            <summary>
+              <span>2. Business Plan Inputs <span class="q" data-help="Kassie's lender checklist calls for a full business plan. These narrative inputs create the core facts that should support that plan.">?</span></span>
+              <span class="section-tag">lender narrative</span>
+            </summary>
+            <div class="inside">
+              <div class="business-plan-grid">
+                <div class="full">
+                  <label for="targetMarketNarrative">Target market & customer profile</label>
+                  <textarea id="targetMarketNarrative" placeholder="Who are the target commercial customers, what geography is served, and what makes the market attractive?"></textarea>
+                </div>
+                <div>
+                  <label for="salesStrategyNarrative">Sales / go-to-market strategy</label>
+                  <textarea id="salesStrategyNarrative" placeholder="How will the franchisee prospect, sell, install, and grow the customer base?"></textarea>
+                </div>
+                <div>
+                  <label for="revenueModelNarrative">Revenue model</label>
+                  <textarea id="revenueModelNarrative" placeholder="Describe recurring machine lease revenue, service activity, and how customer contracts produce cash flow."></textarea>
+                </div>
+                <div>
+                  <label for="managementNarrative">Management experience</label>
+                  <textarea id="managementNarrative" placeholder="Summarize the owners' management, sales, operations, technical, or industry experience."></textarea>
+                </div>
+                <div>
+                  <label for="operationsNarrative">Operating plan</label>
+                  <textarea id="operationsNarrative" placeholder="Describe installation, PM/cleaning, repair coverage, customer support, and how Iceworks systems support the operator."></textarea>
+                </div>
+                <div class="full">
+                  <label for="riskNarrative">Primary risks & mitigation</label>
+                  <textarea id="riskNarrative" placeholder="Identify the major startup risks and how working capital, growth pacing, service reserves, and lender structure mitigate them."></textarea>
+                </div>
+              </div>
+            </div>
+          </details>
+
+          <details class="input-section" open id="section-growth">
+            <summary>
+              <span>3. Customer Leases & Machine Growth</span>
+              <span class="section-tag">three-stage ramp</span>
+            </summary>
+            <div class="inside">
+              <div class="inputs-grid three">
+                <div>
+                  <label for="initialActiveMachines">Machines leased on Day 1</label>
+                  <input id="initialActiveMachines" type="number" min="0" step="1" />
+                </div>
+                <div>
+                  <label for="growthStage1Months">Stage 1 duration (months)</label>
+                  <input id="growthStage1Months" type="number" min="0" step="1" />
+                </div>
+                <div>
+                  <label for="growthStage1Rate">Stage 1 new machines / month</label>
+                  <input id="growthStage1Rate" type="number" min="0" step="0.25" />
+                </div>
+                <div>
+                  <label for="growthStage2Months">Stage 2 duration (months)</label>
+                  <input id="growthStage2Months" type="number" min="0" step="1" />
+                </div>
+                <div>
+                  <label for="growthStage2Rate">Stage 2 new machines / month</label>
+                  <input id="growthStage2Rate" type="number" min="0" step="0.25" />
+                </div>
+                <div>
+                  <label for="growthStage3Rate">Stage 3 new machines / month</label>
+                  <input id="growthStage3Rate" type="number" min="0" step="0.25" />
+                </div>
+                <div>
+                  <label for="monthlyChurnPct">Machines lost / month (%)</label>
+                  <input id="monthlyChurnPct" type="number" min="0" step="0.05" />
+                </div>
+                <div>
+                  <label for="leaseRate">Average monthly lease payment ($)</label>
+                  <input id="leaseRate" type="number" min="0" step="5" />
+                </div>
+                <div>
+                  <label for="serviceRevenuePerMachine">Extra service revenue / machine / month ($)</label>
+                  <input id="serviceRevenuePerMachine" type="number" min="0" step="5" />
+                </div>
+                <div>
+                  <label for="royaltyRate">Iceworks royalty (% of revenue)</label>
+                  <input id="royaltyRate" type="number" min="0" step="0.1" />
+                </div>
+                <div>
+                  <label for="collectionLagMonths">Customer collection lag</label>
+                  <select id="collectionLagMonths">
+                    <option value="0">Same month</option>
+                    <option value="1">One month</option>
+                  </select>
+                </div>
+              </div>
+              <div class="callout" style="margin-top:12px">
+                New placements may be fractional because this is an averaging model. For example, 1.5 machines per month represents 18 placements over a year.
+              </div>
+            </div>
+          </details>
+
+          <details class="input-section" open id="section-startup">
+            <summary>
+              <span>4. Startup Uses & Sources</span>
+              <span class="section-tag">SBA request</span>
+            </summary>
+            <div class="inside">
+              <div class="inputs-grid">
+                <div>
+                  <label for="franchiseFee">Initial franchise fee ($)</label>
+                  <input id="franchiseFee" type="number" min="0" step="100" />
+                </div>
+                <div>
+                  <label for="startupMachineUnits">Machines purchased at startup</label>
+                  <input id="startupMachineUnits" type="number" min="0" step="1" />
+                </div>
+                <div>
+                  <label for="toolsStartupSupplies">Tools and startup supplies ($)</label>
+                  <input id="toolsStartupSupplies" type="number" min="0" step="100" />
+                </div>
+                <div>
+                  <label for="insuranceLicensingSetup">Insurance, licenses, setup ($)</label>
+                  <input id="insuranceLicensingSetup" type="number" min="0" step="100" />
+                </div>
+                <div>
+                  <label for="openingMarketingBudget">Opening marketing budget ($)</label>
+                  <input id="openingMarketingBudget" type="number" min="0" step="100" />
+                </div>
+                <div>
+                  <label for="workingCapitalReserve">Working capital reserve ($)</label>
+                  <input id="workingCapitalReserve" type="number" min="0" step="1000" />
+                </div>
+                <div>
+                  <label for="extraCashCushion">Extra cash cushion ($)</label>
+                  <input id="extraCashCushion" type="number" min="0" step="1000" />
+                </div>
+                <div>
+                  <label for="cashContribution">Franchisee cash contribution ($)</label>
+                  <input id="cashContribution" type="number" min="0" step="1000" />
+                </div>
+                <div class="full">
+                  <label class="checkbox-row" for="autoCalculateStartupLoan">
+                    <input id="autoCalculateStartupLoan" type="checkbox" />
+                    <span>Calculate the requested startup/SBA loan as total project uses minus the cash contribution.</span>
+                  </label>
+                </div>
+                <div>
+                  <label for="manualStartupLoan">Manual startup/SBA loan ($)</label>
+                  <input id="manualStartupLoan" type="number" min="0" step="1000" />
+                </div>
+                <div>
+                  <label for="startupApr">Startup/SBA interest rate (%)</label>
+                  <input id="startupApr" type="number" min="0" step="0.1" />
+                </div>
+                <div>
+                  <label for="startupTerm">Startup/SBA term (months)</label>
+                  <input id="startupTerm" type="number" min="12" step="12" />
+                </div>
+                <div>
+                  <label for="startupInterestOnly">Interest-only months</label>
+                  <input id="startupInterestOnly" type="number" min="0" step="1" />
+                </div>
+              </div>
+
+              <div class="wc-planner" id="workingCapitalPlanner">
+                <div class="wc-planner-head">
+                  <div>
+                    <h4>Six-Month Working Capital Detail</h4>
+                    <div class="hint">The lender specifically called out a six-month expense / use-of-funds working-capital schedule as extremely helpful. Use this as support for the reserve above.</div>
+                  </div>
+                  <span class="wc-total-pill" id="wcPlannerTotalPill">6-month total: $0</span>
+                </div>
+                <div class="wc-grid">
+                  <div class="wc-head">Working-capital item</div><div class="wc-head">Monthly</div><div class="wc-head">6-month total</div>
+                  <div class="wc-row-label">Base operating overhead</div><input id="wcMonthlyOverhead" type="number" min="0" step="50" value="750"><div class="wc-line-total" id="wcOverheadTotal">$0</div>
+                  <div class="wc-row-label">Owner compensation / payroll support</div><input id="wcMonthlyOwnerPay" type="number" min="0" step="100" value="0"><div class="wc-line-total" id="wcOwnerPayTotal">$0</div>
+                  <div class="wc-row-label">Service / repair / parts reserve</div><input id="wcMonthlyService" type="number" min="0" step="50" value="500"><div class="wc-line-total" id="wcServiceTotal">$0</div>
+                  <div class="wc-row-label">Startup / SBA debt service</div><input id="wcMonthlyStartupDebt" type="number" min="0" step="50" value="0"><div class="wc-line-total" id="wcStartupDebtTotal">$0</div>
+                  <div class="wc-row-label">Growth marketing / sales activity</div><input id="wcMonthlyMarketing" type="number" min="0" step="50" value="500"><div class="wc-line-total" id="wcMarketingTotal">$0</div>
+                  <div class="wc-row-label">Other monthly working-capital needs</div><input id="wcMonthlyOther" type="number" min="0" step="50" value="0"><div class="wc-line-total" id="wcOtherTotal">$0</div>
+                  <div class="wc-row-label">One-time contingency reserve</div><input id="wcContingency" type="number" min="0" step="500" value="5000"><div class="wc-line-total" id="wcContingencyTotal">$0</div>
+                </div>
+                <div class="wc-footer">
+                  <label class="checkbox-row" for="useDetailedWorkingCapital">
+                    <input id="useDetailedWorkingCapital" type="checkbox">
+                    <span>Use this calculated six-month amount as the model's working-capital reserve.</span>
+                  </label>
+                  <strong id="wcPlannerTotal">$0</strong>
+                </div>
+              </div>
+
+              <div class="hint">
+                The working-capital reserve and extra cash cushion remain available after launch. Other startup uses are assumed paid at closing.
+              </div>
+            </div>
+          </details>
+
+          <details class="input-section" open id="section-equipment">
+            <summary>
+              <span>5. Machine & Equipment Financing</span>
+              <span class="section-tag">cohort loans</span>
+            </summary>
+            <div class="inside">
+              <div class="inputs-grid three">
+                <div>
+                  <label for="equipmentCost">Average machine cost ($)</label>
+                  <input id="equipmentCost" type="number" min="0" step="1" />
+                </div>
+                <div>
+                  <label for="installCost">Average capitalized install cost ($)</label>
+                  <input id="installCost" type="number" min="0" step="1" />
+                </div>
+                <div>
+                  <label for="freightAccessoryCost">Freight / accessories per machine ($)</label>
+                  <input id="freightAccessoryCost" type="number" min="0" step="1" />
+                </div>
+                <div>
+                  <label for="ongoingFinancedPct">Future machine cost financed (%)</label>
+                  <input id="ongoingFinancedPct" type="number" min="0" max="100" step="1" />
+                </div>
+                <div>
+                  <label for="ongoingApr">Future equipment APR (%)</label>
+                  <input id="ongoingApr" type="number" min="0" step="0.1" />
+                </div>
+                <div>
+                  <label for="ongoingTerm">Future equipment term (months)</label>
+                  <select id="ongoingTerm">
+                    <option value="60">60 months</option>
+                    <option value="84">84 months</option>
+                    <option value="96">96 months</option>
+                    <option value="120">120 months</option>
+                  </select>
+                </div>
+                <div>
+                  <label for="equipmentInterestOnly">Equipment interest-only months</label>
+                  <input id="equipmentInterestOnly" type="number" min="0" step="1" />
+                </div>
+                <div>
+                  <label for="depreciationLife">Depreciation period (months)</label>
+                  <input id="depreciationLife" type="number" min="12" step="12" />
+                </div>
+                <div>
+                  <label class="checkbox-row" for="includeFutureLoans">
+                    <input id="includeFutureLoans" type="checkbox" />
+                    <span>Include separate equipment loans as new machines are added.</span>
+                  </label>
+                </div>
+              </div>
+              <div class="callout warn" style="margin-top:12px">
+                Financing terms are planning assumptions only. Confirm available advance rates, APR, amortization, collateral requirements, and payment timing with the actual lender.
+              </div>
+            </div>
+          </details>
+
+          <details class="input-section" open id="section-service">
+            <summary>
+              <span>6A. Cleaning, Repairs & Parts</span>
+              <span class="section-tag">service reserve</span>
+            </summary>
+            <div class="inside">
+              <div class="inputs-grid">
+                <div class="full">
+                  <label for="serviceMode">Service-cost method</label>
+                  <select id="serviceMode">
+                    <option value="detailed">Detailed: cleaning + repairs + parts</option>
+                    <option value="simple">Simplified: one all-in reserve</option>
+                  </select>
+                </div>
+                <div class="service-detailed">
+                  <label for="routineCleaning">Routine cleaning / machine / month ($)</label>
+                  <input id="routineCleaning" type="number" min="0" step="1" />
+                </div>
+                <div class="service-detailed">
+                  <label for="emergencyRepair">Emergency repair / machine / month ($)</label>
+                  <input id="emergencyRepair" type="number" min="0" step="1" />
+                </div>
+                <div class="service-detailed">
+                  <label for="partsFilter">Parts and filters / machine / month ($)</label>
+                  <input id="partsFilter" type="number" min="0" step="1" />
+                </div>
+                <div class="service-simple conditional">
+                  <label for="allInService">All-in service reserve / machine / month ($)</label>
+                  <input id="allInService" type="number" min="0" step="1" />
+                </div>
+                <div>
+                  <label for="merchantFeeRate">Payment processing fee (% of revenue)</label>
+                  <input id="merchantFeeRate" type="number" min="0" step="0.1" />
+                </div>
+              </div>
+              <div class="hint">
+                Service reserves remain provisional until Iceworks completes the current cost-of-sales account mapping.
+              </div>
+            </div>
+          </details>
+
+          <details class="input-section" open id="section-overhead">
+            <summary>
+              <span>6B. Startup Overhead Ramp</span>
+              <span class="section-tag">scale with business</span>
+            </summary>
+            <div class="inside">
+              <div class="inputs-grid">
+                <div class="full">
+                  <label for="overheadMode">Monthly-bill method</label>
+                  <select id="overheadMode">
+                    <option value="machineRamp">Ramp from startup to mature overhead by machine count</option>
+                    <option value="timeRamp">Ramp from startup to mature overhead by month</option>
+                    <option value="fixedPerMachine">Fixed base plus per-machine overhead</option>
+                    <option value="fixed">Fixed monthly overhead</option>
+                  </select>
+                </div>
+                <div>
+                  <label for="initialOverhead">Startup overhead ($ / month)</label>
+                  <input id="initialOverhead" type="number" min="0" step="50" />
+                </div>
+                <div>
+                  <label for="matureOverhead">Mature overhead target ($ / month)</label>
+                  <input id="matureOverhead" type="number" min="0" step="50" />
+                </div>
+                <div class="overhead-machine-ramp">
+                  <label for="matureAtMachines">Mature overhead reached at active machines</label>
+                  <input id="matureAtMachines" type="number" min="1" step="1" />
+                </div>
+                <div class="overhead-time-ramp conditional">
+                  <label for="matureAtMonth">Mature overhead reached by month</label>
+                  <input id="matureAtMonth" type="number" min="1" step="1" />
+                </div>
+                <div class="overhead-per-machine conditional">
+                  <label for="perMachineOverhead">Extra overhead / active machine ($)</label>
+                  <input id="perMachineOverhead" type="number" min="0" step="1" />
+                </div>
+                <div>
+                  <label for="annualOverheadIncrease">Annual overhead increase (%)</label>
+                  <input id="annualOverheadIncrease" type="number" min="0" step="0.1" />
+                </div>
+                <div>
+                  <label for="ownerPay">Owner compensation ($ / month)</label>
+                  <input id="ownerPay" type="number" min="0" step="100" />
+                </div>
+                <div>
+                  <label for="taxRate">Estimated business tax rate (%)</label>
+                  <input id="taxRate" type="number" min="0" step="1" />
+                </div>
+              </div>
+              <div class="callout" style="margin-top:12px">
+                The mature-overhead target may reflect an established operation, but the startup amount should reflect the actual early operating structure—not a mature fleet from Day 1.
+              </div>
+            </div>
+          </details>
+
+          <details class="input-section" id="section-notes">
+            <summary>
+              <span>7. Assumption Documentation</span>
+              <span class="section-tag">lender support</span>
+            </summary>
+            <div class="inside">
+              <div class="inputs-grid">
+                <div class="full">
+                  <label for="growthBasis">Growth-ramp basis</label>
+                  <textarea id="growthBasis"></textarea>
+                </div>
+                <div class="full">
+                  <label for="overheadBasis">Overhead-ramp basis</label>
+                  <textarea id="overheadBasis"></textarea>
+                </div>
+                <div class="full">
+                  <label for="financingBasis">Financing-term basis</label>
+                  <textarea id="financingBasis"></textarea>
+                </div>
+                <div class="full">
+                  <label for="serviceBasis">Service-reserve basis</label>
+                  <textarea id="serviceBasis"></textarea>
+                </div>
+              </div>
+              <div class="callout warn" style="margin-top:12px">
+                This lender-facing build intentionally does not embed an established-operator or Colorado performance preset. Any actual outlet-performance information should be handled consistently with the current FDD and reviewed by franchise counsel.
+              </div>
+            </div>
+          </details>
+
+
+          <details class="input-section" open id="section-checklist">
+            <summary>
+              <span>8. SBA / Lender Package Checklist <span class="q" data-help="Tracks the startup documents requested by the lender. This is a package-preparation checklist, not an indication of loan approval.">?</span></span>
+              <span class="section-tag">Kassie / FMS request list</span>
+            </summary>
+            <div class="inside">
+              <div class="checklist-toolbar" id="packageReadinessCards"></div>
+              <div class="table-scroll">
+                <table class="package-table">
+                  <thead><tr><th>Item</th><th>Category</th><th>Primary owner</th><th>Status</th><th>Notes</th></tr></thead>
+                  <tbody id="packageChecklistBody"></tbody>
+                </table>
+              </div>
+              <div class="package-warning-list" id="packageWarnings"></div>
+              <div class="callout" style="margin-top:12px">
+                The lender noted that requirements vary case by case. Lease documents, licenses, insurance, collateral documentation, and other items should be confirmed for the actual borrower and location before submission.
+              </div>
+            </div>
+          </details>
+
+          <div class="button-row no-print">
+            <button class="primary" type="button" id="recalculateBtn">Recalculate</button>
+            <button class="secondary" type="button" id="saveBtn">Save all scenarios in browser</button>
+            <button class="secondary" type="button" id="loadBtn">Load saved model</button>
+            <button class="secondary" type="button" id="exportMonthlyBtn">Export monthly CSV</button>
+            <button class="secondary" type="button" id="exportAnnualBtn">Export annual CSV</button>
+            <button class="ghost" type="button" id="printBtn">Print lender package</button>
+          </div>
+
+          <div class="footer-note">
+            <strong>Important:</strong> This tool is a planning, package-preparation, and discussion tool. It does not constitute a financial performance representation, earnings claim, loan approval, accounting opinion, tax advice, or guarantee by Iceworks Franchise Group, LLC. The borrower and lender should validate every assumption and consult appropriate professional advisors.
+          </div>
+        </div>
+      </section>
+
+      <aside class="card right-sticky dashboard-card">
+        <div class="dashboard-head">
+          <div>
+            <h2>Underwriting Dashboard</h2>
+            <div class="small-muted" id="dashboardSubhead">Base scenario · 60-month projection</div>
+          </div>
+          <div class="dashboard-controls">
+            <select id="snapshotMonth"></select>
+            <span class="status-pill" id="underwritingStatus">Calculating…</span>
+          </div>
+        </div>
+        <div class="kpi-grid" id="kpiGrid"></div>
+        <div class="chart-grid">
+          <div class="chart-card">
+            <div class="chart-title">Projected Cash Balance</div>
+            <div class="chart-wrap"><canvas id="cashChart"></canvas></div>
+          </div>
+          <div class="chart-card">
+            <div class="chart-title">Annual Debt-Service Coverage</div>
+            <div class="chart-wrap"><canvas id="dscrChart"></canvas></div>
+          </div>
+        </div>
+      </aside>
+    </div>
+
+    <section class="card section-gap">
+      <div class="card-head">
+        <h2>Underwriting Summary</h2>
+        <span class="small-muted">Selected scenario</span>
+      </div>
+      <div class="card-body">
+        <div class="metric-strip" id="underwritingMetrics"></div>
+      </div>
+    </section>
+
+    <div class="split section-gap">
+      <section class="card">
+        <div class="card-head">
+          <h2>Startup Uses & Sources</h2>
+          <span class="small-muted">project funding</span>
+        </div>
+        <div class="card-body">
+          <div class="table-scroll">
+            <table>
+              <thead><tr><th>Use / source</th><th>Amount</th></tr></thead>
+              <tbody id="usesSourcesBody"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <section class="card">
+        <div class="card-head">
+          <h2>Selected Scenario Summary</h2>
+          <span class="small-muted">plain-English result</span>
+        </div>
+        <div class="card-body">
+          <div class="summary-list" id="plainSummary"></div>
+        </div>
+      </section>
+    </div>
+
+    <section class="card section-gap">
+      <div class="card-head">
+        <h2>Lender Package Readiness</h2>
+        <span class="small-muted">documents + planning support</span>
+      </div>
+      <div class="card-body">
+        <div class="lender-readiness-strip" id="lenderReadinessStrip"></div>
+        <div class="package-warning-list" id="lenderReadinessWarnings"></div>
+      </div>
+    </section>
+
+    <section class="card section-gap">
+      <div class="card-head">
+        <h2>Business Plan Narrative Snapshot</h2>
+        <span class="small-muted">inputs for the lender business plan</span>
+      </div>
+      <div class="card-body">
+        <div class="business-plan-summary" id="businessPlanSummary"></div>
+      </div>
+    </section>
+
+    <section class="card section-gap">
+      <div class="card-head">
+        <h2>SBA Package Checklist Summary</h2>
+        <span class="small-muted">submission-preparation status</span>
+      </div>
+      <div class="card-body">
+        <div class="table-scroll">
+          <table class="package-table">
+            <thead><tr><th>Required / case-specific item</th><th>Owner</th><th>Status</th><th>Notes</th></tr></thead>
+            <tbody id="packageChecklistSummaryBody"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <section class="card section-gap">
+      <div class="card-head">
+        <h2>Equipment-Term Sensitivity</h2>
+        <span class="small-muted">same assumptions · financing term only</span>
+      </div>
+      <div class="card-body">
+        <div class="table-scroll">
+          <table>
+            <thead>
+              <tr>
+                <th>Equipment term</th>
+                <th>Year 3 DSCR</th>
+                <th>Year 5 DSCR</th>
+                <th>Minimum cash</th>
+                <th>Maximum capital gap</th>
+                <th>First target year</th>
+              </tr>
+            </thead>
+            <tbody id="termSensitivityBody"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <section class="card section-gap">
+      <div class="card-head">
+        <h2>Scenario Comparison</h2>
+        <span class="small-muted">base + downside + upside</span>
+      </div>
+      <div class="card-body">
+        <div class="table-scroll">
+          <table>
+            <thead>
+              <tr>
+                <th>Scenario</th>
+                <th>Startup loan</th>
+                <th>Ending machines</th>
+                <th>Year 5 revenue</th>
+                <th>Year 5 DSCR</th>
+                <th>Minimum cash</th>
+                <th>Capital gap</th>
+                <th>Screen result</th>
+              </tr>
+            </thead>
+            <tbody id="scenarioComparisonBody"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <section class="card section-gap">
+      <div class="card-head">
+        <h2>Year-by-Year Projection</h2>
+        <span class="small-muted">lender review table</span>
+      </div>
+      <div class="card-body">
+        <div class="table-scroll">
+          <table>
+            <thead>
+              <tr>
+                <th>Year</th>
+                <th>Ending machines</th>
+                <th>Revenue</th>
+                <th>EBITDA</th>
+                <th>Debt service</th>
+                <th>DSCR</th>
+                <th>Cash taxes</th>
+                <th>Cash change</th>
+                <th>Ending cash</th>
+                <th>Ending debt</th>
+              </tr>
+            </thead>
+            <tbody id="annualTableBody"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <section class="card section-gap monthly-detail">
+      <div class="card-head">
+        <h2>Month-by-Month Detail</h2>
+        <span class="small-muted">full projection math</span>
+      </div>
+      <div class="card-body">
+        <div class="table-scroll" style="max-height:560px">
+          <table>
+            <thead>
+              <tr>
+                <th>Month</th>
+                <th>Machines</th>
+                <th>New</th>
+                <th>Revenue</th>
+                <th>EBITDA</th>
+                <th>Debt service</th>
+                <th>T12 DSCR</th>
+                <th>Cash capex</th>
+                <th>Cash change</th>
+                <th>Ending cash</th>
+                <th>Ending debt</th>
+              </tr>
+            </thead>
+            <tbody id="monthlyTableBody"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <section class="card print-only">
+      <div class="report-title">
+        <h2>Iceworks SBA / Lender Projection & Readiness Package</h2>
+        <div class="report-meta">
+          <div><span>Borrower</span><strong id="printBorrower">—</strong></div>
+          <div><span>Market</span><strong id="printMarket">—</strong></div>
+          <div><span>Scenario</span><strong id="printScenario">—</strong></div>
+          <div><span>Prepared by</span><strong id="printPreparedBy">—</strong></div>
+        </div>
+      </div>
+      <div class="card-body">
+        <h3>Assumption Documentation</h3>
+        <div class="summary-list" id="printAssumptionNotes"></div>
+      </div>
+    </section>
+
+    <section class="card section-gap print-only">
+      <div class="card-body footer-note">
+        <strong>Package limitations:</strong> Results depend entirely on assumptions entered. Actual machine placements, pricing, service costs, collections, financing terms, taxes, owner compensation, and overhead may differ materially. DSCR is calculated as EBITDA before debt service divided by modeled debt service. Lenders may use different addbacks, exclusions, global cash-flow analysis, collateral standards, and minimum thresholds.
+      </div>
+    </section>
+  </main>
+
+  <div class="tooltip" id="tooltip"></div>
+
+  <script>
+    const $ = (id) => document.getElementById(id);
+    const money = (v, d = 0) => {
+      if (!Number.isFinite(v)) return "—";
+      const abs = Math.abs(v);
+      const formatted = abs.toLocaleString(undefined, {
+        minimumFractionDigits: d,
+        maximumFractionDigits: d,
+      });
+      return v < 0 ? `($${formatted})` : `$${formatted}`;
+    };
+    const numfmt = (v, d = 0) =>
+      Number.isFinite(v)
+        ? v.toLocaleString(undefined, {
+            minimumFractionDigits: d,
+            maximumFractionDigits: d,
+          })
+        : "—";
+    const pct = (v, d = 1) => Number.isFinite(v) ? `${v.toFixed(d)}%` : "—";
+    const xfmt = (v) => Number.isFinite(v) ? `${v.toFixed(2)}x` : "—";
+    const val = (id) => Number.parseFloat($(id)?.value || 0);
+    const textVal = (id) => $(id)?.value || "";
+    const checked = (id) => Boolean($(id)?.checked);
+    const clamp = (v, min, max) => Math.max(min, Math.min(max, v));
+    const round = (v, places = 2) => {
+      const p = 10 ** places;
+      return Math.round((v + Number.EPSILON) * p) / p;
+    };
+    const scenarioNames = {
+      downside: "Downside",
+      base: "Base",
+      upside: "Upside",
+    };
+    const fieldIds = [
+      "borrowerName","marketName","modelStartDate","projectionMonths","lenderDscrTarget","preparedBy",
+      "initialActiveMachines","growthStage1Months","growthStage1Rate","growthStage2Months",
+      "growthStage2Rate","growthStage3Rate","monthlyChurnPct","leaseRate",
+      "serviceRevenuePerMachine","royaltyRate","collectionLagMonths","franchiseFee",
+      "startupMachineUnits","toolsStartupSupplies","insuranceLicensingSetup",
+      "openingMarketingBudget","workingCapitalReserve","extraCashCushion","cashContribution",
+      "autoCalculateStartupLoan","manualStartupLoan","startupApr","startupTerm",
+      "startupInterestOnly","equipmentCost","installCost","freightAccessoryCost",
+      "ongoingFinancedPct","ongoingApr","ongoingTerm","equipmentInterestOnly",
+      "depreciationLife","includeFutureLoans","serviceMode","routineCleaning",
+      "emergencyRepair","partsFilter","allInService","merchantFeeRate","overheadMode",
+      "initialOverhead","matureOverhead","matureAtMachines","matureAtMonth",
+      "perMachineOverhead","annualOverheadIncrease","ownerPay","taxRate",
+      "growthBasis","overheadBasis","financingBasis","serviceBasis",
+      "businessLegalName","lenderName","loanPurpose","targetMarketNarrative","salesStrategyNarrative",
+      "revenueModelNarrative","managementNarrative","operationsNarrative","riskNarrative",
+      "wcMonthlyOverhead","wcMonthlyOwnerPay","wcMonthlyService","wcMonthlyStartupDebt",
+      "wcMonthlyMarketing","wcMonthlyOther","wcContingency","useDetailedWorkingCapital"
+    ];
+    const checkboxIds = new Set(["autoCalculateStartupLoan","includeFutureLoans","useDetailedWorkingCapital"]);
+
+
+    const packageChecklistItems = [
+      { key:"projections", item:"3–5 years of business projections with assumptions", category:"Financial", owner:"Iceworks / Borrower", critical:true },
+      { key:"business_plan", item:"Full business plan", category:"Business", owner:"Borrower / Iceworks", critical:true },
+      { key:"working_capital", item:"Six-month expense / working-capital use of funds", category:"Financial", owner:"Iceworks / Borrower", critical:true },
+      { key:"franchise_agreement", item:"Franchise Agreement", category:"Franchise", owner:"Iceworks", critical:true },
+      { key:"franchise_eligibility", item:"SBA franchise eligibility / Franchise Directory confirmation", category:"Franchise", owner:"Iceworks", critical:true },
+      { key:"equipment_quotes", item:"Equipment quotes", category:"Collateral", owner:"Iceworks / Borrower", critical:true },
+      { key:"management_resumes", item:"Management resumes", category:"Personal", owner:"Borrower", critical:true },
+      { key:"tax_returns", item:"3 years of personal tax returns for owners", category:"Personal", owner:"Borrower", critical:true },
+      { key:"personal_ids", item:"Copies of personal IDs", category:"Personal", owner:"Borrower", critical:true },
+      { key:"sba_413", item:"SBA 413 Personal Financial Statement", category:"SBA Form", owner:"Borrower", critical:true },
+      { key:"sba_1919", item:"SBA 1919 for business and personal", category:"SBA Form", owner:"Borrower", critical:true },
+      { key:"ein_ss4", item:"Business EIN / SS-4 document", category:"Business", owner:"Borrower", critical:true },
+      { key:"operating_agreement", item:"Operating Agreement", category:"Business", owner:"Borrower", critical:true },
+      { key:"lease_agreement", item:"Business lease agreement, if renting space", category:"Business", owner:"Borrower", critical:false },
+      { key:"business_licenses", item:"Required state / county / local business licenses", category:"Compliance", owner:"Borrower", critical:true },
+      { key:"hazard_insurance", item:"Hazard / property insurance, as applicable", category:"Insurance", owner:"Borrower", critical:false },
+      { key:"general_liability", item:"General Liability insurance", category:"Insurance", owner:"Borrower", critical:true },
+      { key:"vehicle_insurance", item:"Vehicle insurance, as applicable", category:"Insurance", owner:"Borrower", critical:false },
+      { key:"mortgage_insurance", item:"Mortgage-related insurance, if applicable", category:"Insurance", owner:"Borrower", critical:false },
+      { key:"term_life", item:"Term life insurance in amount and term requested by lender", category:"Insurance", owner:"Borrower", critical:true },
+    ];
+    const packageStatusOptions = ["Needed","In progress","Complete","N/A"];
+    let packageState = {};
+
+    function initPackageChecklist() {
+      const body = $("packageChecklistBody");
+      if (!body) return;
+      body.innerHTML = packageChecklistItems.map(doc => `
+        <tr data-doc-key="${doc.key}">
+          <td><strong>${doc.item}</strong>${doc.critical ? '<div class="hint">Core package item</div>' : ''}</td>
+          <td><span class="doc-category">${doc.category}</span></td>
+          <td><span class="doc-owner">${doc.owner}</span></td>
+          <td><select class="package-status" data-doc-status="${doc.key}">${packageStatusOptions.map(status => `<option value="${status}">${status}</option>`).join("")}</select></td>
+          <td><input class="package-note" data-doc-note="${doc.key}" placeholder="Optional note / location / follow-up" /></td>
+        </tr>`).join("");
+      body.querySelectorAll("select,input").forEach(el => el.addEventListener("input", () => {
+        collectPackageState();
+        renderPackageReadiness();
+      }));
+      applyPackageState(packageState);
+      renderPackageReadiness();
+    }
+
+    function collectPackageState() {
+      const out = {};
+      packageChecklistItems.forEach(doc => {
+        out[doc.key] = {
+          status: document.querySelector(`[data-doc-status="${doc.key}"]`)?.value || "Needed",
+          note: document.querySelector(`[data-doc-note="${doc.key}"]`)?.value || "",
+        };
+      });
+      packageState = out;
+      return out;
+    }
+
+    function applyPackageState(state = {}) {
+      packageChecklistItems.forEach(doc => {
+        const row = state[doc.key] || {};
+        const select = document.querySelector(`[data-doc-status="${doc.key}"]`);
+        const note = document.querySelector(`[data-doc-note="${doc.key}"]`);
+        if (select) select.value = row.status || "Needed";
+        if (note) note.value = row.note || "";
+      });
+    }
+
+    function packageReadiness() {
+      collectPackageState();
+      const applicable = packageChecklistItems.filter(doc => (packageState[doc.key]?.status || "Needed") !== "N/A");
+      const complete = applicable.filter(doc => packageState[doc.key]?.status === "Complete");
+      const inProgress = applicable.filter(doc => packageState[doc.key]?.status === "In progress");
+      const needed = applicable.filter(doc => packageState[doc.key]?.status === "Needed");
+      const criticalMissing = applicable.filter(doc => doc.critical && packageState[doc.key]?.status !== "Complete");
+      const pctComplete = applicable.length ? (complete.length / applicable.length) * 100 : 0;
+      return { applicable, complete, inProgress, needed, criticalMissing, pctComplete };
+    }
+
+    function renderPackageReadiness() {
+      const r = packageReadiness();
+      const state = r.criticalMissing.length === 0 && r.pctComplete >= 90 ? "good" : r.pctComplete >= 60 ? "warn" : "bad";
+      const cards = [
+        { label:"Package complete", value:`${r.pctComplete.toFixed(0)}%`, note:`${r.complete.length} of ${r.applicable.length} applicable items`, cls:state },
+        { label:"Still needed", value:String(r.needed.length), note:"Items not yet started", cls:r.needed.length ? "bad" : "good" },
+        { label:"In progress", value:String(r.inProgress.length), note:"Items currently being assembled", cls:r.inProgress.length ? "warn" : "good" },
+        { label:"Core items incomplete", value:String(r.criticalMissing.length), note:"Core package items not marked complete", cls:r.criticalMissing.length ? "bad" : "good" },
+      ];
+      const html = cards.map(c => `<div class="readiness-card"><div class="label">${c.label}</div><div class="value ${c.cls}">${c.value}</div><div class="note">${c.note}</div></div>`).join("");
+      if ($("packageReadinessCards")) $("packageReadinessCards").innerHTML = html;
+      if ($("lenderReadinessStrip")) $("lenderReadinessStrip").innerHTML = html;
+      const warnings = r.criticalMissing.slice(0,6).map(doc => `<div class="package-warning"><strong>Missing core item:</strong> ${doc.item}</div>`).join("");
+      if ($("packageWarnings")) $("packageWarnings").innerHTML = warnings || '<div class="callout good">All core checklist items are marked complete. Confirm any case-specific lender requirements before submission.</div>';
+      if ($("lenderReadinessWarnings")) $("lenderReadinessWarnings").innerHTML = warnings || '<div class="callout good">Core checklist items are complete. Final lender underwriting and case-specific requests may still apply.</div>';
+      if ($("packageChecklistSummaryBody")) {
+        $("packageChecklistSummaryBody").innerHTML = packageChecklistItems.map(doc => {
+          const row = packageState[doc.key] || { status:"Needed", note:"" };
+          return `<tr><td><strong>${doc.item}</strong></td><td>${doc.owner}</td><td>${row.status}</td><td>${row.note || "—"}</td></tr>`;
+        }).join("");
+      }
+      return r;
+    }
+
+    function renderBusinessPlanSummary() {
+      const el = $("businessPlanSummary");
+      if (!el) return;
+      const items = [
+        ["Target market", textVal("targetMarketNarrative")],
+        ["Sales strategy", textVal("salesStrategyNarrative")],
+        ["Revenue model", textVal("revenueModelNarrative")],
+        ["Management", textVal("managementNarrative")],
+        ["Operations", textVal("operationsNarrative")],
+        ["Risks & mitigation", textVal("riskNarrative")],
+      ];
+      el.innerHTML = items.map(([title,value]) => `<div class="narrative-card"><h4>${title}</h4><p>${value.trim() || "Not yet documented."}</p></div>`).join("");
+    }
+
+    function calculateWorkingCapitalPlanner() {
+      const months = 6;
+      const rows = [
+        ["wcMonthlyOverhead","wcOverheadTotal",true],
+        ["wcMonthlyOwnerPay","wcOwnerPayTotal",true],
+        ["wcMonthlyService","wcServiceTotal",true],
+        ["wcMonthlyStartupDebt","wcStartupDebtTotal",true],
+        ["wcMonthlyMarketing","wcMarketingTotal",true],
+        ["wcMonthlyOther","wcOtherTotal",true],
+        ["wcContingency","wcContingencyTotal",false],
+      ];
+      let total = 0;
+      rows.forEach(([inputId,totalId,isMonthly]) => {
+        const amount = Math.max(0, val(inputId));
+        const line = isMonthly ? amount * months : amount;
+        total += line;
+        if ($(totalId)) $(totalId).textContent = money(line);
+      });
+      if ($("wcPlannerTotal")) $("wcPlannerTotal").textContent = money(total);
+      if ($("wcPlannerTotalPill")) $("wcPlannerTotalPill").textContent = `6-month total: ${money(total)}`;
+      if (checked("useDetailedWorkingCapital") && $("workingCapitalReserve")) {
+        $("workingCapitalReserve").value = round(total,2);
+      }
+      return total;
+    }
+
+    function updateWorkingCapitalSuggestions(result) {
+      if (!result) return;
+      const firstSix = result.rows.slice(0,6);
+      if (firstSix.length) {
+        const avgService = firstSix.reduce((s,r)=>s+r.serviceCost,0) / firstSix.length;
+        const avgStartupDebt = firstSix.reduce((s,r)=>s+r.startupDebtService,0) / firstSix.length;
+        if (!$("wcMonthlyService")?.dataset.userEdited) $("wcMonthlyService").value = round(avgService,2);
+        if (!$("wcMonthlyStartupDebt")?.dataset.userEdited) $("wcMonthlyStartupDebt").value = round(avgStartupDebt,2);
+      }
+      if (!$("wcMonthlyOverhead")?.dataset.userEdited) $("wcMonthlyOverhead").value = round(val("initialOverhead"),2);
+      if (!$("wcMonthlyOwnerPay")?.dataset.userEdited) $("wcMonthlyOwnerPay").value = round(val("ownerPay"),2);
+      calculateWorkingCapitalPlanner();
+    }
+
+    const presets = {
+      downside: {
+        borrowerName: "", marketName: "", modelStartDate: "2026-01-01", projectionMonths: 60,
+        lenderDscrTarget: 1.25, preparedBy: "Iceworks Franchise Group",
+        initialActiveMachines: 2, growthStage1Months: 6, growthStage1Rate: 0.5,
+        growthStage2Months: 12, growthStage2Rate: 1, growthStage3Rate: 1.5,
+        monthlyChurnPct: 0.5, leaseRate: 230, serviceRevenuePerMachine: 0,
+        royaltyRate: 9, collectionLagMonths: "1",
+        franchiseFee: 29500, startupMachineUnits: 2, toolsStartupSupplies: 5000,
+        insuranceLicensingSetup: 2500, openingMarketingBudget: 2500,
+        workingCapitalReserve: 50000, extraCashCushion: 0, cashContribution: 10000,
+        autoCalculateStartupLoan: true, manualStartupLoan: 0, startupApr: 11,
+        startupTerm: 120, startupInterestOnly: 0,
+        equipmentCost: 4467, installCost: 728, freightAccessoryCost: 0,
+        ongoingFinancedPct: 100, ongoingApr: 11, ongoingTerm: "60",
+        equipmentInterestOnly: 0, depreciationLife: 84, includeFutureLoans: true,
+        serviceMode: "detailed", routineCleaning: 40, emergencyRepair: 22,
+        partsFilter: 15, allInService: 77, merchantFeeRate: 2.5,
+        overheadMode: "machineRamp", initialOverhead: 1000, matureOverhead: 4000,
+        matureAtMachines: 70, matureAtMonth: 36, perMachineOverhead: 0,
+        annualOverheadIncrease: 3, ownerPay: 0, taxRate: 20,
+        growthBasis: "Downside planning case: slower early placements, slower mature pace, and higher churn than the base case.",
+        overheadBasis: "Startup overhead begins below the established-operation level and scales to a conservative mature target as the fleet grows.",
+        financingBasis: "Stress case assumes 60-month equipment financing at a higher planning APR. Terms must be confirmed with an actual lender.",
+        serviceBasis: "Conservative service reserve pending completion of Iceworks cost-of-sales account mapping."
+      },
+      base: {
+        borrowerName: "", marketName: "", modelStartDate: "2026-01-01", projectionMonths: 60,
+        lenderDscrTarget: 1.25, preparedBy: "Iceworks Franchise Group",
+        initialActiveMachines: 2, growthStage1Months: 6, growthStage1Rate: 0.75,
+        growthStage2Months: 12, growthStage2Rate: 1.5, growthStage3Rate: 2,
+        monthlyChurnPct: 0.25, leaseRate: 240, serviceRevenuePerMachine: 0,
+        royaltyRate: 9, collectionLagMonths: "0",
+        franchiseFee: 29500, startupMachineUnits: 2, toolsStartupSupplies: 5000,
+        insuranceLicensingSetup: 2500, openingMarketingBudget: 2500,
+        workingCapitalReserve: 40000, extraCashCushion: 0, cashContribution: 10000,
+        autoCalculateStartupLoan: true, manualStartupLoan: 0, startupApr: 10.5,
+        startupTerm: 120, startupInterestOnly: 0,
+        equipmentCost: 4467, installCost: 728, freightAccessoryCost: 0,
+        ongoingFinancedPct: 100, ongoingApr: 10, ongoingTerm: "84",
+        equipmentInterestOnly: 0, depreciationLife: 84, includeFutureLoans: true,
+        serviceMode: "detailed", routineCleaning: 35, emergencyRepair: 20,
+        partsFilter: 13, allInService: 68, merchantFeeRate: 2.5,
+        overheadMode: "machineRamp", initialOverhead: 750, matureOverhead: 3500,
+        matureAtMachines: 80, matureAtMonth: 36, perMachineOverhead: 0,
+        annualOverheadIncrease: 3, ownerPay: 0, taxRate: 20,
+        growthBasis: "Base planning case: gradual six-month launch, stronger second-stage placement pace, and two placements per month after the initial ramp.",
+        overheadBasis: "Startup overhead reflects a lean home-base operation and scales by active-machine count toward the mature established-operation level.",
+        financingBasis: "Base planning assumption uses 84-month equipment amortization. Confirm advance rate, APR, and term with the lender before submission.",
+        serviceBasis: "Detailed reserve totals $68 per active machine per month and remains provisional pending account-level validation."
+      },
+      upside: {
+        borrowerName: "", marketName: "", modelStartDate: "2026-01-01", projectionMonths: 60,
+        lenderDscrTarget: 1.25, preparedBy: "Iceworks Franchise Group",
+        initialActiveMachines: 2, growthStage1Months: 6, growthStage1Rate: 1,
+        growthStage2Months: 12, growthStage2Rate: 2, growthStage3Rate: 2.5,
+        monthlyChurnPct: 0.15, leaseRate: 246, serviceRevenuePerMachine: 0,
+        royaltyRate: 9, collectionLagMonths: "0",
+        franchiseFee: 29500, startupMachineUnits: 2, toolsStartupSupplies: 5000,
+        insuranceLicensingSetup: 2500, openingMarketingBudget: 3500,
+        workingCapitalReserve: 40000, extraCashCushion: 10000, cashContribution: 20000,
+        autoCalculateStartupLoan: true, manualStartupLoan: 0, startupApr: 10,
+        startupTerm: 120, startupInterestOnly: 0,
+        equipmentCost: 4467, installCost: 728, freightAccessoryCost: 0,
+        ongoingFinancedPct: 100, ongoingApr: 9.5, ongoingTerm: "120",
+        equipmentInterestOnly: 0, depreciationLife: 84, includeFutureLoans: true,
+        serviceMode: "detailed", routineCleaning: 35, emergencyRepair: 17,
+        partsFilter: 12, allInService: 64, merchantFeeRate: 2.5,
+        overheadMode: "machineRamp", initialOverhead: 500, matureOverhead: 3200,
+        matureAtMachines: 80, matureAtMonth: 36, perMachineOverhead: 0,
+        annualOverheadIncrease: 3, ownerPay: 0, taxRate: 20,
+        growthBasis: "Upside planning case: stronger early execution, higher mature placement pace, and lower churn. This is not an expected result.",
+        overheadBasis: "Lean startup overhead scales gradually to a mature operating level as the installed fleet grows.",
+        financingBasis: "Upside case assumes longer 120-month equipment amortization and a modestly lower APR; lender confirmation is required.",
+        serviceBasis: "Service reserve remains conservative relative to named cost categories but is not treated as validated actual performance."
+      }
+    };
+
+    let activeScenario = "base";
+    let scenarioStates = JSON.parse(JSON.stringify(presets));
+    let currentResult = null;
+
+    function pmt(principal, annualRatePct, months) {
+      principal = Math.max(0, Number(principal) || 0);
+      months = Math.max(1, Math.round(Number(months) || 1));
+      const r = Math.max(0, Number(annualRatePct) || 0) / 100 / 12;
+      if (principal === 0) return 0;
+      if (r === 0) return principal / months;
+      return principal * r / (1 - Math.pow(1 + r, -months));
+    }
+
+    function createLoan(principal, annualRatePct, termMonths, interestOnlyMonths, startMonth, name) {
+      const term = Math.max(1, Math.round(termMonths));
+      const io = clamp(Math.round(interestOnlyMonths || 0), 0, Math.max(0, term - 1));
+      return {
+        name,
+        originalPrincipal: Math.max(0, principal),
+        balance: Math.max(0, principal),
+        annualRatePct: Math.max(0, annualRatePct),
+        termMonths: term,
+        interestOnlyMonths: io,
+        startMonth: Math.max(1, Math.round(startMonth)),
+        amortPayment: 0,
+      };
+    }
+
+    function advanceLoan(loan, month) {
+      const age = month - loan.startMonth + 1;
+      if (age < 1 || age > loan.termMonths || loan.balance <= 0.005) {
+        return { payment: 0, interest: 0, principal: 0, endingBalance: Math.max(0, loan.balance) };
+      }
+      const r = loan.annualRatePct / 100 / 12;
+      let interest = loan.balance * r;
+      let principal = 0;
+      let payment = 0;
+
+      if (age <= loan.interestOnlyMonths) {
+        payment = interest;
+      } else {
+        if (!loan.amortPayment) {
+          const remaining = Math.max(1, loan.termMonths - loan.interestOnlyMonths);
+          loan.amortPayment = pmt(loan.balance, loan.annualRatePct, remaining);
+        }
+        payment = Math.min(loan.balance + interest, loan.amortPayment);
+        principal = Math.max(0, payment - interest);
+        principal = Math.min(principal, loan.balance);
+        loan.balance = Math.max(0, loan.balance - principal);
+      }
+
+      return {
+        payment,
+        interest,
+        principal,
+        endingBalance: Math.max(0, loan.balance),
+      };
+    }
+
+    function serviceReserve(inp) {
+      return inp.serviceMode === "simple"
+        ? inp.allInService
+        : inp.routineCleaning + inp.emergencyRepair + inp.partsFilter;
+    }
+
+    function growthRateForMonth(inp, month) {
+      if (month <= inp.growthStage1Months) return inp.growthStage1Rate;
+      if (month <= inp.growthStage1Months + inp.growthStage2Months) return inp.growthStage2Rate;
+      return inp.growthStage3Rate;
+    }
+
+    function overheadForMonth(inp, month, activeMachines) {
+      let base = inp.initialOverhead;
+      if (inp.overheadMode === "machineRamp") {
+        const progress = clamp(activeMachines / Math.max(1, inp.matureAtMachines), 0, 1);
+        base = inp.initialOverhead + (inp.matureOverhead - inp.initialOverhead) * progress;
+      } else if (inp.overheadMode === "timeRamp") {
+        const progress = clamp((month - 1) / Math.max(1, inp.matureAtMonth - 1), 0, 1);
+        base = inp.initialOverhead + (inp.matureOverhead - inp.initialOverhead) * progress;
+      } else if (inp.overheadMode === "fixedPerMachine") {
+        base = inp.initialOverhead + activeMachines * inp.perMachineOverhead;
+      } else if (inp.overheadMode === "fixed") {
+        base = inp.initialOverhead;
+      }
+      const yearIndex = Math.floor((month - 1) / 12);
+      return base * Math.pow(1 + inp.annualOverheadIncrease / 100, yearIndex);
+    }
+
+    function depreciationForMonth(assetCohorts, month, lifeMonths) {
+      if (lifeMonths <= 0) return 0;
+      return assetCohorts.reduce((sum, asset) => {
+        const age = month - asset.startMonth + 1;
+        if (age >= 1 && age <= lifeMonths) return sum + asset.cost / lifeMonths;
+        return sum;
+      }, 0);
+    }
+
+    function readInputs() {
+      calculateWorkingCapitalPlanner();
+      return {
+        borrowerName: textVal("borrowerName").trim(),
+        marketName: textVal("marketName").trim(),
+        modelStartDate: textVal("modelStartDate"),
+        projectionMonths: clamp(Math.round(val("projectionMonths")), 60, 180),
+        lenderDscrTarget: Math.max(0.01, val("lenderDscrTarget")),
+        preparedBy: textVal("preparedBy").trim(),
+        initialActiveMachines: Math.max(0, val("initialActiveMachines")),
+        growthStage1Months: Math.max(0, Math.round(val("growthStage1Months"))),
+        growthStage1Rate: Math.max(0, val("growthStage1Rate")),
+        growthStage2Months: Math.max(0, Math.round(val("growthStage2Months"))),
+        growthStage2Rate: Math.max(0, val("growthStage2Rate")),
+        growthStage3Rate: Math.max(0, val("growthStage3Rate")),
+        monthlyChurnPct: Math.max(0, val("monthlyChurnPct")),
+        leaseRate: Math.max(0, val("leaseRate")),
+        serviceRevenuePerMachine: Math.max(0, val("serviceRevenuePerMachine")),
+        royaltyRate: Math.max(0, val("royaltyRate")),
+        collectionLagMonths: Math.round(val("collectionLagMonths")),
+        franchiseFee: Math.max(0, val("franchiseFee")),
+        startupMachineUnits: Math.max(0, val("startupMachineUnits")),
+        toolsStartupSupplies: Math.max(0, val("toolsStartupSupplies")),
+        insuranceLicensingSetup: Math.max(0, val("insuranceLicensingSetup")),
+        openingMarketingBudget: Math.max(0, val("openingMarketingBudget")),
+        workingCapitalReserve: Math.max(0, val("workingCapitalReserve")),
+        extraCashCushion: Math.max(0, val("extraCashCushion")),
+        cashContribution: Math.max(0, val("cashContribution")),
+        autoCalculateStartupLoan: checked("autoCalculateStartupLoan"),
+        manualStartupLoan: Math.max(0, val("manualStartupLoan")),
+        startupApr: Math.max(0, val("startupApr")),
+        startupTerm: Math.max(12, Math.round(val("startupTerm"))),
+        startupInterestOnly: Math.max(0, Math.round(val("startupInterestOnly"))),
+        equipmentCost: Math.max(0, val("equipmentCost")),
+        installCost: Math.max(0, val("installCost")),
+        freightAccessoryCost: Math.max(0, val("freightAccessoryCost")),
+        ongoingFinancedPct: clamp(val("ongoingFinancedPct"), 0, 100),
+        ongoingApr: Math.max(0, val("ongoingApr")),
+        ongoingTerm: Math.max(1, Math.round(val("ongoingTerm"))),
+        equipmentInterestOnly: Math.max(0, Math.round(val("equipmentInterestOnly"))),
+        depreciationLife: Math.max(12, Math.round(val("depreciationLife"))),
+        includeFutureLoans: checked("includeFutureLoans"),
+        serviceMode: textVal("serviceMode"),
+        routineCleaning: Math.max(0, val("routineCleaning")),
+        emergencyRepair: Math.max(0, val("emergencyRepair")),
+        partsFilter: Math.max(0, val("partsFilter")),
+        allInService: Math.max(0, val("allInService")),
+        merchantFeeRate: Math.max(0, val("merchantFeeRate")),
+        overheadMode: textVal("overheadMode"),
+        initialOverhead: Math.max(0, val("initialOverhead")),
+        matureOverhead: Math.max(0, val("matureOverhead")),
+        matureAtMachines: Math.max(1, val("matureAtMachines")),
+        matureAtMonth: Math.max(1, Math.round(val("matureAtMonth"))),
+        perMachineOverhead: Math.max(0, val("perMachineOverhead")),
+        annualOverheadIncrease: Math.max(0, val("annualOverheadIncrease")),
+        ownerPay: Math.max(0, val("ownerPay")),
+        taxRate: Math.max(0, val("taxRate")),
+        growthBasis: textVal("growthBasis").trim(),
+        overheadBasis: textVal("overheadBasis").trim(),
+        financingBasis: textVal("financingBasis").trim(),
+        serviceBasis: textVal("serviceBasis").trim(),
+      };
+    }
+
+    function deriveProjectUses(inp) {
+      const unitEquipmentPackage = inp.equipmentCost + inp.installCost + inp.freightAccessoryCost;
+      const startupEquipment = inp.startupMachineUnits * unitEquipmentPackage;
+      const nonCashUses =
+        inp.franchiseFee +
+        startupEquipment +
+        inp.toolsStartupSupplies +
+        inp.insuranceLicensingSetup +
+        inp.openingMarketingBudget;
+      const totalUses = nonCashUses + inp.workingCapitalReserve + inp.extraCashCushion;
+      const startupLoanAmount = inp.autoCalculateStartupLoan
+        ? Math.max(0, totalUses - inp.cashContribution)
+        : inp.manualStartupLoan;
+      const totalSources = startupLoanAmount + inp.cashContribution;
+      const initialFundingGap = Math.max(0, totalUses - totalSources);
+      const openingCashAvailable = Math.max(0, totalSources - nonCashUses);
+      return {
+        unitEquipmentPackage,
+        startupEquipment,
+        nonCashUses,
+        totalUses,
+        startupLoanAmount,
+        totalSources,
+        initialFundingGap,
+        openingCashAvailable,
+      };
+    }
+
+    function trailingDscr(rows, endIndex, months = 12) {
+      const start = Math.max(0, endIndex - months + 1);
+      const slice = rows.slice(start, endIndex + 1);
+      const ebitda = slice.reduce((s, r) => s + r.ebitda, 0);
+      const debt = slice.reduce((s, r) => s + r.debtService, 0);
+      return debt > 0 ? ebitda / debt : Infinity;
+    }
+
+    function simulate(inp) {
+      const project = deriveProjectUses(inp);
+      const rows = [];
+      const annual = [];
+      const assetCohorts = [];
+      const equipmentLoans = [];
+      const startupLoan = createLoan(
+        project.startupLoanAmount,
+        inp.startupApr,
+        inp.startupTerm,
+        inp.startupInterestOnly,
+        1,
+        "Startup/SBA loan"
+      );
+
+      if (project.startupEquipment > 0) {
+        assetCohorts.push({ cost: project.startupEquipment, startMonth: 1 });
+      }
+
+      let activeMachines = inp.initialActiveMachines;
+      let cash = project.openingCashAvailable;
+      let priorAccruedRevenue = 0;
+      let minCash = cash;
+      let minCashMonth = 0;
+      let firstNegativeMonth = null;
+      const servicePerMachine = serviceReserve(inp);
+
+      for (let month = 1; month <= inp.projectionMonths; month++) {
+        const beginningMachines = activeMachines;
+        const newMachines = growthRateForMonth(inp, month);
+        const churnedMachines = beginningMachines * (inp.monthlyChurnPct / 100);
+        activeMachines = Math.max(0, beginningMachines + newMachines - churnedMachines);
+
+        const equipmentPurchase = newMachines * project.unitEquipmentPackage;
+        let equipmentFinanced = 0;
+        let cashCapex = equipmentPurchase;
+        if (inp.includeFutureLoans && equipmentPurchase > 0) {
+          equipmentFinanced = equipmentPurchase * (inp.ongoingFinancedPct / 100);
+          cashCapex = equipmentPurchase - equipmentFinanced;
+          if (equipmentFinanced > 0) {
+            equipmentLoans.push(
+              createLoan(
+                equipmentFinanced,
+                inp.ongoingApr,
+                inp.ongoingTerm,
+                inp.equipmentInterestOnly,
+                month,
+                `Equipment cohort M${month}`
+              )
+            );
+          }
+        }
+        if (equipmentPurchase > 0) {
+          assetCohorts.push({ cost: equipmentPurchase, startMonth: month });
+        }
+
+        const accruedRevenue = activeMachines * (inp.leaseRate + inp.serviceRevenuePerMachine);
+        const collectedRevenue = inp.collectionLagMonths === 1 ? priorAccruedRevenue : accruedRevenue;
+        priorAccruedRevenue = accruedRevenue;
+        const royalties = accruedRevenue * (inp.royaltyRate / 100);
+        const merchantFees = accruedRevenue * (inp.merchantFeeRate / 100);
+        const serviceCost = activeMachines * servicePerMachine;
+        const overhead = overheadForMonth(inp, month, activeMachines);
+        const ebitda =
+          accruedRevenue -
+          royalties -
+          merchantFees -
+          serviceCost -
+          overhead -
+          inp.ownerPay;
+
+        const startupDebt = advanceLoan(startupLoan, month);
+        let equipmentDebtService = 0;
+        let equipmentInterest = 0;
+        let equipmentPrincipal = 0;
+        for (const loan of equipmentLoans) {
+          const result = advanceLoan(loan, month);
+          equipmentDebtService += result.payment;
+          equipmentInterest += result.interest;
+          equipmentPrincipal += result.principal;
+        }
+        const debtService = startupDebt.payment + equipmentDebtService;
+        const interestExpense = startupDebt.interest + equipmentInterest;
+        const depreciation = depreciationForMonth(assetCohorts, month, inp.depreciationLife);
+        const pretaxIncome = ebitda - depreciation - interestExpense;
+        const cashTaxes = Math.max(0, pretaxIncome) * (inp.taxRate / 100);
+
+        const cashChange =
+          collectedRevenue -
+          royalties -
+          merchantFees -
+          serviceCost -
+          overhead -
+          inp.ownerPay -
+          debtService -
+          cashCapex -
+          cashTaxes;
+
+        cash += cashChange;
+        const totalEquipmentDebt = equipmentLoans.reduce((s, loan) => s + loan.balance, 0);
+        const endingDebt = startupLoan.balance + totalEquipmentDebt;
+        const dscr = debtService > 0 ? ebitda / debtService : Infinity;
+
+        const row = {
+          month,
+          beginningMachines,
+          newMachines,
+          churnedMachines,
+          activeMachines,
+          accruedRevenue,
+          collectedRevenue,
+          royalties,
+          merchantFees,
+          serviceCost,
+          overhead,
+          ownerPay: inp.ownerPay,
+          ebitda,
+          equipmentPurchase,
+          equipmentFinanced,
+          cashCapex,
+          startupDebtService: startupDebt.payment,
+          equipmentDebtService,
+          debtService,
+          interestExpense,
+          principalPaid: startupDebt.principal + equipmentPrincipal,
+          depreciation,
+          pretaxIncome,
+          cashTaxes,
+          cashChange,
+          endingCash: cash,
+          endingDebt,
+          dscr,
+          trailing12Dscr: Infinity,
+        };
+        rows.push(row);
+        row.trailing12Dscr = trailingDscr(rows, rows.length - 1, Math.min(12, rows.length));
+
+        if (cash < minCash) {
+          minCash = cash;
+          minCashMonth = month;
+        }
+        if (cash < 0 && firstNegativeMonth === null) firstNegativeMonth = month;
+      }
+
+      const yearCount = Math.ceil(inp.projectionMonths / 12);
+      for (let year = 1; year <= yearCount; year++) {
+        const start = (year - 1) * 12;
+        const slice = rows.slice(start, start + 12);
+        if (!slice.length) continue;
+        const sum = (key) => slice.reduce((s, r) => s + r[key], 0);
+        const debtService = sum("debtService");
+        const ebitda = sum("ebitda");
+        annual.push({
+          year,
+          months: slice.length,
+          endingMachines: slice[slice.length - 1].activeMachines,
+          revenue: sum("accruedRevenue"),
+          collectedRevenue: sum("collectedRevenue"),
+          serviceCost: sum("serviceCost"),
+          royalties: sum("royalties"),
+          merchantFees: sum("merchantFees"),
+          overhead: sum("overhead"),
+          ownerPay: sum("ownerPay"),
+          ebitda,
+          debtService,
+          dscr: debtService > 0 ? ebitda / debtService : Infinity,
+          interestExpense: sum("interestExpense"),
+          depreciation: sum("depreciation"),
+          pretaxIncome: sum("pretaxIncome"),
+          cashTaxes: sum("cashTaxes"),
+          cashCapex: sum("cashCapex"),
+          cashChange: sum("cashChange"),
+          endingCash: slice[slice.length - 1].endingCash,
+          endingDebt: slice[slice.length - 1].endingDebt,
+        });
+      }
+
+      const firstMonthDscrOne = rows.find(r => r.month >= 12 && r.trailing12Dscr >= 1)?.month ?? null;
+      const firstMonthDscrTarget = rows.find(r => r.month >= 12 && r.trailing12Dscr >= inp.lenderDscrTarget)?.month ?? null;
+      const firstTargetYear = annual.find(y => y.dscr >= inp.lenderDscrTarget)?.year ?? null;
+      const maxCapitalGap = Math.max(project.initialFundingGap, Math.max(0, -minCash));
+      const ending = rows[rows.length - 1];
+      const breakEvenMachines = calculateBreakEvenMachines(inp, project);
+      const status = underwritingStatusForResult({
+        project, minCash, maxCapitalGap, annual, inp,
+      });
+
+      return {
+        inp,
+        project,
+        rows,
+        annual,
+        servicePerMachine,
+        minCash,
+        minCashMonth,
+        firstNegativeMonth,
+        firstMonthDscrOne,
+        firstMonthDscrTarget,
+        firstTargetYear,
+        maxCapitalGap,
+        ending,
+        breakEvenMachines,
+        status,
+      };
+    }
+
+    function calculateBreakEvenMachines(inp, project) {
+      const servicePerMachine = serviceReserve(inp);
+      const startupMonthlyDebt = pmt(
+        project.startupLoanAmount,
+        inp.startupApr,
+        Math.max(1, inp.startupTerm - inp.startupInterestOnly)
+      );
+      const unitFinanced = inp.includeFutureLoans
+        ? project.unitEquipmentPackage * (inp.ongoingFinancedPct / 100)
+        : 0;
+      const unitDebt = unitFinanced > 0
+        ? pmt(unitFinanced, inp.ongoingApr, Math.max(1, inp.ongoingTerm - inp.equipmentInterestOnly))
+        : 0;
+
+      for (let machines = 0; machines <= 500; machines++) {
+        const revenue = machines * (inp.leaseRate + inp.serviceRevenuePerMachine);
+        const direct =
+          revenue * ((inp.royaltyRate + inp.merchantFeeRate) / 100) +
+          machines * servicePerMachine;
+        const overhead = overheadForMonth(inp, 12, machines);
+        const ebitda = revenue - direct - overhead - inp.ownerPay;
+        const ongoingUnits = Math.max(0, machines - inp.startupMachineUnits);
+        const debt = startupMonthlyDebt + ongoingUnits * unitDebt;
+        if (ebitda >= debt) return machines;
+      }
+      return null;
+    }
+
+    function underwritingStatusForResult({ project, minCash, maxCapitalGap, annual, inp }) {
+      const year5 = annual[4];
+      if (project.initialFundingGap > 0) {
+        return { state: "bad", label: "Sources do not cover project uses" };
+      }
+      if (minCash < 0 || maxCapitalGap > 0) {
+        return { state: "bad", label: "Additional capital is required" };
+      }
+      if (!year5 || year5.dscr < 1) {
+        return { state: "bad", label: "Year 5 DSCR is below 1.00x" };
+      }
+      if (year5.dscr < inp.lenderDscrTarget) {
+        return { state: "warn", label: "Year 5 is below the selected DSCR target" };
+      }
+      return { state: "good", label: "Meets the selected DSCR target by Year 5" };
+    }
+
+    function saveCurrentScenarioState() {
+      if (!activeScenario) return;
+      scenarioStates[activeScenario] = collectFormState();
+    }
+
+    function collectFormState() {
+      const out = {};
+      for (const id of fieldIds) {
+        const el = $(id);
+        if (!el) continue;
+        out[id] = checkboxIds.has(id) ? el.checked : el.value;
+      }
+      return out;
+    }
+
+    function applyState(state) {
+      for (const id of fieldIds) {
+        const el = $(id);
+        if (!el || state[id] === undefined) continue;
+        if (checkboxIds.has(id)) el.checked = Boolean(state[id]);
+        else el.value = state[id];
+      }
+      updateConditionalFields();
+    }
+
+    function switchScenario(next) {
+      if (!scenarioStates[next]) return;
+      saveCurrentScenarioState();
+      activeScenario = next;
+      applyState(scenarioStates[next]);
+      document.querySelectorAll(".scenario-tab").forEach(btn => {
+        btn.classList.toggle("is-active", btn.dataset.scenario === next);
+      });
+      $("activeScenarioLabel").textContent = `${scenarioNames[next]} scenario`;
+      $("scenarioDescription").textContent = scenarioDescription(next);
+      calculateAndRender();
+    }
+
+    function scenarioDescription(key) {
+      if (key === "downside") return "Stress case with slower placements, higher churn and service reserve, one-month collections, higher APR, and 60-month equipment amortization.";
+      if (key === "upside") return "Stronger execution case with faster placements, lower churn, added borrower cash, and longer equipment amortization. It is not an expected or promised outcome.";
+      return "Planning case with a staged placement ramp, startup-scaled overhead, provisional service reserve, and 84-month equipment amortization that must be verified with a lender.";
+    }
+
+    function updateConditionalFields() {
+      const simple = textVal("serviceMode") === "simple";
+      document.querySelectorAll(".service-detailed").forEach(el => {
+        el.style.display = simple ? "none" : "block";
+      });
+      document.querySelectorAll(".service-simple").forEach(el => {
+        el.classList.toggle("is-visible", simple);
+      });
+      const mode = textVal("overheadMode");
+      document.querySelectorAll(".overhead-machine-ramp").forEach(el => {
+        el.style.display = mode === "machineRamp" ? "block" : "none";
+      });
+      document.querySelectorAll(".overhead-time-ramp").forEach(el => {
+        el.classList.toggle("is-visible", mode === "timeRamp");
+      });
+      document.querySelectorAll(".overhead-per-machine").forEach(el => {
+        el.classList.toggle("is-visible", mode === "fixedPerMachine");
+      });
+      $("manualStartupLoan").disabled = checked("autoCalculateStartupLoan");
+    }
+
+    function calculateAndRender() {
+      updateConditionalFields();
+      calculateWorkingCapitalPlanner();
+      const inp = readInputs();
+      currentResult = simulate(inp);
+      scenarioStates[activeScenario] = collectFormState();
+      renderAll(currentResult);
+      renderPackageReadiness();
+      renderBusinessPlanSummary();
+    }
+
+    function renderAll(result) {
+      renderSnapshotOptions(result);
+      renderDashboard(result);
+      renderUnderwritingSummary(result);
+      renderUsesSources(result);
+      renderPlainSummary(result);
+      renderTermSensitivity(result);
+      renderScenarioComparison();
+      renderAnnualTable(result);
+      renderMonthlyTable(result);
+      renderPrintData(result);
+      drawCharts(result);
+    }
+
+    function renderSnapshotOptions(result) {
+      const current = Number($("snapshotMonth").value || 1);
+      const options = [];
+      for (let m = 1; m <= result.rows.length; m++) {
+        if (m === 1 || m % 12 === 0 || m === result.rows.length) {
+          options.push(`<option value="${m}">${m === result.rows.length ? `End · Month ${m}` : m % 12 === 0 ? `Year ${m / 12} · Month ${m}` : "Month 1"}</option>`);
+        }
+      }
+      $("snapshotMonth").innerHTML = options.join("");
+      const valid = options.some(o => o.includes(`value="${current}"`));
+      $("snapshotMonth").value = valid ? String(current) : String(Math.min(12, result.rows.length));
+    }
+
+    function dashboardClassForDscr(dscr, target) {
+      if (!Number.isFinite(dscr)) return "good";
+      if (dscr < 1) return "bad";
+      if (dscr < target) return "warn";
+      return "good";
+    }
+
+    function renderDashboard(result) {
+      const month = clamp(Number($("snapshotMonth").value || 1), 1, result.rows.length);
+      const row = result.rows[month - 1];
+      const project = result.project;
+      $("dashboardSubhead").textContent = `${scenarioNames[activeScenario]} scenario · ${result.inp.projectionMonths}-month projection`;
+      const status = $("underwritingStatus");
+      status.className = `status-pill ${result.status.state}`;
+      status.textContent = result.status.label;
+
+      const cards = [
+        { name: "Active machines", value: numfmt(row.activeMachines, 1), note: `${numfmt(row.newMachines, 2)} added in Month ${month}` },
+        { name: "Monthly revenue", value: money(row.accruedRevenue), note: `${money(result.inp.leaseRate)} average lease rate` },
+        { name: "Monthly EBITDA", value: money(row.ebitda), note: "Before debt service", cls: row.ebitda >= 0 ? "good" : "bad" },
+        { name: "Monthly debt service", value: money(row.debtService), note: `${money(row.startupDebtService)} startup + ${money(row.equipmentDebtService)} equipment` },
+        { name: "Trailing DSCR", value: Number.isFinite(row.trailing12Dscr) ? xfmt(row.trailing12Dscr) : "No debt", note: `Target ${xfmt(result.inp.lenderDscrTarget)}`, cls: dashboardClassForDscr(row.trailing12Dscr, result.inp.lenderDscrTarget) },
+        { name: "Ending cash", value: money(row.endingCash), note: `Minimum ${money(result.minCash)} in Month ${result.minCashMonth || 0}`, cls: row.endingCash >= 0 ? "good" : "bad" },
+        { name: "Ending debt", value: money(row.endingDebt), note: `${money(row.endingDebt / Math.max(1, row.activeMachines))} per active machine` },
+        { name: "Requested startup loan", value: money(project.startupLoanAmount), note: `Total uses ${money(project.totalUses)}` },
+      ];
+      $("kpiGrid").innerHTML = cards.map(c => `
+        <div class="kpi">
+          <div class="name">${c.name}</div>
+          <div class="value ${c.cls || ""}">${c.value}</div>
+          <div class="note">${c.note}</div>
+        </div>
+      `).join("");
+    }
+
+    function renderUnderwritingSummary(result) {
+      const y5 = result.annual[Math.min(4, result.annual.length - 1)];
+      const workingCapitalDetail = calculateWorkingCapitalPlanner();
+      const equityPct = result.project.totalUses > 0 ? (result.inp.cashContribution / result.project.totalUses) * 100 : 0;
+      const metrics = [
+        { label: "Total project uses", number: money(result.project.totalUses), sub: `Working capital reserve ${money(result.inp.workingCapitalReserve)}` },
+        { label: "Requested startup loan", number: money(result.project.startupLoanAmount), sub: `Cash contribution ${money(result.inp.cashContribution)}` },
+        { label: "Borrower cash injection", number: pct(equityPct, 1), sub: `${money(result.inp.cashContribution)} of total uses` },
+        { label: "6-month WC detail", number: money(workingCapitalDetail), sub: checked("useDetailedWorkingCapital") ? "Synced to working-capital reserve" : "Supporting schedule only" },
+        { label: "Minimum projected cash", number: money(result.minCash), sub: result.minCashMonth ? `Month ${result.minCashMonth}` : "Opening balance" },
+        { label: "Maximum capital gap", number: money(result.maxCapitalGap), sub: result.maxCapitalGap > 0 ? "Additional support indicated" : "No modeled gap" },
+        { label: "First negative cash", number: result.firstNegativeMonth ? `Month ${result.firstNegativeMonth}` : "Never", sub: `Within ${result.inp.projectionMonths} months` },
+        { label: "First trailing DSCR ≥ 1.00x", number: result.firstMonthDscrOne ? `Month ${result.firstMonthDscrOne}` : "Not reached", sub: "Trailing twelve months" },
+        { label: `First trailing DSCR ≥ ${result.inp.lenderDscrTarget.toFixed(2)}x`, number: result.firstMonthDscrTarget ? `Month ${result.firstMonthDscrTarget}` : "Not reached", sub: result.firstTargetYear ? `Annual screen in Year ${result.firstTargetYear}` : "No annual year clears" },
+        { label: "Approx. break-even machines", number: result.breakEvenMachines === null ? ">500" : numfmt(result.breakEvenMachines), sub: "Steady-state monthly cash coverage" },
+        { label: "Year 5 DSCR", number: y5 ? xfmt(y5.dscr) : "—", sub: y5 ? `${money(y5.ebitda)} EBITDA` : "Projection shorter than five years" },
+      ];
+      $("underwritingMetrics").innerHTML = metrics.map(m => `
+        <div class="mini-metric">
+          <div class="label">${m.label}</div>
+          <div class="number">${m.number}</div>
+          <div class="sub">${m.sub}</div>
+        </div>
+      `).join("");
+    }
+
+    function renderUsesSources(result) {
+      const p = result.project;
+      const inp = result.inp;
+      const rows = [
+        ["Initial franchise fee", inp.franchiseFee],
+        ["Startup equipment package", p.startupEquipment],
+        ["Tools and startup supplies", inp.toolsStartupSupplies],
+        ["Insurance, licenses, and setup", inp.insuranceLicensingSetup],
+        ["Opening marketing budget", inp.openingMarketingBudget],
+        ["Working capital reserve", inp.workingCapitalReserve],
+        ["Extra cash cushion", inp.extraCashCushion],
+        ["Total project uses", p.totalUses, "total"],
+        ["Franchisee cash contribution", inp.cashContribution, "source"],
+        ["Requested startup/SBA loan", p.startupLoanAmount, "source"],
+        ["Total sources", p.totalSources, "total"],
+        ["Initial funding gap", p.initialFundingGap, p.initialFundingGap > 0 ? "bad" : "good"],
+        ["Opening operating cash", p.openingCashAvailable, "good"],
+      ];
+      $("usesSourcesBody").innerHTML = rows.map(([name, amount, cls]) => `
+        <tr class="${cls === "total" ? "total-row" : ""}">
+          <td><strong>${name}</strong></td>
+          <td class="${cls === "bad" ? "cell-bad" : cls === "good" ? "cell-good" : ""}">${money(amount)}</td>
+        </tr>
+      `).join("");
+    }
+
+    function renderPlainSummary(result) {
+      const y5 = result.annual[Math.min(4, result.annual.length - 1)];
+      const lines = [
+        ["Underwriting result", `<span class="cell-${result.status.state}">${result.status.label}</span>`],
+        ["Projection horizon", `${result.inp.projectionMonths} months`],
+        ["Ending active machines", numfmt(result.ending.activeMachines, 1)],
+        ["Ending monthly revenue", money(result.ending.accruedRevenue)],
+        ["Year 5 DSCR", y5 ? xfmt(y5.dscr) : "—"],
+        ["Minimum cash balance", `${money(result.minCash)}${result.minCashMonth ? ` in Month ${result.minCashMonth}` : ""}`],
+        ["Maximum modeled capital gap", money(result.maxCapitalGap)],
+        ["Equipment financing assumption", `${result.inp.ongoingTerm} months at ${pct(result.inp.ongoingApr, 1)}`],
+        ["Service reserve", `${money(result.servicePerMachine)} per active machine / month`],
+        ["Overhead method", overheadMethodLabel(result.inp.overheadMode)],
+      ];
+      $("plainSummary").innerHTML = lines.map(([label, value]) => `
+        <div class="summary-line"><span>${label}</span><strong>${value}</strong></div>
+      `).join("");
+    }
+
+    function overheadMethodLabel(mode) {
+      return {
+        machineRamp: "Machine-count startup ramp",
+        timeRamp: "Time-based startup ramp",
+        fixedPerMachine: "Fixed plus per-machine",
+        fixed: "Fixed monthly overhead",
+      }[mode] || mode;
+    }
+
+    function inputWithOverride(inp, overrides) {
+      return Object.assign({}, inp, overrides);
+    }
+
+    function renderTermSensitivity(result) {
+      const terms = [60, 84, 96, 120];
+      $("termSensitivityBody").innerHTML = terms.map(term => {
+        const variant = simulate(inputWithOverride(result.inp, { ongoingTerm: term }));
+        const y3 = variant.annual[2];
+        const y5 = variant.annual[4] || variant.annual[variant.annual.length - 1];
+        const state = variant.status.state;
+        return `
+          <tr>
+            <td><strong>${term} months${term === result.inp.ongoingTerm ? " · selected" : ""}</strong></td>
+            <td class="${y3 ? dashboardClassForDscr(y3.dscr, result.inp.lenderDscrTarget).replace("good","cell-good").replace("warn","cell-warn").replace("bad","cell-bad") : ""}">${y3 ? xfmt(y3.dscr) : "—"}</td>
+            <td>${y5 ? xfmt(y5.dscr) : "—"}</td>
+            <td>${money(variant.minCash)}</td>
+            <td>${money(variant.maxCapitalGap)}</td>
+            <td class="cell-${state}">${variant.firstTargetYear ? `Year ${variant.firstTargetYear}` : "Not reached"}</td>
+          </tr>
+        `;
+      }).join("");
+    }
+
+    function normalizedStateToInputs(state) {
+      const backup = collectFormState();
+      applyState(state);
+      const inp = readInputs();
+      applyState(backup);
+      return inp;
+    }
+
+    function renderScenarioComparison() {
+      saveCurrentScenarioState();
+      const rows = [];
+      for (const key of ["downside","base","upside"]) {
+        const inp = normalizedStateToInputs(scenarioStates[key]);
+        const result = simulate(inp);
+        const y5 = result.annual[4] || result.annual[result.annual.length - 1];
+        rows.push({ key, result, y5 });
+      }
+      $("scenarioComparisonBody").innerHTML = rows.map(({ key, result, y5 }) => `
+        <tr>
+          <td><strong>${scenarioNames[key]}${key === activeScenario ? " · active" : ""}</strong></td>
+          <td>${money(result.project.startupLoanAmount)}</td>
+          <td>${numfmt(result.ending.activeMachines, 1)}</td>
+          <td>${y5 ? money(y5.revenue) : "—"}</td>
+          <td>${y5 ? xfmt(y5.dscr) : "—"}</td>
+          <td>${money(result.minCash)}</td>
+          <td>${money(result.maxCapitalGap)}</td>
+          <td class="cell-${result.status.state}">${result.status.label}</td>
+        </tr>
+      `).join("");
+    }
+
+    function renderAnnualTable(result) {
+      $("annualTableBody").innerHTML = result.annual.map(y => `
+        <tr>
+          <td><strong>Year ${y.year}</strong></td>
+          <td>${numfmt(y.endingMachines, 1)}</td>
+          <td>${money(y.revenue)}</td>
+          <td>${money(y.ebitda)}</td>
+          <td>${money(y.debtService)}</td>
+          <td class="${dashboardClassForDscr(y.dscr, result.inp.lenderDscrTarget).replace("good","cell-good").replace("warn","cell-warn").replace("bad","cell-bad")}">${xfmt(y.dscr)}</td>
+          <td>${money(y.cashTaxes)}</td>
+          <td>${money(y.cashChange)}</td>
+          <td>${money(y.endingCash)}</td>
+          <td>${money(y.endingDebt)}</td>
+        </tr>
+      `).join("");
+    }
+
+    function renderMonthlyTable(result) {
+      $("monthlyTableBody").innerHTML = result.rows.map(r => `
+        <tr>
+          <td><strong>${r.month}</strong></td>
+          <td>${numfmt(r.activeMachines, 1)}</td>
+          <td>${numfmt(r.newMachines, 2)}</td>
+          <td>${money(r.accruedRevenue)}</td>
+          <td>${money(r.ebitda)}</td>
+          <td>${money(r.debtService)}</td>
+          <td>${xfmt(r.trailing12Dscr)}</td>
+          <td>${money(r.cashCapex)}</td>
+          <td>${money(r.cashChange)}</td>
+          <td>${money(r.endingCash)}</td>
+          <td>${money(r.endingDebt)}</td>
+        </tr>
+      `).join("");
+    }
+
+    function renderPrintData(result) {
+      $("printBorrower").textContent = result.inp.borrowerName || "Prospective franchisee";
+      $("printMarket").textContent = result.inp.marketName || "Not specified";
+      $("printScenario").textContent = scenarioNames[activeScenario];
+      $("printPreparedBy").textContent = result.inp.preparedBy || "Iceworks Franchise Group";
+      const notes = [
+        ["Growth basis", result.inp.growthBasis || "Not documented"],
+        ["Overhead basis", result.inp.overheadBasis || "Not documented"],
+        ["Financing basis", result.inp.financingBasis || "Not documented"],
+        ["Service-cost basis", result.inp.serviceBasis || "Not documented"],
+      ];
+      $("printAssumptionNotes").innerHTML = notes.map(([label, value]) => `
+        <div class="summary-line"><span>${label}</span><strong style="max-width:72%">${escapeHtml(value)}</strong></div>
+      `).join("");
+    }
+
+    function drawCharts(result) {
+      drawLineChart(
+        $("cashChart"),
+        result.rows.map(r => r.endingCash),
+        {
+          valueFormatter: shortMoney,
+          target: 0,
+          targetLabel: "$0",
+          lineColor: "#0f8b5f",
+        }
+      );
+      drawBarChart(
+        $("dscrChart"),
+        result.annual.slice(0, 5).map(y => y.dscr),
+        result.annual.slice(0, 5).map(y => `Y${y.year}`),
+        result.inp.lenderDscrTarget
+      );
+    }
+
+    function setupCanvas(canvas) {
+      const ratio = window.devicePixelRatio || 1;
+      const rect = canvas.getBoundingClientRect();
+      canvas.width = Math.max(1, Math.round(rect.width * ratio));
+      canvas.height = Math.max(1, Math.round(rect.height * ratio));
+      const ctx = canvas.getContext("2d");
+      ctx.setTransform(ratio, 0, 0, ratio, 0, 0);
+      return { ctx, w: rect.width, h: rect.height };
+    }
+
+    function drawLineChart(canvas, values, opts) {
+      const { ctx, w, h } = setupCanvas(canvas);
+      ctx.clearRect(0,0,w,h);
+      const pad = { l: 52, r: 14, t: 15, b: 28 };
+      const all = values.concat([opts.target ?? 0]);
+      let min = Math.min(...all);
+      let max = Math.max(...all);
+      if (min === max) { min -= 1; max += 1; }
+      const extra = (max - min) * 0.12;
+      min -= extra;
+      max += extra;
+      const x = i => pad.l + i * (w - pad.l - pad.r) / Math.max(1, values.length - 1);
+      const y = v => pad.t + (max - v) * (h - pad.t - pad.b) / (max - min);
+
+      ctx.strokeStyle = "#dce7ee";
+      ctx.fillStyle = "#65758b";
+      ctx.font = "10px system-ui";
+      for (let i = 0; i <= 4; i++) {
+        const yy = pad.t + i * (h - pad.t - pad.b) / 4;
+        const gv = max - i * (max - min) / 4;
+        ctx.beginPath();
+        ctx.moveTo(pad.l, yy);
+        ctx.lineTo(w - pad.r, yy);
+        ctx.stroke();
+        ctx.fillText(opts.valueFormatter(gv), 2, yy + 3);
+      }
+      if (opts.target !== undefined && opts.target >= min && opts.target <= max) {
+        ctx.setLineDash([5,4]);
+        ctx.strokeStyle = "#bd3039";
+        ctx.beginPath();
+        ctx.moveTo(pad.l, y(opts.target));
+        ctx.lineTo(w-pad.r, y(opts.target));
+        ctx.stroke();
+        ctx.setLineDash([]);
+      }
+      ctx.strokeStyle = opts.lineColor;
+      ctx.lineWidth = 2.5;
+      ctx.beginPath();
+      values.forEach((v,i) => {
+        if (i === 0) ctx.moveTo(x(i), y(v));
+        else ctx.lineTo(x(i), y(v));
+      });
+      ctx.stroke();
+      ctx.fillStyle = "#65758b";
+      ctx.font = "10px system-ui";
+      ctx.fillText("M1", pad.l, h - 7);
+      ctx.textAlign = "right";
+      ctx.fillText(`M${values.length}`, w - pad.r, h - 7);
+      ctx.textAlign = "left";
+    }
+
+    function drawBarChart(canvas, values, labels, target) {
+      const { ctx, w, h } = setupCanvas(canvas);
+      ctx.clearRect(0,0,w,h);
+      const pad = { l: 38, r: 12, t: 16, b: 28 };
+      const finite = values.map(v => Number.isFinite(v) ? v : 0);
+      const max = Math.max(target * 1.25, ...finite, 1);
+      const y = v => pad.t + (max - v) * (h - pad.t - pad.b) / max;
+      ctx.strokeStyle = "#dce7ee";
+      ctx.fillStyle = "#65758b";
+      ctx.font = "10px system-ui";
+      for (let i = 0; i <= 4; i++) {
+        const yy = pad.t + i * (h - pad.t - pad.b) / 4;
+        const gv = max - i * max / 4;
+        ctx.beginPath();
+        ctx.moveTo(pad.l, yy);
+        ctx.lineTo(w-pad.r, yy);
+        ctx.stroke();
+        ctx.fillText(gv.toFixed(1)+"x", 2, yy+3);
+      }
+      const targetY = y(target);
+      ctx.setLineDash([5,4]);
+      ctx.strokeStyle = "#b7791f";
+      ctx.beginPath();
+      ctx.moveTo(pad.l,targetY);
+      ctx.lineTo(w-pad.r,targetY);
+      ctx.stroke();
+      ctx.setLineDash([]);
+      const slot = (w-pad.l-pad.r)/Math.max(1,finite.length);
+      finite.forEach((v,i) => {
+        const bw = Math.min(42, slot*.55);
+        const xx = pad.l + slot*i + slot/2 - bw/2;
+        const yy = y(Math.max(0,v));
+        ctx.fillStyle = v >= target ? "#0f8b5f" : v >= 1 ? "#b7791f" : "#bd3039";
+        ctx.fillRect(xx, yy, bw, Math.max(2, h-pad.b-yy));
+        ctx.fillStyle = "#536782";
+        ctx.textAlign = "center";
+        ctx.fillText(labels[i], xx+bw/2, h-8);
+      });
+      ctx.textAlign = "left";
+    }
+
+    function shortMoney(v) {
+      const sign = v < 0 ? "-" : "";
+      const a = Math.abs(v);
+      if (a >= 1000000) return `${sign}$${(a/1000000).toFixed(1)}M`;
+      if (a >= 1000) return `${sign}$${(a/1000).toFixed(0)}k`;
+      return `${sign}$${a.toFixed(0)}`;
+    }
+
+    function escapeHtml(str) {
+      return String(str ?? "").replace(/[&<>"']/g, s => ({
+        "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"
+      })[s]);
+    }
+
+    function exportMonthlyCsv() {
+      if (!currentResult) return;
+      const headers = [
+        "Month","Beginning Machines","New Machines","Churned Machines","Ending Machines",
+        "Accrued Revenue","Collected Revenue","Royalties","Merchant Fees","Service Cost",
+        "Overhead","Owner Pay","EBITDA","Equipment Purchase","Equipment Financed",
+        "Cash Capex","Startup Debt Service","Equipment Debt Service","Total Debt Service",
+        "Interest","Principal","Depreciation","Pretax Income","Cash Taxes","Cash Change",
+        "Ending Cash","Ending Debt","Monthly DSCR","Trailing 12 DSCR"
+      ];
+      const rows = currentResult.rows.map(r => [
+        r.month,r.beginningMachines,r.newMachines,r.churnedMachines,r.activeMachines,
+        r.accruedRevenue,r.collectedRevenue,r.royalties,r.merchantFees,r.serviceCost,
+        r.overhead,r.ownerPay,r.ebitda,r.equipmentPurchase,r.equipmentFinanced,
+        r.cashCapex,r.startupDebtService,r.equipmentDebtService,r.debtService,
+        r.interestExpense,r.principalPaid,r.depreciation,r.pretaxIncome,r.cashTaxes,
+        r.cashChange,r.endingCash,r.endingDebt,r.dscr,r.trailing12Dscr
+      ]);
+      downloadCsv([headers,...rows], `iceworks_sba_lender_tool_v5_0_${activeScenario}_monthly.csv`);
+    }
+
+    function exportAnnualCsv() {
+      if (!currentResult) return;
+      const headers = [
+        "Year","Months","Ending Machines","Revenue","Collected Revenue","Service Cost",
+        "Royalties","Merchant Fees","Overhead","Owner Pay","EBITDA","Debt Service",
+        "DSCR","Interest","Depreciation","Pretax Income","Cash Taxes","Cash Capex",
+        "Cash Change","Ending Cash","Ending Debt"
+      ];
+      const rows = currentResult.annual.map(y => [
+        y.year,y.months,y.endingMachines,y.revenue,y.collectedRevenue,y.serviceCost,
+        y.royalties,y.merchantFees,y.overhead,y.ownerPay,y.ebitda,y.debtService,
+        y.dscr,y.interestExpense,y.depreciation,y.pretaxIncome,y.cashTaxes,y.cashCapex,
+        y.cashChange,y.endingCash,y.endingDebt
+      ]);
+      downloadCsv([headers,...rows], `iceworks_sba_lender_tool_v5_0_${activeScenario}_annual.csv`);
+    }
+
+    function downloadCsv(rows, filename) {
+      const csv = rows.map(row => row.map(cell => JSON.stringify(cell ?? "")).join(",")).join("\n");
+      const blob = new Blob([csv], { type: "text/csv;charset=utf-8" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = filename;
+      a.click();
+      URL.revokeObjectURL(url);
+    }
+
+    function saveAll() {
+      saveCurrentScenarioState();
+      const payload = {
+        version: "v5.0",
+        savedAt: new Date().toISOString(),
+        activeScenario,
+        scenarioStates,
+        packageState: collectPackageState(),
+      };
+      localStorage.setItem("iceworksSbaLenderToolV50", JSON.stringify(payload));
+      alert("All three scenarios and the lender-package checklist were saved in this browser.");
+    }
+
+    function loadAll() {
+      const raw = localStorage.getItem("iceworksSbaLenderToolV50");
+      if (!raw) {
+        alert("No saved v5.0 SBA / lender model was found in this browser.");
+        return;
+      }
+      try {
+        const payload = JSON.parse(raw);
+        if (!payload.scenarioStates) throw new Error("Invalid saved file");
+        scenarioStates = payload.scenarioStates;
+        packageState = payload.packageState || {};
+        activeScenario = payload.activeScenario || "base";
+        applyState(scenarioStates[activeScenario]);
+        document.querySelectorAll(".scenario-tab").forEach(btn => {
+          btn.classList.toggle("is-active", btn.dataset.scenario === activeScenario);
+        });
+        $("activeScenarioLabel").textContent = `${scenarioNames[activeScenario]} scenario`;
+        $("scenarioDescription").textContent = scenarioDescription(activeScenario);
+        applyPackageState(packageState);
+        calculateAndRender();
+      } catch (error) {
+        alert("The saved model could not be loaded.");
+      }
+    }
+
+    function resetActiveScenario() {
+      if (!confirm(`Reset the ${scenarioNames[activeScenario]} scenario to the v5.0 defaults?`)) return;
+      scenarioStates[activeScenario] = JSON.parse(JSON.stringify(presets[activeScenario]));
+      applyState(scenarioStates[activeScenario]);
+      calculateAndRender();
+    }
+
+    function resetAllScenarios() {
+      if (!confirm("Reset all three scenarios to the v5.0 defaults?")) return;
+      scenarioStates = JSON.parse(JSON.stringify(presets));
+      activeScenario = "base";
+      applyState(scenarioStates.base);
+      document.querySelectorAll(".scenario-tab").forEach(btn => {
+        btn.classList.toggle("is-active", btn.dataset.scenario === "base");
+      });
+      $("activeScenarioLabel").textContent = "Base scenario";
+      $("scenarioDescription").textContent = scenarioDescription("base");
+      calculateAndRender();
+    }
+
+    function setupTooltip() {
+      const tip = $("tooltip");
+      function show(el) {
+        const txt = el.dataset.help;
+        if (!txt) return;
+        tip.textContent = txt;
+        tip.classList.add("show");
+        position(el);
+      }
+      function position(el) {
+        const r = el.getBoundingClientRect();
+        const tw = Math.min(340, window.innerWidth - 24);
+        tip.style.maxWidth = `${tw}px`;
+        const top = Math.max(8, r.top - tip.offsetHeight - 12);
+        let left = r.left + r.width / 2 - tw / 2;
+        left = Math.max(10, Math.min(window.innerWidth - tw - 10, left));
+        tip.style.top = `${top}px`;
+        tip.style.left = `${left}px`;
+      }
+      document.addEventListener("mouseover", e => {
+        const el = e.target.closest("[data-help]");
+        if (el) show(el);
+      });
+      document.addEventListener("mouseout", e => {
+        if (e.target.closest("[data-help]")) tip.classList.remove("show");
+      });
+    }
+
+    function wireEvents() {
+      document.querySelectorAll(".scenario-tab").forEach(btn => {
+        btn.addEventListener("click", () => switchScenario(btn.dataset.scenario));
+      });
+      document.querySelectorAll("input, select, textarea").forEach(el => {
+        el.addEventListener("input", () => {
+          updateConditionalFields();
+          calculateAndRender();
+        });
+      });
+      $("snapshotMonth").addEventListener("change", () => {
+        if (currentResult) renderDashboard(currentResult);
+      });
+      $("recalculateBtn").addEventListener("click", calculateAndRender);
+      $("saveBtn").addEventListener("click", saveAll);
+      $("loadBtn").addEventListener("click", loadAll);
+      $("exportMonthlyBtn").addEventListener("click", exportMonthlyCsv);
+      $("exportAnnualBtn").addEventListener("click", exportAnnualCsv);
+      $("printBtn").addEventListener("click", () => window.print());
+      $("resetScenarioBtn").addEventListener("click", resetActiveScenario);
+      $("resetAllBtn").addEventListener("click", resetAllScenarios);
+      window.addEventListener("resize", () => {
+        if (currentResult) drawCharts(currentResult);
+      });
+    }
+
+
+    function initLenderNavigation() {
+      const links = [...document.querySelectorAll(".lender-nav-item")];
+      const sections = links.map(link => $(link.dataset.lenderTarget)).filter(Boolean);
+      links.forEach(link => link.addEventListener("click", () => {
+        links.forEach(x => x.classList.remove("is-active"));
+        link.classList.add("is-active");
+      }));
+      if (!("IntersectionObserver" in window) || !sections.length) return;
+      const observer = new IntersectionObserver(entries => {
+        const visible = entries.filter(e => e.isIntersecting).sort((a,b)=>b.intersectionRatio-a.intersectionRatio)[0];
+        if (!visible) return;
+        links.forEach(link => link.classList.toggle("is-active", link.dataset.lenderTarget === visible.target.id));
+      }, { rootMargin:"-18% 0px -68% 0px", threshold:[0,.1,.25,.5] });
+      sections.forEach(section => observer.observe(section));
+    }
+
+    function init() {
+      applyState(scenarioStates.base);
+      initPackageChecklist();
+      initLenderNavigation();
+      ["wcMonthlyOverhead","wcMonthlyOwnerPay","wcMonthlyService","wcMonthlyStartupDebt","wcMonthlyMarketing","wcMonthlyOther","wcContingency"].forEach(id => {
+        const el = $(id);
+        if (!el) return;
+        el.addEventListener("input", () => { el.dataset.userEdited = "true"; calculateWorkingCapitalPlanner(); });
+      });
+      $("useDetailedWorkingCapital")?.addEventListener("input", () => { calculateWorkingCapitalPlanner(); calculateAndRender(); });
+      $("scenarioDescription").textContent = scenarioDescription("base");
+      setupTooltip();
+      wireEvents();
+      calculateAndRender();
+    }
+
+    init();
+  </script>
+</body>
+</html>

@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Iceworks Franchisee Financial Model v4.2</title>
+    <title>Iceworks SBA / Lender Readiness Tool v5.0</title>
     <style>
       :root {
         --bg: #f3f7fb;
@@ -777,6 +777,412 @@
           grid-template-columns: 1fr 1fr;
         }
       }
+
+      /* v5.0 lender-package workflow — mirrors the Quarterly Review Tool navigation */
+      .workspace {
+        grid-template-columns: 218px minmax(520px, 0.92fr) minmax(620px, 1.18fr);
+      }
+      .lender-nav {
+        position: sticky;
+        top: 16px;
+        z-index: 7;
+        align-self: start;
+        min-width: 0;
+      }
+      .lender-nav-panel {
+        overflow: hidden;
+        border: 1px solid rgba(199, 216, 228, 0.96);
+        border-radius: 16px;
+        background: rgba(255, 255, 255, 0.96);
+        box-shadow: 0 12px 30px rgba(19, 33, 59, 0.08);
+        backdrop-filter: blur(12px);
+      }
+      .lender-nav-head {
+        padding: 14px 14px 12px;
+        border-bottom: 1px solid var(--line);
+        background: linear-gradient(180deg, #fff 0%, #f8fbfd 100%);
+      }
+      .lender-nav-kicker {
+        display: block;
+        margin-bottom: 3px;
+        color: var(--muted);
+        font-size: 10px;
+        font-weight: 950;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+      }
+      .lender-nav-title {
+        margin: 0;
+        color: var(--brand-dark);
+        font-size: 15px;
+        line-height: 1.15;
+        letter-spacing: -0.025em;
+        font-weight: 950;
+      }
+      .lender-nav-list {
+        display: flex;
+        flex-direction: column;
+        gap: 3px;
+        padding: 8px 0;
+      }
+      .lender-nav-item {
+        display: grid;
+        grid-template-columns: 29px minmax(0, 1fr);
+        align-items: center;
+        gap: 8px;
+        min-height: 43px;
+        margin: 0 8px;
+        padding: 8px 9px 8px 7px;
+        border-left: 4px solid transparent;
+        border-radius: 0 10px 10px 0;
+        color: #75859a;
+        text-decoration: none;
+        opacity: 0.78;
+        transition: all 0.16s ease;
+      }
+      .lender-nav-item:hover {
+        color: #425a73;
+        opacity: 1;
+        background: #f2f7fa;
+        transform: translateX(1px);
+      }
+      .lender-nav-item.is-active {
+        color: var(--brand-dark);
+        opacity: 1;
+        border-left-color: var(--brand);
+        background: var(--brand-soft);
+      }
+      .lender-nav-number {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 27px;
+        height: 27px;
+        border: 1px solid #cad9e4;
+        border-radius: 9px;
+        background: #f7fafc;
+        color: #7c8ca0;
+        font-size: 11px;
+        font-weight: 950;
+      }
+      .lender-nav-item.is-active .lender-nav-number {
+        color: #fff;
+        border-color: var(--brand);
+        background: var(--brand);
+      }
+      .lender-nav-label {
+        min-width: 0;
+        font-size: 12px;
+        line-height: 1.22;
+        font-weight: 760;
+        letter-spacing: -0.01em;
+      }
+      details.input-section {
+        scroll-margin-top: 24px;
+      }
+
+      .q {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 18px;
+        height: 18px;
+        min-width: 18px;
+        border-radius: 999px;
+        border: 1px solid rgba(8, 125, 144, 0.38);
+        background: #eefbfc;
+        color: var(--brand-dark);
+        font-size: 12px;
+        font-weight: 950;
+        cursor: help;
+        user-select: none;
+      }
+
+      .business-plan-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 12px;
+      }
+      .business-plan-grid .full {
+        grid-column: 1 / -1;
+      }
+      .business-plan-grid textarea {
+        min-height: 96px;
+      }
+
+      .wc-planner {
+        margin-top: 14px;
+        padding: 14px;
+        border: 1px solid var(--line);
+        border-radius: 15px;
+        background: linear-gradient(180deg, #fbfdff 0%, #f6fbfd 100%);
+      }
+      .wc-planner-head {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 12px;
+        margin-bottom: 12px;
+      }
+      .wc-planner-head h4 {
+        margin: 0;
+        color: var(--navy);
+        font-size: 15px;
+        letter-spacing: -0.02em;
+      }
+      .wc-total-pill {
+        flex: 0 0 auto;
+        padding: 7px 10px;
+        border-radius: 999px;
+        background: var(--brand-soft);
+        color: var(--brand-dark);
+        font-size: 11px;
+        font-weight: 950;
+        white-space: nowrap;
+      }
+      .wc-grid {
+        display: grid;
+        grid-template-columns: minmax(0, 1.35fr) 120px 120px;
+        gap: 8px;
+        align-items: center;
+      }
+      .wc-grid .wc-head {
+        color: var(--muted);
+        font-size: 10px;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        font-weight: 950;
+      }
+      .wc-row-label {
+        color: #536782;
+        font-size: 12px;
+        line-height: 1.25;
+        font-weight: 850;
+      }
+      .wc-grid input {
+        height: 36px;
+        font-size: 12px;
+        padding: 0 8px;
+        border-radius: 10px;
+      }
+      .wc-line-total {
+        text-align: right;
+        color: var(--navy);
+        font-size: 12px;
+        font-weight: 950;
+        white-space: nowrap;
+      }
+      .wc-footer {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) auto;
+        gap: 12px;
+        align-items: center;
+        margin-top: 12px;
+        padding-top: 12px;
+        border-top: 1px solid var(--line);
+      }
+      .wc-footer strong {
+        font-size: 14px;
+        color: var(--brand-dark);
+      }
+
+      .checklist-toolbar {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 10px;
+        margin-bottom: 12px;
+      }
+      .readiness-card {
+        border: 1px solid var(--line);
+        border-radius: 14px;
+        padding: 11px 12px;
+        background: var(--surface-2);
+      }
+      .readiness-card .label {
+        color: var(--muted);
+        font-size: 10px;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        font-weight: 950;
+      }
+      .readiness-card .value {
+        margin-top: 5px;
+        color: var(--navy);
+        font-size: 21px;
+        line-height: 1;
+        font-weight: 1000;
+        letter-spacing: -0.04em;
+      }
+      .readiness-card .value.good {
+        color: var(--good);
+      }
+      .readiness-card .value.warn {
+        color: var(--warn);
+      }
+      .readiness-card .value.bad {
+        color: var(--bad);
+      }
+      .readiness-card .note {
+        margin-top: 5px;
+        color: var(--muted);
+        font-size: 10px;
+        line-height: 1.3;
+        font-weight: 700;
+      }
+
+      .package-table td:first-child,
+      .package-table th:first-child {
+        text-align: left;
+      }
+      .package-table td:nth-child(2),
+      .package-table th:nth-child(2) {
+        text-align: left;
+      }
+      .package-table td:nth-child(3),
+      .package-table th:nth-child(3) {
+        text-align: left;
+      }
+      .package-table td:nth-child(4),
+      .package-table th:nth-child(4) {
+        text-align: left;
+      }
+      .package-table select {
+        min-width: 118px;
+        height: 34px;
+        padding: 0 7px;
+        border-radius: 10px;
+        font-size: 11px;
+      }
+      .doc-category {
+        display: inline-flex;
+        padding: 4px 7px;
+        border-radius: 999px;
+        background: #eef3f7;
+        color: #536782;
+        font-size: 9px;
+        line-height: 1;
+        font-weight: 950;
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+      }
+      .doc-owner {
+        display: inline-flex;
+        padding: 4px 7px;
+        border-radius: 999px;
+        background: var(--brand-soft);
+        color: var(--brand-dark);
+        font-size: 9px;
+        line-height: 1;
+        font-weight: 950;
+      }
+      .package-warning-list {
+        display: grid;
+        gap: 8px;
+        margin-top: 12px;
+      }
+      .package-warning {
+        border-left: 4px solid var(--warn);
+        background: var(--warn-bg);
+        border-radius: 10px;
+        padding: 9px 10px;
+        color: #765018;
+        font-size: 11px;
+        line-height: 1.35;
+        font-weight: 750;
+      }
+
+      .lender-readiness-strip {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 10px;
+      }
+      .business-plan-summary {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 12px;
+      }
+      .narrative-card {
+        border: 1px solid var(--line);
+        border-radius: 14px;
+        padding: 12px;
+        background: #fff;
+      }
+      .narrative-card h4 {
+        margin: 0 0 5px;
+        color: var(--brand-dark);
+        font-size: 12px;
+      }
+      .narrative-card p {
+        margin: 0;
+        color: var(--muted);
+        font-size: 11px;
+        line-height: 1.45;
+        font-weight: 700;
+        white-space: pre-wrap;
+      }
+
+      @media (max-width: 1380px) {
+        .workspace {
+          grid-template-columns: minmax(520px, 0.92fr) minmax(600px, 1.18fr);
+        }
+        .lender-nav {
+          grid-column: 1 / -1;
+          position: sticky;
+          top: 8px;
+          z-index: 20;
+        }
+        .lender-nav-panel {
+          border-radius: 14px;
+        }
+        .lender-nav-head {
+          padding: 9px 13px;
+        }
+        .lender-nav-kicker {
+          display: none;
+        }
+        .lender-nav-list {
+          flex-direction: row;
+          gap: 6px;
+          overflow-x: auto;
+          padding: 7px 8px 9px;
+        }
+        .lender-nav-item {
+          flex: 0 0 auto;
+          grid-template-columns: 26px auto;
+          min-width: 180px;
+          min-height: 40px;
+          margin: 0;
+          padding: 7px 10px;
+          border-left: 0;
+          border-bottom: 3px solid transparent;
+          border-radius: 10px;
+        }
+        .lender-nav-item.is-active {
+          border-bottom-color: var(--brand);
+        }
+        details.input-section {
+          scroll-margin-top: 130px;
+        }
+      }
+      @media (max-width: 820px) {
+        .business-plan-grid,
+        .checklist-toolbar,
+        .lender-readiness-strip,
+        .business-plan-summary {
+          grid-template-columns: 1fr;
+        }
+        .wc-grid {
+          grid-template-columns: minmax(0, 1fr) 92px 92px;
+        }
+        .wc-planner-head {
+          display: block;
+        }
+        .wc-total-pill {
+          display: inline-flex;
+          margin-top: 8px;
+        }
+      }
+
       @media print {
         @page {
           size: letter portrait;
@@ -805,6 +1211,7 @@
         .no-print,
         .guide-card,
         .scenario-card,
+        .lender-nav,
         .input-card,
         .dashboard-card,
         .monthly-detail {
@@ -865,15 +1272,18 @@
     <header>
       <div class="topbar">
         <div>
-          <h1>Iceworks Franchisee Financial Model v4.2</h1>
+          <h1>Iceworks SBA / Lender Readiness Tool v5.0</h1>
           <div class="subtitle">
-            SBA and lender-facing planning model for startup uses, machine
-            growth, operating costs, equipment financing, cash runway, and
-            debt-service coverage. Assumptions are editable and outcomes are
-            estimates—not promises or guarantees.
+            Build a lender-ready startup package in one place: borrower profile,
+            business-plan inputs, 5-year projections, six-month working capital,
+            sources and uses, equipment financing, DSCR, cash runway, scenario
+            stress testing, and the SBA document checklist requested by the
+            lender.
           </div>
         </div>
-        <div class="pill">Lender calibration · three scenarios</div>
+        <div class="pill">
+          SBA package builder · lender-ready projections · v5.0
+        </div>
       </div>
     </header>
 
@@ -888,31 +1298,31 @@
         <div class="card-body">
           <div class="guide-grid">
             <div class="guide-step">
-              <strong>1. Document the assumptions.</strong>
+              <strong>1. Build the borrower story.</strong>
               <span
-                >Choose base, downside, or upside and identify the basis for
-                growth, overhead, service costs, and financing.</span
+                >Capture the borrower, market, management experience, target
+                customers, sales strategy, and revenue model.</span
               >
             </div>
             <div class="guide-step">
-              <strong>2. Model a realistic startup ramp.</strong>
+              <strong>2. Build sources, uses & working capital.</strong>
               <span
-                >Machine placements and overhead build in stages rather than
-                assuming mature operations from Month 1.</span
+                >Show what the loan pays for and document a detailed six-month
+                working-capital reserve.</span
               >
             </div>
             <div class="guide-step">
-              <strong>3. Stress the debt structure.</strong>
+              <strong>3. Stress the projections.</strong>
               <span
-                >Compare 60-, 84-, 96-, and 120-month equipment terms without
-                hiding an unfavorable result.</span
+                >Compare downside, base, and upside cases, then test cash,
+                equipment debt, break-even, and DSCR.</span
               >
             </div>
             <div class="guide-step">
-              <strong>4. Print a lender-ready summary.</strong>
+              <strong>4. Finish the SBA package.</strong>
               <span
-                >Use of funds, annual results, DSCR, minimum cash, and scenario
-                comparisons are organized for review.</span
+                >Track lender documents, identify missing items, and print a
+                clean projection and readiness package.</span
               >
             </div>
           </div>
@@ -965,69 +1375,243 @@
       </section>
 
       <div class="workspace">
+        <aside class="lender-nav" aria-label="SBA lender package sections">
+          <nav class="lender-nav-panel" aria-label="Lender Package Sections">
+            <div class="lender-nav-head">
+              <span class="lender-nav-kicker">Package workflow</span>
+              <h2 class="lender-nav-title">SBA / Lender Sections</h2>
+            </div>
+            <div class="lender-nav-list">
+              <a
+                class="lender-nav-item is-active"
+                href="#section-borrower"
+                data-lender-target="section-borrower"
+                ><span class="lender-nav-number">1</span
+                ><span class="lender-nav-label">Borrower & Loan Setup</span></a
+              >
+              <a
+                class="lender-nav-item"
+                href="#section-business-plan"
+                data-lender-target="section-business-plan"
+                ><span class="lender-nav-number">2</span
+                ><span class="lender-nav-label">Business Plan Inputs</span></a
+              >
+              <a
+                class="lender-nav-item"
+                href="#section-growth"
+                data-lender-target="section-growth"
+                ><span class="lender-nav-number">3</span
+                ><span class="lender-nav-label">Growth & Revenue</span></a
+              >
+              <a
+                class="lender-nav-item"
+                href="#section-startup"
+                data-lender-target="section-startup"
+                ><span class="lender-nav-number">4</span
+                ><span class="lender-nav-label">Uses & Working Capital</span></a
+              >
+              <a
+                class="lender-nav-item"
+                href="#section-equipment"
+                data-lender-target="section-equipment"
+                ><span class="lender-nav-number">5</span
+                ><span class="lender-nav-label">Equipment Financing</span></a
+              >
+              <a
+                class="lender-nav-item"
+                href="#section-service"
+                data-lender-target="section-service"
+                ><span class="lender-nav-number">6</span
+                ><span class="lender-nav-label">Service & Overhead</span></a
+              >
+              <a
+                class="lender-nav-item"
+                href="#section-notes"
+                data-lender-target="section-notes"
+                ><span class="lender-nav-number">7</span
+                ><span class="lender-nav-label">Assumption Support</span></a
+              >
+              <a
+                class="lender-nav-item"
+                href="#section-checklist"
+                data-lender-target="section-checklist"
+                ><span class="lender-nav-number">8</span
+                ><span class="lender-nav-label">SBA Package Checklist</span></a
+              >
+            </div>
+          </nav>
+        </aside>
         <section class="card input-card">
           <div class="card-head">
-            <h2>Projection Assumptions</h2>
+            <h2>SBA / Lender Package Inputs</h2>
             <span class="small-muted" id="activeScenarioLabel"
               >Base scenario</span
             >
           </div>
           <div class="card-body stack">
-            <div class="inputs-grid">
-              <div>
-                <label for="borrowerName">Borrower / ownership group</label>
-                <input
-                  id="borrowerName"
-                  value=""
-                  placeholder="Prospective franchisee"
-                />
-              </div>
-              <div>
-                <label for="marketName">Market / territory</label>
-                <input
-                  id="marketName"
-                  value=""
-                  placeholder="City or territory"
-                />
-              </div>
-              <div>
-                <label for="modelStartDate"
-                  >Franchise start date / inception</label
+            <details class="input-section" open id="section-borrower">
+              <summary>
+                <span
+                  >1. Borrower & Loan Setup
+                  <span
+                    class="q"
+                    data-help="Identify the borrower, legal business, market, projection period, and lender screen before building the financial model."
+                    >?</span
+                  ></span
                 >
-                <input id="modelStartDate" type="date" value="2026-01-01" />
+                <span class="section-tag">borrower facts</span>
+              </summary>
+              <div class="inside">
+                <div class="inputs-grid">
+                  <div>
+                    <label for="borrowerName">Borrower / ownership group</label>
+                    <input
+                      id="borrowerName"
+                      value=""
+                      placeholder="Prospective franchisee"
+                    />
+                  </div>
+                  <div>
+                    <label for="businessLegalName"
+                      >Proposed legal business name</label
+                    >
+                    <input
+                      id="businessLegalName"
+                      value=""
+                      placeholder="Borrower entity / LLC"
+                    />
+                  </div>
+                  <div>
+                    <label for="marketName">Market / territory</label>
+                    <input
+                      id="marketName"
+                      value=""
+                      placeholder="City or territory"
+                    />
+                  </div>
+                  <div>
+                    <label for="lenderName">Lender / bank</label>
+                    <input id="lenderName" value="FMS Bank" />
+                  </div>
+                  <div>
+                    <label for="modelStartDate"
+                      >Franchise start date / inception</label
+                    >
+                    <input id="modelStartDate" type="date" value="2026-01-01" />
+                  </div>
+                  <div>
+                    <label for="projectionMonths"
+                      >Projection period (months)</label
+                    >
+                    <input
+                      id="projectionMonths"
+                      type="number"
+                      min="60"
+                      max="180"
+                      step="1"
+                      value="60"
+                    />
+                  </div>
+                  <div>
+                    <label for="lenderDscrTarget"
+                      >Selected lender DSCR screen</label
+                    >
+                    <input
+                      id="lenderDscrTarget"
+                      type="number"
+                      min="0.5"
+                      step="0.05"
+                      value="1.25"
+                    />
+                  </div>
+                  <div>
+                    <label for="preparedBy">Prepared by</label>
+                    <input id="preparedBy" value="Iceworks Franchise Group" />
+                  </div>
+                  <div class="full">
+                    <label for="loanPurpose"
+                      >Loan purpose / request summary</label
+                    >
+                    <textarea
+                      id="loanPurpose"
+                      placeholder="Example: franchise startup costs, working capital, initial equipment, tools, licensing, and launch expenses."
+                    ></textarea>
+                  </div>
+                </div>
               </div>
-              <div>
-                <label for="projectionMonths">Projection period (months)</label>
-                <input
-                  id="projectionMonths"
-                  type="number"
-                  min="60"
-                  max="180"
-                  step="1"
-                  value="60"
-                />
-              </div>
-              <div>
-                <label for="lenderDscrTarget"
-                  >Selected lender DSCR screen</label
+            </details>
+
+            <details class="input-section" open id="section-business-plan">
+              <summary>
+                <span
+                  >2. Business Plan Inputs
+                  <span
+                    class="q"
+                    data-help="Kassie's lender checklist calls for a full business plan. These narrative inputs create the core facts that should support that plan."
+                    >?</span
+                  ></span
                 >
-                <input
-                  id="lenderDscrTarget"
-                  type="number"
-                  min="0.5"
-                  step="0.05"
-                  value="1.25"
-                />
+                <span class="section-tag">lender narrative</span>
+              </summary>
+              <div class="inside">
+                <div class="business-plan-grid">
+                  <div class="full">
+                    <label for="targetMarketNarrative"
+                      >Target market & customer profile</label
+                    >
+                    <textarea
+                      id="targetMarketNarrative"
+                      placeholder="Who are the target commercial customers, what geography is served, and what makes the market attractive?"
+                    ></textarea>
+                  </div>
+                  <div>
+                    <label for="salesStrategyNarrative"
+                      >Sales / go-to-market strategy</label
+                    >
+                    <textarea
+                      id="salesStrategyNarrative"
+                      placeholder="How will the franchisee prospect, sell, install, and grow the customer base?"
+                    ></textarea>
+                  </div>
+                  <div>
+                    <label for="revenueModelNarrative">Revenue model</label>
+                    <textarea
+                      id="revenueModelNarrative"
+                      placeholder="Describe recurring machine lease revenue, service activity, and how customer contracts produce cash flow."
+                    ></textarea>
+                  </div>
+                  <div>
+                    <label for="managementNarrative"
+                      >Management experience</label
+                    >
+                    <textarea
+                      id="managementNarrative"
+                      placeholder="Summarize the owners' management, sales, operations, technical, or industry experience."
+                    ></textarea>
+                  </div>
+                  <div>
+                    <label for="operationsNarrative">Operating plan</label>
+                    <textarea
+                      id="operationsNarrative"
+                      placeholder="Describe installation, PM/cleaning, repair coverage, customer support, and how Iceworks systems support the operator."
+                    ></textarea>
+                  </div>
+                  <div class="full">
+                    <label for="riskNarrative"
+                      >Primary risks & mitigation</label
+                    >
+                    <textarea
+                      id="riskNarrative"
+                      placeholder="Identify the major startup risks and how working capital, growth pacing, service reserves, and lender structure mitigate them."
+                    ></textarea>
+                  </div>
+                </div>
               </div>
-              <div>
-                <label for="preparedBy">Prepared by</label>
-                <input id="preparedBy" value="Iceworks Franchise Group" />
-              </div>
-            </div>
+            </details>
 
             <details class="input-section" open id="section-growth">
               <summary>
-                <span>1. Customer Leases & Machine Growth</span>
+                <span>3. Customer Leases & Machine Growth</span>
                 <span class="section-tag">three-stage ramp</span>
               </summary>
               <div class="inside">
@@ -1152,7 +1736,7 @@
 
             <details class="input-section" open id="section-startup">
               <summary>
-                <span>2. Startup Uses & Sources</span>
+                <span>4. Startup Uses & Sources</span>
                 <span class="section-tag">SBA request</span>
               </summary>
               <div class="inside">
@@ -1278,6 +1862,109 @@
                     />
                   </div>
                 </div>
+
+                <div class="wc-planner" id="workingCapitalPlanner">
+                  <div class="wc-planner-head">
+                    <div>
+                      <h4>Six-Month Working Capital Detail</h4>
+                      <div class="hint">
+                        The lender specifically called out a six-month expense /
+                        use-of-funds working-capital schedule as extremely
+                        helpful. Use this as support for the reserve above.
+                      </div>
+                    </div>
+                    <span class="wc-total-pill" id="wcPlannerTotalPill"
+                      >6-month total: $0</span
+                    >
+                  </div>
+                  <div class="wc-grid">
+                    <div class="wc-head">Working-capital item</div>
+                    <div class="wc-head">Monthly</div>
+                    <div class="wc-head">6-month total</div>
+                    <div class="wc-row-label">Base operating overhead</div>
+                    <input
+                      id="wcMonthlyOverhead"
+                      type="number"
+                      min="0"
+                      step="50"
+                      value="750"
+                    />
+                    <div class="wc-line-total" id="wcOverheadTotal">$0</div>
+                    <div class="wc-row-label">
+                      Owner compensation / payroll support
+                    </div>
+                    <input
+                      id="wcMonthlyOwnerPay"
+                      type="number"
+                      min="0"
+                      step="100"
+                      value="0"
+                    />
+                    <div class="wc-line-total" id="wcOwnerPayTotal">$0</div>
+                    <div class="wc-row-label">
+                      Service / repair / parts reserve
+                    </div>
+                    <input
+                      id="wcMonthlyService"
+                      type="number"
+                      min="0"
+                      step="50"
+                      value="500"
+                    />
+                    <div class="wc-line-total" id="wcServiceTotal">$0</div>
+                    <div class="wc-row-label">Startup / SBA debt service</div>
+                    <input
+                      id="wcMonthlyStartupDebt"
+                      type="number"
+                      min="0"
+                      step="50"
+                      value="0"
+                    />
+                    <div class="wc-line-total" id="wcStartupDebtTotal">$0</div>
+                    <div class="wc-row-label">
+                      Growth marketing / sales activity
+                    </div>
+                    <input
+                      id="wcMonthlyMarketing"
+                      type="number"
+                      min="0"
+                      step="50"
+                      value="500"
+                    />
+                    <div class="wc-line-total" id="wcMarketingTotal">$0</div>
+                    <div class="wc-row-label">
+                      Other monthly working-capital needs
+                    </div>
+                    <input
+                      id="wcMonthlyOther"
+                      type="number"
+                      min="0"
+                      step="50"
+                      value="0"
+                    />
+                    <div class="wc-line-total" id="wcOtherTotal">$0</div>
+                    <div class="wc-row-label">One-time contingency reserve</div>
+                    <input
+                      id="wcContingency"
+                      type="number"
+                      min="0"
+                      step="500"
+                      value="5000"
+                    />
+                    <div class="wc-line-total" id="wcContingencyTotal">$0</div>
+                  </div>
+                  <div class="wc-footer">
+                    <label class="checkbox-row" for="useDetailedWorkingCapital">
+                      <input id="useDetailedWorkingCapital" type="checkbox" />
+                      <span
+                        >Use this calculated six-month amount as the model's
+                        working-capital reserve.</span
+                      >
+                    </label>
+                    <strong id="wcPlannerTotal">$0</strong>
+                  </div>
+                </div>
+
                 <div class="hint">
                   The working-capital reserve and extra cash cushion remain
                   available after launch. Other startup uses are assumed paid at
@@ -1288,7 +1975,7 @@
 
             <details class="input-section" open id="section-equipment">
               <summary>
-                <span>3. Machine & Equipment Financing</span>
+                <span>5. Machine & Equipment Financing</span>
                 <span class="section-tag">cohort loans</span>
               </summary>
               <div class="inside">
@@ -1383,7 +2070,7 @@
 
             <details class="input-section" open id="section-service">
               <summary>
-                <span>4. Cleaning, Repairs & Parts</span>
+                <span>6A. Cleaning, Repairs & Parts</span>
                 <span class="section-tag">service reserve</span>
               </summary>
               <div class="inside">
@@ -1454,7 +2141,7 @@
 
             <details class="input-section" open id="section-overhead">
               <summary>
-                <span>5. Startup Overhead Ramp</span>
+                <span>6B. Startup Overhead Ramp</span>
                 <span class="section-tag">scale with business</span>
               </summary>
               <div class="inside">
@@ -1554,7 +2241,7 @@
 
             <details class="input-section" id="section-notes">
               <summary>
-                <span>6. Assumption Documentation</span>
+                <span>7. Assumption Documentation</span>
                 <span class="section-tag">lender support</span>
               </summary>
               <div class="inside">
@@ -1586,6 +2273,44 @@
               </div>
             </details>
 
+            <details class="input-section" open id="section-checklist">
+              <summary>
+                <span
+                  >8. SBA / Lender Package Checklist
+                  <span
+                    class="q"
+                    data-help="Tracks the startup documents requested by the lender. This is a package-preparation checklist, not an indication of loan approval."
+                    >?</span
+                  ></span
+                >
+                <span class="section-tag">Kassie / FMS request list</span>
+              </summary>
+              <div class="inside">
+                <div class="checklist-toolbar" id="packageReadinessCards"></div>
+                <div class="table-scroll">
+                  <table class="package-table">
+                    <thead>
+                      <tr>
+                        <th>Item</th>
+                        <th>Category</th>
+                        <th>Primary owner</th>
+                        <th>Status</th>
+                        <th>Notes</th>
+                      </tr>
+                    </thead>
+                    <tbody id="packageChecklistBody"></tbody>
+                  </table>
+                </div>
+                <div class="package-warning-list" id="packageWarnings"></div>
+                <div class="callout" style="margin-top: 12px">
+                  The lender noted that requirements vary case by case. Lease
+                  documents, licenses, insurance, collateral documentation, and
+                  other items should be confirmed for the actual borrower and
+                  location before submission.
+                </div>
+              </div>
+            </details>
+
             <div class="button-row no-print">
               <button class="primary" type="button" id="recalculateBtn">
                 Recalculate
@@ -1608,12 +2333,12 @@
             </div>
 
             <div class="footer-note">
-              <strong>Important:</strong> This model is a planning and
-              discussion tool. It does not constitute a financial performance
-              representation, earnings claim, loan approval, accounting opinion,
-              tax advice, or guarantee by Iceworks Franchise Group, LLC. The
-              borrower and lender should validate every assumption and consult
-              appropriate professional advisors.
+              <strong>Important:</strong> This tool is a planning,
+              package-preparation, and discussion tool. It does not constitute a
+              financial performance representation, earnings claim, loan
+              approval, accounting opinion, tax advice, or guarantee by Iceworks
+              Franchise Group, LLC. The borrower and lender should validate
+              every assumption and consult appropriate professional advisors.
             </div>
           </div>
         </section>
@@ -1688,6 +2413,49 @@
           </div>
         </section>
       </div>
+
+      <section class="card section-gap">
+        <div class="card-head">
+          <h2>Lender Package Readiness</h2>
+          <span class="small-muted">documents + planning support</span>
+        </div>
+        <div class="card-body">
+          <div class="lender-readiness-strip" id="lenderReadinessStrip"></div>
+          <div class="package-warning-list" id="lenderReadinessWarnings"></div>
+        </div>
+      </section>
+
+      <section class="card section-gap">
+        <div class="card-head">
+          <h2>Business Plan Narrative Snapshot</h2>
+          <span class="small-muted">inputs for the lender business plan</span>
+        </div>
+        <div class="card-body">
+          <div class="business-plan-summary" id="businessPlanSummary"></div>
+        </div>
+      </section>
+
+      <section class="card section-gap">
+        <div class="card-head">
+          <h2>SBA Package Checklist Summary</h2>
+          <span class="small-muted">submission-preparation status</span>
+        </div>
+        <div class="card-body">
+          <div class="table-scroll">
+            <table class="package-table">
+              <thead>
+                <tr>
+                  <th>Required / case-specific item</th>
+                  <th>Owner</th>
+                  <th>Status</th>
+                  <th>Notes</th>
+                </tr>
+              </thead>
+              <tbody id="packageChecklistSummaryBody"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
 
       <section class="card section-gap">
         <div class="card-head">
@@ -1800,7 +2568,7 @@
 
       <section class="card print-only">
         <div class="report-title">
-          <h2>Iceworks Franchisee Financial Projection</h2>
+          <h2>Iceworks SBA / Lender Projection & Readiness Package</h2>
           <div class="report-meta">
             <div>
               <span>Borrower</span><strong id="printBorrower">—</strong>
@@ -1822,7 +2590,7 @@
 
       <section class="card section-gap print-only">
         <div class="card-body footer-note">
-          <strong>Model limitations:</strong> Results depend entirely on
+          <strong>Package limitations:</strong> Results depend entirely on
           assumptions entered. Actual machine placements, pricing, service
           costs, collections, financing terms, taxes, owner compensation, and
           overhead may differ materially. DSCR is calculated as EBITDA before
@@ -1927,11 +2695,401 @@
         "overheadBasis",
         "financingBasis",
         "serviceBasis",
+        "businessLegalName",
+        "lenderName",
+        "loanPurpose",
+        "targetMarketNarrative",
+        "salesStrategyNarrative",
+        "revenueModelNarrative",
+        "managementNarrative",
+        "operationsNarrative",
+        "riskNarrative",
+        "wcMonthlyOverhead",
+        "wcMonthlyOwnerPay",
+        "wcMonthlyService",
+        "wcMonthlyStartupDebt",
+        "wcMonthlyMarketing",
+        "wcMonthlyOther",
+        "wcContingency",
+        "useDetailedWorkingCapital",
       ];
       const checkboxIds = new Set([
         "autoCalculateStartupLoan",
         "includeFutureLoans",
+        "useDetailedWorkingCapital",
       ]);
+
+      const packageChecklistItems = [
+        {
+          key: "projections",
+          item: "3–5 years of business projections with assumptions",
+          category: "Financial",
+          owner: "Iceworks / Borrower",
+          critical: true,
+        },
+        {
+          key: "business_plan",
+          item: "Full business plan",
+          category: "Business",
+          owner: "Borrower / Iceworks",
+          critical: true,
+        },
+        {
+          key: "working_capital",
+          item: "Six-month expense / working-capital use of funds",
+          category: "Financial",
+          owner: "Iceworks / Borrower",
+          critical: true,
+        },
+        {
+          key: "franchise_agreement",
+          item: "Franchise Agreement",
+          category: "Franchise",
+          owner: "Iceworks",
+          critical: true,
+        },
+        {
+          key: "franchise_eligibility",
+          item: "SBA franchise eligibility / Franchise Directory confirmation",
+          category: "Franchise",
+          owner: "Iceworks",
+          critical: true,
+        },
+        {
+          key: "equipment_quotes",
+          item: "Equipment quotes",
+          category: "Collateral",
+          owner: "Iceworks / Borrower",
+          critical: true,
+        },
+        {
+          key: "management_resumes",
+          item: "Management resumes",
+          category: "Personal",
+          owner: "Borrower",
+          critical: true,
+        },
+        {
+          key: "tax_returns",
+          item: "3 years of personal tax returns for owners",
+          category: "Personal",
+          owner: "Borrower",
+          critical: true,
+        },
+        {
+          key: "personal_ids",
+          item: "Copies of personal IDs",
+          category: "Personal",
+          owner: "Borrower",
+          critical: true,
+        },
+        {
+          key: "sba_413",
+          item: "SBA 413 Personal Financial Statement",
+          category: "SBA Form",
+          owner: "Borrower",
+          critical: true,
+        },
+        {
+          key: "sba_1919",
+          item: "SBA 1919 for business and personal",
+          category: "SBA Form",
+          owner: "Borrower",
+          critical: true,
+        },
+        {
+          key: "ein_ss4",
+          item: "Business EIN / SS-4 document",
+          category: "Business",
+          owner: "Borrower",
+          critical: true,
+        },
+        {
+          key: "operating_agreement",
+          item: "Operating Agreement",
+          category: "Business",
+          owner: "Borrower",
+          critical: true,
+        },
+        {
+          key: "lease_agreement",
+          item: "Business lease agreement, if renting space",
+          category: "Business",
+          owner: "Borrower",
+          critical: false,
+        },
+        {
+          key: "business_licenses",
+          item: "Required state / county / local business licenses",
+          category: "Compliance",
+          owner: "Borrower",
+          critical: true,
+        },
+        {
+          key: "hazard_insurance",
+          item: "Hazard / property insurance, as applicable",
+          category: "Insurance",
+          owner: "Borrower",
+          critical: false,
+        },
+        {
+          key: "general_liability",
+          item: "General Liability insurance",
+          category: "Insurance",
+          owner: "Borrower",
+          critical: true,
+        },
+        {
+          key: "vehicle_insurance",
+          item: "Vehicle insurance, as applicable",
+          category: "Insurance",
+          owner: "Borrower",
+          critical: false,
+        },
+        {
+          key: "mortgage_insurance",
+          item: "Mortgage-related insurance, if applicable",
+          category: "Insurance",
+          owner: "Borrower",
+          critical: false,
+        },
+        {
+          key: "term_life",
+          item: "Term life insurance in amount and term requested by lender",
+          category: "Insurance",
+          owner: "Borrower",
+          critical: true,
+        },
+      ];
+      const packageStatusOptions = ["Needed", "In progress", "Complete", "N/A"];
+      let packageState = {};
+
+      function initPackageChecklist() {
+        const body = $("packageChecklistBody");
+        if (!body) return;
+        body.innerHTML = packageChecklistItems
+          .map(
+            (doc) => `
+        <tr data-doc-key="${doc.key}">
+          <td><strong>${doc.item}</strong>${doc.critical ? '<div class="hint">Core package item</div>' : ""}</td>
+          <td><span class="doc-category">${doc.category}</span></td>
+          <td><span class="doc-owner">${doc.owner}</span></td>
+          <td><select class="package-status" data-doc-status="${doc.key}">${packageStatusOptions.map((status) => `<option value="${status}">${status}</option>`).join("")}</select></td>
+          <td><input class="package-note" data-doc-note="${doc.key}" placeholder="Optional note / location / follow-up" /></td>
+        </tr>`,
+          )
+          .join("");
+        body.querySelectorAll("select,input").forEach((el) =>
+          el.addEventListener("input", () => {
+            collectPackageState();
+            renderPackageReadiness();
+          }),
+        );
+        applyPackageState(packageState);
+        renderPackageReadiness();
+      }
+
+      function collectPackageState() {
+        const out = {};
+        packageChecklistItems.forEach((doc) => {
+          out[doc.key] = {
+            status:
+              document.querySelector(`[data-doc-status="${doc.key}"]`)?.value ||
+              "Needed",
+            note:
+              document.querySelector(`[data-doc-note="${doc.key}"]`)?.value ||
+              "",
+          };
+        });
+        packageState = out;
+        return out;
+      }
+
+      function applyPackageState(state = {}) {
+        packageChecklistItems.forEach((doc) => {
+          const row = state[doc.key] || {};
+          const select = document.querySelector(
+            `[data-doc-status="${doc.key}"]`,
+          );
+          const note = document.querySelector(`[data-doc-note="${doc.key}"]`);
+          if (select) select.value = row.status || "Needed";
+          if (note) note.value = row.note || "";
+        });
+      }
+
+      function packageReadiness() {
+        collectPackageState();
+        const applicable = packageChecklistItems.filter(
+          (doc) => (packageState[doc.key]?.status || "Needed") !== "N/A",
+        );
+        const complete = applicable.filter(
+          (doc) => packageState[doc.key]?.status === "Complete",
+        );
+        const inProgress = applicable.filter(
+          (doc) => packageState[doc.key]?.status === "In progress",
+        );
+        const needed = applicable.filter(
+          (doc) => packageState[doc.key]?.status === "Needed",
+        );
+        const criticalMissing = applicable.filter(
+          (doc) => doc.critical && packageState[doc.key]?.status !== "Complete",
+        );
+        const pctComplete = applicable.length
+          ? (complete.length / applicable.length) * 100
+          : 0;
+        return {
+          applicable,
+          complete,
+          inProgress,
+          needed,
+          criticalMissing,
+          pctComplete,
+        };
+      }
+
+      function renderPackageReadiness() {
+        const r = packageReadiness();
+        const state =
+          r.criticalMissing.length === 0 && r.pctComplete >= 90
+            ? "good"
+            : r.pctComplete >= 60
+              ? "warn"
+              : "bad";
+        const cards = [
+          {
+            label: "Package complete",
+            value: `${r.pctComplete.toFixed(0)}%`,
+            note: `${r.complete.length} of ${r.applicable.length} applicable items`,
+            cls: state,
+          },
+          {
+            label: "Still needed",
+            value: String(r.needed.length),
+            note: "Items not yet started",
+            cls: r.needed.length ? "bad" : "good",
+          },
+          {
+            label: "In progress",
+            value: String(r.inProgress.length),
+            note: "Items currently being assembled",
+            cls: r.inProgress.length ? "warn" : "good",
+          },
+          {
+            label: "Core items incomplete",
+            value: String(r.criticalMissing.length),
+            note: "Core package items not marked complete",
+            cls: r.criticalMissing.length ? "bad" : "good",
+          },
+        ];
+        const html = cards
+          .map(
+            (c) =>
+              `<div class="readiness-card"><div class="label">${c.label}</div><div class="value ${c.cls}">${c.value}</div><div class="note">${c.note}</div></div>`,
+          )
+          .join("");
+        if ($("packageReadinessCards"))
+          $("packageReadinessCards").innerHTML = html;
+        if ($("lenderReadinessStrip"))
+          $("lenderReadinessStrip").innerHTML = html;
+        const warnings = r.criticalMissing
+          .slice(0, 6)
+          .map(
+            (doc) =>
+              `<div class="package-warning"><strong>Missing core item:</strong> ${doc.item}</div>`,
+          )
+          .join("");
+        if ($("packageWarnings"))
+          $("packageWarnings").innerHTML =
+            warnings ||
+            '<div class="callout good">All core checklist items are marked complete. Confirm any case-specific lender requirements before submission.</div>';
+        if ($("lenderReadinessWarnings"))
+          $("lenderReadinessWarnings").innerHTML =
+            warnings ||
+            '<div class="callout good">Core checklist items are complete. Final lender underwriting and case-specific requests may still apply.</div>';
+        if ($("packageChecklistSummaryBody")) {
+          $("packageChecklistSummaryBody").innerHTML = packageChecklistItems
+            .map((doc) => {
+              const row = packageState[doc.key] || {
+                status: "Needed",
+                note: "",
+              };
+              return `<tr><td><strong>${doc.item}</strong></td><td>${doc.owner}</td><td>${row.status}</td><td>${row.note || "—"}</td></tr>`;
+            })
+            .join("");
+        }
+        return r;
+      }
+
+      function renderBusinessPlanSummary() {
+        const el = $("businessPlanSummary");
+        if (!el) return;
+        const items = [
+          ["Target market", textVal("targetMarketNarrative")],
+          ["Sales strategy", textVal("salesStrategyNarrative")],
+          ["Revenue model", textVal("revenueModelNarrative")],
+          ["Management", textVal("managementNarrative")],
+          ["Operations", textVal("operationsNarrative")],
+          ["Risks & mitigation", textVal("riskNarrative")],
+        ];
+        el.innerHTML = items
+          .map(
+            ([title, value]) =>
+              `<div class="narrative-card"><h4>${title}</h4><p>${value.trim() || "Not yet documented."}</p></div>`,
+          )
+          .join("");
+      }
+
+      function calculateWorkingCapitalPlanner() {
+        const months = 6;
+        const rows = [
+          ["wcMonthlyOverhead", "wcOverheadTotal", true],
+          ["wcMonthlyOwnerPay", "wcOwnerPayTotal", true],
+          ["wcMonthlyService", "wcServiceTotal", true],
+          ["wcMonthlyStartupDebt", "wcStartupDebtTotal", true],
+          ["wcMonthlyMarketing", "wcMarketingTotal", true],
+          ["wcMonthlyOther", "wcOtherTotal", true],
+          ["wcContingency", "wcContingencyTotal", false],
+        ];
+        let total = 0;
+        rows.forEach(([inputId, totalId, isMonthly]) => {
+          const amount = Math.max(0, val(inputId));
+          const line = isMonthly ? amount * months : amount;
+          total += line;
+          if ($(totalId)) $(totalId).textContent = money(line);
+        });
+        if ($("wcPlannerTotal")) $("wcPlannerTotal").textContent = money(total);
+        if ($("wcPlannerTotalPill"))
+          $("wcPlannerTotalPill").textContent =
+            `6-month total: ${money(total)}`;
+        if (
+          checked("useDetailedWorkingCapital") &&
+          $("workingCapitalReserve")
+        ) {
+          $("workingCapitalReserve").value = round(total, 2);
+        }
+        return total;
+      }
+
+      function updateWorkingCapitalSuggestions(result) {
+        if (!result) return;
+        const firstSix = result.rows.slice(0, 6);
+        if (firstSix.length) {
+          const avgService =
+            firstSix.reduce((s, r) => s + r.serviceCost, 0) / firstSix.length;
+          const avgStartupDebt =
+            firstSix.reduce((s, r) => s + r.startupDebtService, 0) /
+            firstSix.length;
+          if (!$("wcMonthlyService")?.dataset.userEdited)
+            $("wcMonthlyService").value = round(avgService, 2);
+          if (!$("wcMonthlyStartupDebt")?.dataset.userEdited)
+            $("wcMonthlyStartupDebt").value = round(avgStartupDebt, 2);
+        }
+        if (!$("wcMonthlyOverhead")?.dataset.userEdited)
+          $("wcMonthlyOverhead").value = round(val("initialOverhead"), 2);
+        if (!$("wcMonthlyOwnerPay")?.dataset.userEdited)
+          $("wcMonthlyOwnerPay").value = round(val("ownerPay"), 2);
+        calculateWorkingCapitalPlanner();
+      }
 
       const presets = {
         downside: {
@@ -1952,7 +3110,7 @@
           serviceRevenuePerMachine: 0,
           royaltyRate: 9,
           collectionLagMonths: "1",
-          franchiseFee: 29900,
+          franchiseFee: 29500,
           startupMachineUnits: 2,
           toolsStartupSupplies: 5000,
           insuranceLicensingSetup: 2500,
@@ -2016,7 +3174,7 @@
           serviceRevenuePerMachine: 0,
           royaltyRate: 9,
           collectionLagMonths: "0",
-          franchiseFee: 29900,
+          franchiseFee: 29500,
           startupMachineUnits: 2,
           toolsStartupSupplies: 5000,
           insuranceLicensingSetup: 2500,
@@ -2080,7 +3238,7 @@
           serviceRevenuePerMachine: 0,
           royaltyRate: 9,
           collectionLagMonths: "0",
-          franchiseFee: 29900,
+          franchiseFee: 29500,
           startupMachineUnits: 2,
           toolsStartupSupplies: 5000,
           insuranceLicensingSetup: 2500,
@@ -2263,6 +3421,7 @@
       }
 
       function readInputs() {
+        calculateWorkingCapitalPlanner();
         return {
           borrowerName: textVal("borrowerName").trim(),
           marketName: textVal("marketName").trim(),
@@ -2751,10 +3910,13 @@
 
       function calculateAndRender() {
         updateConditionalFields();
+        calculateWorkingCapitalPlanner();
         const inp = readInputs();
         currentResult = simulate(inp);
         scenarioStates[activeScenario] = collectFormState();
         renderAll(currentResult);
+        renderPackageReadiness();
+        renderBusinessPlanSummary();
       }
 
       function renderAll(result) {
@@ -2874,11 +4036,33 @@
 
       function renderUnderwritingSummary(result) {
         const y5 = result.annual[Math.min(4, result.annual.length - 1)];
+        const workingCapitalDetail = calculateWorkingCapitalPlanner();
+        const equityPct =
+          result.project.totalUses > 0
+            ? (result.inp.cashContribution / result.project.totalUses) * 100
+            : 0;
         const metrics = [
+          {
+            label: "Total project uses",
+            number: money(result.project.totalUses),
+            sub: `Working capital reserve ${money(result.inp.workingCapitalReserve)}`,
+          },
           {
             label: "Requested startup loan",
             number: money(result.project.startupLoanAmount),
             sub: `Cash contribution ${money(result.inp.cashContribution)}`,
+          },
+          {
+            label: "Borrower cash injection",
+            number: pct(equityPct, 1),
+            sub: `${money(result.inp.cashContribution)} of total uses`,
+          },
+          {
+            label: "6-month WC detail",
+            number: money(workingCapitalDetail),
+            sub: checked("useDetailedWorkingCapital")
+              ? "Synced to working-capital reserve"
+              : "Supporting schedule only",
           },
           {
             label: "Minimum projected cash",
@@ -3376,7 +4560,7 @@
         ]);
         downloadCsv(
           [headers, ...rows],
-          `iceworks_financial_model_v4_2_${activeScenario}_monthly.csv`,
+          `iceworks_sba_lender_tool_v5_0_${activeScenario}_monthly.csv`,
         );
       }
 
@@ -3430,7 +4614,7 @@
         ]);
         downloadCsv(
           [headers, ...rows],
-          `iceworks_financial_model_v4_2_${activeScenario}_annual.csv`,
+          `iceworks_sba_lender_tool_v5_0_${activeScenario}_annual.csv`,
         );
       }
 
@@ -3450,28 +4634,32 @@
       function saveAll() {
         saveCurrentScenarioState();
         const payload = {
-          version: "v4.2",
+          version: "v5.0",
           savedAt: new Date().toISOString(),
           activeScenario,
           scenarioStates,
+          packageState: collectPackageState(),
         };
         localStorage.setItem(
-          "iceworksFinancialModelV42",
+          "iceworksSbaLenderToolV50",
           JSON.stringify(payload),
         );
-        alert("All three scenarios were saved in this browser.");
+        alert(
+          "All three scenarios and the lender-package checklist were saved in this browser.",
+        );
       }
 
       function loadAll() {
-        const raw = localStorage.getItem("iceworksFinancialModelV42");
+        const raw = localStorage.getItem("iceworksSbaLenderToolV50");
         if (!raw) {
-          alert("No saved v4.2 model was found in this browser.");
+          alert("No saved v5.0 SBA / lender model was found in this browser.");
           return;
         }
         try {
           const payload = JSON.parse(raw);
           if (!payload.scenarioStates) throw new Error("Invalid saved file");
           scenarioStates = payload.scenarioStates;
+          packageState = payload.packageState || {};
           activeScenario = payload.activeScenario || "base";
           applyState(scenarioStates[activeScenario]);
           document.querySelectorAll(".scenario-tab").forEach((btn) => {
@@ -3484,6 +4672,7 @@
             `${scenarioNames[activeScenario]} scenario`;
           $("scenarioDescription").textContent =
             scenarioDescription(activeScenario);
+          applyPackageState(packageState);
           calculateAndRender();
         } catch (error) {
           alert("The saved model could not be loaded.");
@@ -3493,7 +4682,7 @@
       function resetActiveScenario() {
         if (
           !confirm(
-            `Reset the ${scenarioNames[activeScenario]} scenario to the v4.2 defaults?`,
+            `Reset the ${scenarioNames[activeScenario]} scenario to the v5.0 defaults?`,
           )
         )
           return;
@@ -3505,7 +4694,7 @@
       }
 
       function resetAllScenarios() {
-        if (!confirm("Reset all three scenarios to the v4.2 defaults?")) return;
+        if (!confirm("Reset all three scenarios to the v5.0 defaults?")) return;
         scenarioStates = JSON.parse(JSON.stringify(presets));
         activeScenario = "base";
         applyState(scenarioStates.base);
@@ -3573,8 +4762,60 @@
         });
       }
 
+      function initLenderNavigation() {
+        const links = [...document.querySelectorAll(".lender-nav-item")];
+        const sections = links
+          .map((link) => $(link.dataset.lenderTarget))
+          .filter(Boolean);
+        links.forEach((link) =>
+          link.addEventListener("click", () => {
+            links.forEach((x) => x.classList.remove("is-active"));
+            link.classList.add("is-active");
+          }),
+        );
+        if (!("IntersectionObserver" in window) || !sections.length) return;
+        const observer = new IntersectionObserver(
+          (entries) => {
+            const visible = entries
+              .filter((e) => e.isIntersecting)
+              .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
+            if (!visible) return;
+            links.forEach((link) =>
+              link.classList.toggle(
+                "is-active",
+                link.dataset.lenderTarget === visible.target.id,
+              ),
+            );
+          },
+          { rootMargin: "-18% 0px -68% 0px", threshold: [0, 0.1, 0.25, 0.5] },
+        );
+        sections.forEach((section) => observer.observe(section));
+      }
+
       function init() {
         applyState(scenarioStates.base);
+        initPackageChecklist();
+        initLenderNavigation();
+        [
+          "wcMonthlyOverhead",
+          "wcMonthlyOwnerPay",
+          "wcMonthlyService",
+          "wcMonthlyStartupDebt",
+          "wcMonthlyMarketing",
+          "wcMonthlyOther",
+          "wcContingency",
+        ].forEach((id) => {
+          const el = $(id);
+          if (!el) return;
+          el.addEventListener("input", () => {
+            el.dataset.userEdited = "true";
+            calculateWorkingCapitalPlanner();
+          });
+        });
+        $("useDetailedWorkingCapital")?.addEventListener("input", () => {
+          calculateWorkingCapitalPlanner();
+          calculateAndRender();
+        });
         $("scenarioDescription").textContent = scenarioDescription("base");
         setupTooltip();
         wireEvents();
