@@ -227,7 +227,7 @@ body.has-modal{overflow:hidden}
   <section class="panel"><h2>What this tool can—and cannot—tell you</h2>
     <p class="muted">It compares stated funding sources with published startup costs and user-selected extra expenses. It does not predict customers, machine placements, leasing revenue, profits, payback, cash flow, investment returns or franchise success. Net worth isn't necessarily spendable cash. Actual expenses, financing conditions and franchise terms may differ. Consult the governing Franchise Disclosure Document, your lender and your professional advisers.</p>
     <div class="actions"><button type="button" id="print">Print your private summary</button><button class="ghost" type="button" id="reset">Clear all my inputs</button></div>
-    <p class="footer">Cost reference: <span id="source"></span>. Cost-reference date: <span id="updated"></span>. This private educational aid is not a franchise offer, financing approval or suitability determination. No data collection or analytics scripts are included. Printing or saving a PDF is controlled by your browser.</p>
+    <p class="footer">Cost reference: <span id="source"></span>. Cost-reference date: <span id="updated"></span>. This educational aid is not a franchise offer, financing approval or suitability determination. Detailed Financial Snapshot entries remain local. A limited readiness summary is transmitted only if you explicitly consent through a verified secure invitation. No analytics scripts are included. Printing or saving a PDF is controlled by your browser.</p>
   </section>
 
 <section class="market-panel" id="marketAnalysis">
@@ -276,7 +276,7 @@ function scrub(input,limit=130){return String(input||"").replace(/[<>\\x00-\\x1f
 function readToken(){
  const fragment=new URLSearchParams(location.hash.replace(/^#/,""));
  const t=fragment.get("invite")||"";
- if(t){history.replaceState(null,"",location.pathname+location.search);return /^[a-f0-9]{48}$/.test(t)?t:""}
+ if(t){return /^[a-f0-9]{48}$/.test(t)?t:""}
  return "";
 }
 async function portalRequest(action,details){
