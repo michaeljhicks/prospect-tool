@@ -2,6 +2,8 @@
 -- Run with Supabase SQL editor using a privileged database owner.
 -- All private data stays inaccessible to anon/authenticated PostgREST clients.
 create extension if not exists pgcrypto;
+create schema if not exists iceworks_private;
+revoke all on schema iceworks_private from public, anon, authenticated;
 create table if not exists public.iceworks_market_reports (
  id uuid primary key default gen_random_uuid(),
  market_label text not null,
@@ -51,7 +53,7 @@ grant select, insert on public.iceworks_capital_submissions to service_role;
 
 -- Issue a new, unguessable 192-bit invitation token and store only its SHA256 hash.
 -- Execute only as trusted administrator; never expose this function to public roles.
-create or replace function public.issue_iceworks_capital_invitation(
+create or replace function iceworks_private.issue_iceworks_capital_invitation(
  p_first_name text,
  p_market_label text,
  p_welcome_message text default '',
@@ -59,7 +61,7 @@ create or replace function public.issue_iceworks_capital_invitation(
  p_valid_days integer default 30
 )
 returns table (invitation_id uuid, raw_token text, expires_at timestamptz)
-language plpgsql security definer
+language plpgsql security invoker
 set search_path = public, extensions
 as $$
 declare
@@ -78,15 +80,16 @@ begin
  return next;
 end
 $$;
-revoke all on function public.issue_iceworks_capital_invitation(text,text,text,uuid,integer) from public, anon, authenticated;
-grant execute on function public.issue_iceworks_capital_invitation(text,text,text,uuid,integer) to service_role;
+revoke all on function iceworks_private.issue_iceworks_capital_invitation(text,text,text,uuid,integer) from public, anon, authenticated;
+grant usage on schema iceworks_private to service_role;
+grant execute on function iceworks_private.issue_iceworks_capital_invitation(text,text,text,uuid,integer) to service_role;
 
 -- Administration sample (only publish complete, sourced research after review):
 -- insert into public.iceworks_market_reports(market_label,status,overview,boundaries,establishment_count,population,pudi_score,methodology,source_notes)
 -- values ('Tucson, AZ','draft','Research in progress','Tucson city limits',null,null,null,'','');
 --
 -- Issue an invitation via a trusted SQL session. The token is returned ONCE:
--- select * from public.issue_iceworks_capital_invitation('Jim','Tucson, AZ','Welcome to your Iceworks capital explorer', '<approved-report-uuid>'::uuid, 30);
+-- select * from iceworks_private.issue_iceworks_capital_invitation('Jim','Tucson, AZ','Welcome to your Iceworks capital explorer', '<approved-report-uuid>'::uuid, 30);
 -- Construct: https://michaeljhicks.github.io/prospect-tool/capital-readiness.html#invite=<raw_token>
 -- The #fragment avoids sending the token to GitHub Pages in its URL request.
 -- If a link is forwarded it functions as a bearer credential. Do not include sensitive PUDI or finance data in links.
