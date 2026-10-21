@@ -25,11 +25,11 @@ async function tokenHash(token:string){
  const hash=await crypto.subtle.digest("SHA-256",new TextEncoder().encode(token));
  return [...new Uint8Array(hash)].map(b=>b.toString(16).padStart(2,"0")).join("");
 }
-async function getReport(invitation:{report_id:string|null}){
- if(!invitation.report_id)return null;
- const {data,error}=await db.from("iceworks_market_reports").select("market_label,status,overview,boundaries,establishment_count,population,pudi_score,methodology,source_notes").eq("id",invitation.report_id).eq("status","approved").maybeSingle();
- if(error||!data)return null;
- return {title:data.market_label,overview:data.overview,boundaries:data.boundaries,establishment_count:data.establishment_count,population:data.population,pudi_score:data.pudi_score,methodology:data.methodology,source_notes:data.source_notes};
+// Only reveals whether market research is approved. Never sends scores or reports to a prospect.
+async function hasApprovedReport(invitation:{report_id:string|null}){
+ if(!invitation.report_id)return false;
+ const {data,error}=await db.from("iceworks_market_reports").select("id").eq("id",invitation.report_id).eq("status","approved").maybeSingle();
+ return !error&&!!data;
 }
 Deno.serve(async req=>{
  if(req.method==="OPTIONS")return new Response(null,{status:204,headers:cors});
@@ -47,14 +47,12 @@ Deno.serve(async req=>{
   if(error||!inv||inv.revoked_at||Date.parse(inv.expires_at)<Date.now())return fail("Invitation unavailable or expired",404);
   const {data:existing,error:subError}=await db.from("iceworks_capital_submissions").select("id").eq("invitation_id",inv.id).maybeSingle();
   if(subError)return fail("Temporary service issue",503);
-  const ready=!!(await getReport(inv));
+  const ready=await hasApprovedReport(inv);
   if(body.action==="resolve"){
-   const report=existing&&ready?await getReport(inv):null;
-   return json({invitation:{first_name:inv.first_name,market_label:inv.market_label,welcome_message:inv.welcome_message,report_ready:ready},submitted:!!existing,report});
+   return json({invitation:{first_name:inv.first_name,market_label:inv.market_label,welcome_message:inv.welcome_message,report_ready:ready},submitted:!!existing});
   }
   if(body.action==="submit"){
-   if(!ready)return fail("Approved market report is not available",409);
-   if(existing)return json({submitted:true,report:await getReport(inv)});
+   if(existing)return json({submitted:true,review_status:"pending_iceworks_review"});
    if(body.consent!==true||body.consent_version!=="capital-summary-v1.3")return fail("Explicit consent required");
    const summary=body.summary;
    if(!summary||typeof summary!=="object"||Array.isArray(summary)||Object.keys(summary).sort().join(",")!=="capital_gap_high,capital_gap_low,deployable_funds,financing_status,flags,selected_cost_high,selected_cost_low")return fail("Summary is invalid");
@@ -74,10 +72,10 @@ Deno.serve(async req=>{
    };
    const {error:insertError}=await db.from("iceworks_capital_submissions").insert({invitation_id:inv.id,summary:sanitized,consent_version:"capital-summary-v1.3"});
    if(insertError){
-    if(insertError.code==="23505")return json({submitted:true,report:await getReport(inv)});
+    if(insertError.code==="23505")return json({submitted:true,review_status:"pending_iceworks_review"});
     return fail("Could not save summary",503);
    }
-   return json({submitted:true,report:await getReport(inv)});
+   return json({submitted:true,review_status:"pending_iceworks_review"});
   }
   return fail("Unknown action");
  }catch(_){return fail("Unable to process request",400)}
