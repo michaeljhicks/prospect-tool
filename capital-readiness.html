@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Iceworks | Capital Readiness Explorer v1.2</title>
+<title>Iceworks | Capital Readiness Explorer v1.3</title>
 <style>
 :root{font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:#19364a;background:#f3f8fa}*{box-sizing:border-box}body{margin:0}header{background:#073c53;color:white;padding:38px max(22px,calc((100vw - 1030px)/2))}header h1{font-size:clamp(28px,4vw,39px);margin:8px 0}header p{color:#c9e5ec;max-width:710px;line-height:1.5}main{max-width:1060px;margin:25px auto;padding:0 16px 50px}.tag{font-size:12px;letter-spacing:1.6px;font-weight:700;text-transform:uppercase;color:#61e1df}.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:13px}.card,.panel{background:white;border:1px solid #dbe7eb;border-radius:16px;padding:23px;box-shadow:0 5px 15px #102d4308}.card .metric{font-weight:800;font-size:27px;margin:8px 0}.muted{color:#617782;font-size:13px;line-height:1.5}h2{font-size:20px;margin:2px 0 8px}h3{font-size:16px;margin:0 0 13px}section{margin-top:18px}.grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}.fields{display:grid;grid-template-columns:1fr 1fr;gap:15px}label{font-size:13px;display:block;font-weight:650;margin:0 0 6px}input{width:100%;border:1px solid #bfcfd7;border-radius:8px;padding:12px;font:inherit;color:#173448;background:white}input:focus{outline:2px solid #50bfc4}button{background:#087e94;color:white;border:0;border-radius:8px;padding:12px 17px;font-size:14px;font-weight:700;cursor:pointer}button.ghost{background:white;color:#086c83;border:1px solid #9bcbd2} .line{display:flex;justify-content:space-between;gap:15px;padding:10px 0;border-bottom:1px solid #e8f0f3;font-size:14px}.line strong{white-space:nowrap}.notice{background:#f2f8fb;border-left:4px solid #178aa1;padding:14px;font-size:13px;color:#355568;line-height:1.55;border-radius:8px}.range{color:#078ba2} .negative{color:#b04c33}.positive{color:#087a67} .footer{margin-top:21px;font-size:12px;line-height:1.6;color:#657784}.pill{display:inline-block;border-radius:25px;background:#e7f6f5;color:#076d74;font-size:12px;padding:6px 10px;font-weight:700} .actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px}@media(max-width:760px){.cards,.grid,.fields{grid-template-columns:1fr}header{padding:28px 20px}.card .metric{font-size:24px}}@media print{.actions{display:none}header{padding:20px}.panel{break-inside:avoid}body{background:white}}
 /* Version 1.1 additions */
@@ -43,11 +43,67 @@ button.help-trigger:focus-visible{outline:3px solid #3c9db2;outline-offset:2px}
 button.help-trigger:hover + .field-help,button.help-trigger:focus-visible + .field-help,button.help-trigger[aria-expanded="true"] + .field-help{display:block}
 @media (max-width:760px){.panel{padding:22px 18px}.fields{grid-template-columns:1fr;gap:20px}.start-hint{font-size:13px}.field-help{max-height:45vh}.steps-stack{gap:12px}}
 @media print{.help-trigger,.field-help,.start-hint{display:none!important}.steps-stack{display:block}.panel{break-inside:avoid}}
+
+/* V1.3 — opt-in personalized invitations, compact sticky totals, market preview */
+.cards{position:sticky;top:8px;z-index:18;transition:box-shadow .2s;isolation:isolate}
+.cards.is-condensed{gap:8px;filter:drop-shadow(0 8px 11px rgba(13,52,67,.15))}
+.cards.is-condensed .card{padding:10px 13px;border-radius:10px}
+.cards.is-condensed .card .metric{font-size:16px!important;margin:3px 0}
+.cards.is-condensed .card .muted{font-size:10px;line-height:1.25}
+.cards.is-condensed .card .muted:last-child{display:none}
+.cards.is-condensed #investmentRange{font-size:14px!important}
+body.has-modal{overflow:hidden}
+.welcome-overlay{position:fixed;inset:0;background:rgba(5,28,42,.72);z-index:100;display:grid;place-items:center;padding:18px}
+.welcome-overlay[hidden]{display:none}
+.welcome-dialog{max-width:570px;width:100%;background:white;border-radius:22px;padding:clamp(24px,4vw,39px);box-shadow:0 18px 70px rgba(0,0,0,.25)}
+.welcome-dialog .logo{color:#067d91;font-size:12px;font-weight:850;letter-spacing:1.5px;text-transform:uppercase}
+.welcome-dialog h2{font-size:30px;line-height:1.2;margin:18px 0 14px}
+.welcome-dialog p{font-size:15px;line-height:1.7;color:#37576a}
+.welcome-dialog button{margin-top:10px;min-width:170px}
+.market-panel{background:#eaf6fa;border:1px solid #9acbd8;border-radius:18px;padding:clamp(22px,3.7vw,36px);margin-top:24px}
+.market-panel h2{color:#073d53;font-size:24px}
+.market-panel h3{color:#073d53}
+.market-panel p{line-height:1.65}
+.market-panel .eyebrow{font-size:12px;letter-spacing:1.2px;color:#126f87;font-weight:800}
+.market-panel .market-tiles{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:20px 0}
+.market-tile{background:white;border:1px solid #b9dce6;border-radius:12px;padding:16px;font-size:13px;line-height:1.5}
+.market-tile strong{display:block;margin-bottom:5px}
+.market-panel .private-box{background:white;border:1px solid #afd1dc;border-radius:12px;padding:18px;margin-top:18px}
+.market-panel .private-box[hidden]{display:none}
+.market-panel .private-box label{display:flex;gap:9px;align-items:flex-start;line-height:1.55;font-weight:500}
+.market-panel .private-box input{width:auto;flex:none;margin-top:3px}
+.market-panel .private-box button:disabled{opacity:.5;cursor:not-allowed}
+.market-panel .notice{background:#fff;border-left-color:#2889a4}
+.market-panel a{color:#06728b}
+.market-panel #reportResult[hidden],.market-panel #portalAlert[hidden]{display:none}
+.sticky-sentinel{height:1px}
+@media(max-width:750px){
+.cards.is-condensed{grid-template-columns:repeat(3,minmax(0,1fr));gap:5px;top:4px}
+.cards.is-condensed .card{padding:8px 5px}
+.cards.is-condensed .card .muted{font-size:9px}
+.cards.is-condensed .card .metric{font-size:12px!important;overflow-wrap:anywhere}
+.cards.is-condensed #investmentRange{font-size:11px!important}
+.market-panel .market-tiles{grid-template-columns:1fr}
+.welcome-dialog h2{font-size:25px}
+}
+@media print{.welcome-overlay,.market-panel .private-box button,.cards.is-condensed{display:none!important}.cards{position:static}.market-panel{break-inside:avoid}}
 </style>
 <script src="capital-readiness-config.js"></script>
+<script src="capital-portal-config.js"></script>
 </head><body>
-<header><span class="tag">Iceworks Franchise Group</span><h1>Capital Readiness Explorer <span style="font-size:14px;opacity:.75;font-weight:500">v1.2</span></h1><p>Explore startup costs and capital gaps, then optionally review your financial position—without submitting private information or modeling franchise earnings. No income or profit forecasts—just costs, capital, and planning.</p><span class="pill">Private in your browser · No financial details submitted</span></header>
+
+<div id="welcomeOverlay" class="welcome-overlay" hidden>
+  <div class="welcome-dialog" role="dialog" aria-modal="true" aria-labelledby="welcomeTitle" aria-describedby="welcomeMessage">
+    <div class="logo">ICEWORKS FRANCHISE GROUP · PERSONAL INTRODUCTION</div>
+    <h2 id="welcomeTitle">Welcome to Iceworks</h2>
+    <p id="welcomeMessage">Explore franchise startup funding and costs at your own pace.</p>
+    <p id="welcomeFootnote" class="muted">This is a private planning experience until you explicitly choose to share a summary.</p>
+    <button type="button" id="begin">Begin exploring →</button>
+  </div>
+</div>
+<header><span class="tag">Iceworks Franchise Group</span><h1>Capital Readiness Explorer <span style="font-size:14px;opacity:.75;font-weight:500">v1.3</span></h1><p>Explore startup costs and capital gaps, then optionally review your financial position—without modeling franchise earnings. Your financial entries stay private unless you explicitly choose to send a limited readiness summary through an enabled secure invitation.</p><span class="pill">Private by default · Sharing is always optional</span></header>
 <main>
+  <div class="sticky-sentinel" id="cardSentinel" aria-hidden="true"></div>
   <p class="start-hint">Start with Steps 1–3. The Financial Snapshot is optional. Select any <strong>?</strong> for an everyday-language explanation and examples.</p>
   <div class="cards" aria-live="polite">
     <div class="card"><div class="muted">Published initial investment range</div><div class="metric" id="investmentRange">—</div><div class="muted">Current tool reference; confirm against the governing FDD</div></div>
@@ -173,12 +229,111 @@ button.help-trigger:hover + .field-help,button.help-trigger:focus-visible + .fie
     <div class="actions"><button type="button" id="print">Print your private summary</button><button class="ghost" type="button" id="reset">Clear all my inputs</button></div>
     <p class="footer">Cost reference: <span id="source"></span>. Cost-reference date: <span id="updated"></span>. This private educational aid is not a franchise offer, financing approval or suitability determination. No data collection or analytics scripts are included. Printing or saving a PDF is controlled by your browser.</p>
   </section>
+
+<section class="market-panel" id="marketAnalysis">
+  <div class="eyebrow">ICEWORKS · TERRITORY RESEARCH</div>
+  <h2><span id="marketTitle">Market Research Preview</span></h2>
+  <p id="marketIntro">We research potential commercial foodservice customer concentration and service-area conditions before discussing new franchise territories. Specific market findings are shared only when a verified, approved report is available.</p>
+  <div class="market-tiles">
+    <div class="market-tile"><strong>Foodservice establishments</strong> We assess potential commercial kitchens and other businesses that might use commercial ice equipment.</div>
+    <div class="market-tile"><strong>Market boundaries</strong> We distinguish a city from its surrounding metropolitan service area so counts use comparable boundaries.</div>
+    <div class="market-tile"><strong>Location density</strong> Our internal PUDI research compares the concentration of qualifying establishments; it does not forecast customers, installs, or earnings.</div>
+  </div>
+  <p class="notice" id="researchStatus">Market-specific research has not been verified for this invitation. No PUDI score or confidential underlying formula is included in this public page.</p>
+  <h3>Request a detailed market report</h3>
+  <p>A completed market report may include establishment counts, data sources, geographical boundaries, the PUDI score, and an explanation of how it was calculated. It is not a financial performance projection. You can use the capital tool freely without sharing anything.</p>
+  <button id="viewShare" type="button" class="ghost">Review optional summary sharing</button>
+  <div class="private-box" id="sharePanel" hidden>
+    <h3>Review exactly what Iceworks would receive</h3>
+    <p>Only this capital-readiness summary is eligible to be shared. Your detailed Financial Snapshot, income, retirement accounts, mortgage balances, real estate, debt payments, and other asset/liability entries are <strong>never sent</strong>.</p>
+    <div class="line"><span>Deployable capital</span><strong id="sharedFunds">—</strong></div>
+    <div class="line"><span>Selected total cost range</span><strong id="sharedCosts">—</strong></div>
+    <div class="line"><span>Funding gap (low to high)</span><strong id="sharedGap">—</strong></div>
+    <div class="line"><span>Financing status</span><strong id="sharedFinancing">—</strong></div>
+    <div class="line"><span>General readiness considerations</span><strong id="sharedFlags">—</strong></div>
+    <p class="muted">We also record your invitation identifier, submission time, and consent. Iceworks uses this summary for franchise discovery and follow-up. Do not submit someone else's financial information.</p>
+    <label for="submitConsent"><input id="submitConsent" type="checkbox">I choose to share only the summary displayed above with Iceworks for franchise discovery. I understand this is voluntary and does not guarantee territory availability, a franchise offer, financing, or access to a report that has not been completed.</label>
+    <div class="actions"><button type="button" id="sendSummary" disabled>Submit summary and request report</button><button type="button" class="ghost" id="cancelShare">Cancel — keep private</button></div>
+    <p id="portalAlert" class="notice" role="status" aria-live="polite" hidden></p>
+  </div>
+  <div class="private-box" id="reportResult" hidden>
+    <h3 id="reportHeading">Territory report</h3>
+    <p id="reportOverview"></p>
+    <div id="reportDetails"></div>
+    <p class="muted">Market analysis is informational and does not predict signed customers, unit installations, sales, revenues, or investment outcomes.</p>
+  </div>
+</section>
 </main>
 <script>
 (() => {
 "use strict";
 const cfg=window.ICEWORKS_CAPITAL_CONFIG;
 if(!cfg){document.body.textContent="Cost configuration unavailable. Please contact Iceworks.";return}
+const portal=window.ICEWORKS_PORTAL_CONFIG||{enabled:false,endpoint:""};
+let invitation=null,inviteToken="",readonlyDemo=false,lastCapitalSummary=null;
+const validMoney=v=>Number.isFinite(v)&&v>=0&&v<=1e9;
+function scrub(input,limit=130){return String(input||"").replace(/[<>\\x00-\\x1f]/g,"").slice(0,limit)}
+function readToken(){
+ const fragment=new URLSearchParams(location.hash.replace(/^#/,""));
+ const t=fragment.get("invite")||"";
+ if(t){history.replaceState(null,"",location.pathname+location.search);return /^[a-f0-9]{48}$/.test(t)?t:""}
+ return "";
+}
+async function portalRequest(action,details){
+ if(!portal.enabled||!/^https:\/\/[a-z0-9-]+\.supabase\.co\/functions\/v1\/iceworks-capital-portal$/.test(portal.endpoint))throw Error("Secure invitation service is not configured.");
+ const ctrl=new AbortController();const stop=setTimeout(()=>ctrl.abort(),12000);
+ try{
+  const r=await fetch(portal.endpoint,{method:"POST",mode:"cors",headers:{"Content-Type":"application/json"},body:JSON.stringify({action,token:inviteToken,...(details||{})}),signal:ctrl.signal,cache:"no-store",referrerPolicy:"no-referrer"});
+  const data=await r.json();if(!r.ok)throw Error("Unable to complete this request. Please contact Iceworks for assistance.");
+  return data
+ } finally{clearTimeout(stop)}
+}
+function setWelcome(first,market,message,footnote){
+ const name=scrub(first,60),place=scrub(market,100);
+ el("welcomeTitle").textContent=name?"Welcome, "+name+"!":"Welcome to Iceworks";
+ el("welcomeMessage").textContent=message?String(message).slice(0,650):"We've prepared a simple way to explore franchise startup costs and capital readiness"+(place?" for the "+place+" market":"")+". We invite you to take a look at your own pace.";
+ el("welcomeFootnote").textContent=footnote||"Your detailed Financial Snapshot stays in your browser. Sharing a limited summary is optional.";
+ el("welcomeOverlay").hidden=false;document.body.classList.add("has-modal");el("begin").focus();
+}
+function setMarket(place,ready){
+ el("marketTitle").textContent=place?"Market Research · "+scrub(place,100):"Market Research Preview";
+ el("researchStatus").textContent=ready?"A market-specific report has been prepared for this invitation. You can request access after voluntarily sharing your limited capital-readiness summary.":"A verified, market-specific report is not currently available for this invitation. No PUDI score or confidential underlying calculation is stored in this public page.";
+}
+function displayReport(report){
+ if(!report||typeof report!=="object")return;
+ el("reportHeading").textContent=scrub(report.title||"Market report",150);
+ el("reportOverview").textContent=scrub(report.overview||"Market information provided by Iceworks.",700);
+ const box=el("reportDetails");box.replaceChildren();
+ const pairs=[["PUDI score",report.pudi_score],["Establishment count",report.establishment_count],["Population basis",report.population],["Market boundaries",report.boundaries],["Methodology",report.methodology],["Sources / as-of date",report.source_notes]];
+ for(const [label,value] of pairs){if(value===null||value===undefined||value==="")continue;const item=document.createElement("div"),head=document.createElement("strong"),detail=document.createElement("span");item.className="line";head.textContent=label;detail.textContent=String(value).slice(0,1200);item.append(head,detail);box.append(item)}
+ el("reportResult").hidden=false;
+}
+async function initInvitation(){
+ inviteToken=readToken();
+ const params=new URLSearchParams(location.search);
+ if(!inviteToken&&params.get("demo")==="1"){
+  readonlyDemo=true;
+  const name=scrub(params.get("first")||"Jim",50);
+  const market=scrub(params.get("market")||"Tucson, Arizona",95);
+  setMarket(market,false);
+  setWelcome(name,market,"This is a demonstration of a personalized Iceworks invitation for "+market+". The capital explorer is fully interactive; any financial entries remain in this browser. Secure submission and private reports are not enabled in this demo.","Demo invitation — not a verified market report or official franchise offer.");
+  el("researchStatus").textContent="Example market preview only. No market-specific PUDI research or score is represented by this demo.";
+  return
+ }
+ if(inviteToken&&portal.enabled){
+   try{
+    const result=await portalRequest("resolve");
+    invitation=result.invitation;
+    if(!invitation)throw Error("Invitation not found");
+    setMarket(invitation.market_label,!!invitation.report_ready);
+    setWelcome(invitation.first_name,invitation.market_label,invitation.welcome_message);
+    if(result.submitted&&result.report)displayReport(result.report);
+    return
+   }catch(e){setMarket("",false);el("researchStatus").textContent="We couldn't verify the invitation. Please ask Iceworks for a new link.";return}
+ }
+ if(inviteToken&&!portal.enabled)el("researchStatus").textContent="Personal invitations are awaiting secure service activation. You can still use this calculator privately.";
+}
+
 const el=id=>document.getElementById(id);
 const money=n=>new Intl.NumberFormat("en-US",{style:"currency",currency:"USD",maximumFractionDigits:0}).format(n);
 const set=(id,value)=>{el(id).textContent=value};
@@ -239,6 +394,15 @@ function render(){
  if(!hasSnapshot&&reported===null&&budget===null&&pending===null)flags.push("Enter optional figures to view reconciliation questions. Leaving this section blank is fine.");
  if(flags.length===0)flags.push("No basic reconciliation flags from the figures entered. This does not verify completeness or accuracy.");
  list("snapshotFlags",flags);
+ lastCapitalSummary={
+   deployable_funds:Math.round(funds),selected_cost_low:Math.round(costLow),selected_cost_high:Math.round(costHigh),
+   capital_gap_low:Math.round(gapLow),capital_gap_high:Math.round(gapHigh),
+   financing_status:el("fundingStage").value,
+   flags:[...(reserve===0?["no_reserve_established"]:[]),...(gapHigh>0?["capital_gap_exists"]:[]),...(pending!==null&&pending>0?["uncommitted_financing_present"]:[])]
+ };
+ set("sharedFunds",money(funds));set("sharedCosts",range(costLow,costHigh));set("sharedGap",range(gapLow,gapHigh));
+ set("sharedFinancing",({none:"Not specified",exploring:"Exploring",applied:"Applied",preapproved:"Conditionally preapproved",committed:"Approved / available"})[el("fundingStage").value]);
+ set("sharedFlags",lastCapitalSummary.flags.length?lastCapitalSummary.flags.map(x=>({"no_reserve_established":"Reserve not established","capital_gap_exists":"Funding gap identified","uncommitted_financing_present":"Uncommitted financing noted"})[x]).join("; "):"None flagged");
  set("summaryFunds",money(funds));set("summaryGap",range(gapLow,gapHigh));
  set("summaryPending",pending===null?"Not entered":money(pending));const statusLabels={none:"Not specified",exploring:"Exploring options",applied:"Application submitted",preapproved:"Conditionally preapproved",committed:"Approved / available"};set("summaryStage",statusLabels[el("fundingStage").value]);
  set("summaryBudget",budget===null?"Not entered":money(budget));
@@ -278,6 +442,37 @@ helpButtons.forEach(b=>b.addEventListener("click",event=>{
 }));
 document.addEventListener("click",event=>{if(!event.target.closest(".field-help"))closeHelp()});
 document.addEventListener("keydown",event=>{if(event.key==="Escape"){closeHelp();if(document.activeElement?.classList?.contains("help-trigger"))document.activeElement.blur()}});
+
+
+const initialFocus=()=>{el("begin").addEventListener("click",()=>{
+ el("welcomeOverlay").hidden=true;document.body.classList.remove("has-modal");el("cash").focus();
+});
+ el("viewShare").addEventListener("click",()=>{
+  el("sharePanel").hidden=false;el("sharePanel").scrollIntoView({behavior:"smooth",block:"nearest"});
+  const allowed=!!(invitation&&inviteToken&&portal.enabled&&!readonlyDemo&&invitation.report_ready);
+  el("sendSummary").disabled=!allowed||!el("submitConsent").checked;
+  el("portalAlert").hidden=false;
+  el("portalAlert").textContent=allowed?"Please review the summary and choose whether to consent.":"Preview only: secure report requests will become available when Iceworks activates an invitation and publishes the market research. Nothing has been submitted.";
+ });
+ el("cancelShare").addEventListener("click",()=>{el("sharePanel").hidden=true;el("submitConsent").checked=false;el("sendSummary").disabled=true});
+ el("submitConsent").addEventListener("change",()=>{
+  el("sendSummary").disabled=!(el("submitConsent").checked&&invitation?.report_ready&&inviteToken&&portal.enabled&&!readonlyDemo)
+ });
+ el("sendSummary").addEventListener("click",async()=>{
+  if(!lastCapitalSummary||!invitation?.report_ready||!el("submitConsent").checked||readonlyDemo)return;
+  const btn=el("sendSummary");btn.disabled=true;el("portalAlert").hidden=false;el("portalAlert").textContent="Submitting your limited summary securely…";
+  try{
+   const result=await portalRequest("submit",{consent:true,consent_version:"capital-summary-v1.3",summary:lastCapitalSummary});
+   if(result.report){displayReport(result.report);el("portalAlert").textContent="Summary submitted. Your detailed market report is available below."}
+   else el("portalAlert").textContent="Your summary was submitted. A detailed report isn't available for this invitation yet.";
+  }catch(e){el("portalAlert").textContent="Your summary wasn't confirmed as submitted. Please try again or contact Iceworks."}
+  btn.disabled=false;el("submitConsent").checked=false;
+ });
+ const cards=document.querySelector(".cards");
+ const updateSticky=()=>cards.classList.toggle("is-condensed",window.scrollY>180);
+ window.addEventListener("scroll",updateSticky,{passive:true});updateSticky();
+};
+initialFocus();initInvitation();
 
 set("source",cfg.sourceLabel);set("updated",cfg.updated);render();
 })();
