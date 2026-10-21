@@ -1,67 +1,249 @@
 <!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Iceworks | Capital Readiness Explorer</title>
+<title>Iceworks | Capital Readiness Explorer v1.1</title>
 <style>
-:root{font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:#19364a;background:#f3f8fa}*{box-sizing:border-box}body{margin:0}header{background:#073c53;color:white;padding:38px max(22px,calc((100vw - 1030px)/2))}header h1{font-size:clamp(28px,4vw,39px);margin:8px 0}header p{color:#c9e5ec;max-width:710px;line-height:1.5}main{max-width:1060px;margin:25px auto;padding:0 16px 50px}.tag{font-size:12px;letter-spacing:1.6px;font-weight:700;text-transform:uppercase;color:#61e1df}.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:13px}.card,.panel{background:white;border:1px solid #dbe7eb;border-radius:16px;padding:23px;box-shadow:0 5px 15px #102d4308}.card .metric{font-weight:800;font-size:27px;margin:8px 0}.muted{color:#617782;font-size:13px;line-height:1.5}h2{font-size:20px;margin:2px 0 8px}h3{font-size:16px;margin:0 0 13px}section{margin-top:18px}.grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}.fields{display:grid;grid-template-columns:1fr 1fr;gap:15px}label{font-size:13px;display:block;font-weight:650;margin:0 0 6px}input{width:100%;border:1px solid #bfcfd7;border-radius:8px;padding:12px;font:inherit;color:#173448;background:white}input:focus{outline:2px solid #50bfc4}button{background:#087e94;color:white;border:0;border-radius:8px;padding:12px 17px;font-size:14px;font-weight:700;cursor:pointer}button.ghost{background:white;color:#086c83;border:1px solid #9bcbd2} .line{display:flex;justify-content:space-between;gap:15px;padding:10px 0;border-bottom:1px solid #e8f0f3;font-size:14px}.line strong{white-space:nowrap}.notice{background:#f2f8fb;border-left:4px solid #178aa1;padding:14px;font-size:13px;color:#355568;line-height:1.55;border-radius:8px}.range{color:#078ba2} .negative{color:#b04c33}.positive{color:#087a67} .footer{margin-top:21px;font-size:12px;line-height:1.6;color:#657784}.pill{display:inline-block;border-radius:25px;background:#e7f6f5;color:#076d74;font-size:12px;padding:6px 10px;font-weight:700} .actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px}@media(max-width:760px){.cards,.grid,.fields{grid-template-columns:1fr}header{padding:28px 20px}.card .metric{font-size:24px}}@media print{.actions{display:none}header{padding:20px}.panel{break-inside:avoid}body{background:white}}</style>
+:root{font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:#19364a;background:#f3f8fa}*{box-sizing:border-box}body{margin:0}header{background:#073c53;color:white;padding:38px max(22px,calc((100vw - 1030px)/2))}header h1{font-size:clamp(28px,4vw,39px);margin:8px 0}header p{color:#c9e5ec;max-width:710px;line-height:1.5}main{max-width:1060px;margin:25px auto;padding:0 16px 50px}.tag{font-size:12px;letter-spacing:1.6px;font-weight:700;text-transform:uppercase;color:#61e1df}.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:13px}.card,.panel{background:white;border:1px solid #dbe7eb;border-radius:16px;padding:23px;box-shadow:0 5px 15px #102d4308}.card .metric{font-weight:800;font-size:27px;margin:8px 0}.muted{color:#617782;font-size:13px;line-height:1.5}h2{font-size:20px;margin:2px 0 8px}h3{font-size:16px;margin:0 0 13px}section{margin-top:18px}.grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}.fields{display:grid;grid-template-columns:1fr 1fr;gap:15px}label{font-size:13px;display:block;font-weight:650;margin:0 0 6px}input{width:100%;border:1px solid #bfcfd7;border-radius:8px;padding:12px;font:inherit;color:#173448;background:white}input:focus{outline:2px solid #50bfc4}button{background:#087e94;color:white;border:0;border-radius:8px;padding:12px 17px;font-size:14px;font-weight:700;cursor:pointer}button.ghost{background:white;color:#086c83;border:1px solid #9bcbd2} .line{display:flex;justify-content:space-between;gap:15px;padding:10px 0;border-bottom:1px solid #e8f0f3;font-size:14px}.line strong{white-space:nowrap}.notice{background:#f2f8fb;border-left:4px solid #178aa1;padding:14px;font-size:13px;color:#355568;line-height:1.55;border-radius:8px}.range{color:#078ba2} .negative{color:#b04c33}.positive{color:#087a67} .footer{margin-top:21px;font-size:12px;line-height:1.6;color:#657784}.pill{display:inline-block;border-radius:25px;background:#e7f6f5;color:#076d74;font-size:12px;padding:6px 10px;font-weight:700} .actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px}@media(max-width:760px){.cards,.grid,.fields{grid-template-columns:1fr}header{padding:28px 20px}.card .metric{font-size:24px}}@media print{.actions{display:none}header{padding:20px}.panel{break-inside:avoid}body{background:white}}
+/* Version 1.1 additions */
+.step{font-size:11px;font-weight:850;color:#087e94;letter-spacing:1.35px;margin-bottom:10px}
+.hint{font-size:12px;color:#788d99;line-height:1.5;margin-top:5px}
+select{width:100%;border:1px solid #bfcfd7;border-radius:8px;padding:12px;font:inherit;color:#173448;background:white}
+input[type=checkbox]{width:auto;accent-color:#087e94}
+.checkbox-line{display:flex;align-items:flex-start;gap:9px;margin:17px 0;line-height:1.5;font-size:13px;font-weight:500}
+.checkbox-line input{flex:none;margin-top:3px}
+summary{list-style:none;display:flex;justify-content:space-between;align-items:center;cursor:pointer;font-size:21px}
+summary::-webkit-details-marker{display:none}
+summary small{font-weight:400;display:block;font-size:13px;color:#617782;line-height:1.6;margin-top:7px}
+details>h3{margin-top:24px}
+.summary-sub{padding:12px;border-radius:10px;background:#f7fbfc}
+.line.emphasis{font-weight:700;border-bottom-color:#cee8eb}
+.review-list{line-height:1.55;font-size:13px;color:#36596c;padding-left:21px}
+.review-list li{margin:8px 0}
+.warning{color:#a65a28}
+#investmentRange{font-size:23px}
+@media(max-width:760px){#investmentRange{font-size:21px}.summary-sub{padding:0}}
+</style>
 <script src="capital-readiness-config.js"></script>
 </head><body>
-<header><span class="tag">Iceworks Franchise Group</span><h1>Capital Readiness Explorer</h1><p>Understand the cost of getting started, compare your available funding with a startup investment range, and plan for equipment and ongoing expenses. No income or profit forecasts—just costs, capital, and planning.</p><span class="pill">Private in your browser · No financial details submitted</span></header>
+<header><span class="tag">Iceworks Franchise Group</span><h1>Capital Readiness Explorer <span style="font-size:14px;opacity:.75;font-weight:500">v1.1</span></h1><p>Explore startup costs and capital gaps, then optionally review your financial position—without submitting private information or modeling franchise earnings. No income or profit forecasts—just costs, capital, and planning.</p><span class="pill">Private in your browser · No financial details submitted</span></header>
 <main>
-<div class="cards">
- <div class="card"><div class="muted">Published initial investment range</div><div class="metric" id="investmentRange">—</div><div class="muted">From the listed FDD-era brochure; confirm latest FDD</div></div>
- <div class="card"><div class="muted">Estimated deployable funds</div><div class="metric" id="available">—</div><div class="muted">Cash + confirmed financing − personal reserves</div></div>
- <div class="card"><div class="muted">Gap to published startup range</div><div class="metric" id="gap">—</div><div class="muted">Does not include optional extra equipment</div></div>
-</div>
-<div class="grid"><section class="panel"><h2>1. Your funding position</h2><p class="muted">Use approximate values. You can leave unfamiliar amounts at zero. Nothing is saved or transmitted.</p><div class="fields">
-<div><label for="cash">Accessible cash for business ($)</label><input id="cash" type="number" min="0" step="500" value="75000"></div>
-<div><label for="financing">Confirmed available financing ($)</label><input id="financing" type="number" min="0" step="500" value="0"></div>
-<div><label for="reserve">Personal cash you want to protect ($)</label><input id="reserve" type="number" min="0" step="500" value="30000"></div>
-<div><label for="other">Other startup commitments not in the range ($)</label><input id="other" type="number" min="0" step="500" value="0"></div>
-</div><p class="notice">Only count financing that is genuinely available, not an assumed or unapproved loan. Personal reserves remain yours and are excluded from deployable capital.</p></section>
-<section class="panel"><h2>2. Optional equipment planning</h2><p class="muted">Explore the extra cash needed for equipment placements <strong>only if those costs fall outside</strong> the published initial investment.</p><div class="fields">
-<div><label for="units">Additional equipment placements</label><input id="units" type="number" min="0" max="5000" step="1" value="0"></div>
-<div><label for="months">Maintenance planning period (months)</label><input id="months" type="number" min="0" max="120" step="6" value="12"></div>
-</div><div class="line"><span>Purchase and installation per placement</span><strong id="perPlacement">—</strong></div><div class="line"><span>Extra equipment + installation</span><strong id="equipment">—</strong></div><div class="line"><span>Maintenance reserve for selected period</span><strong id="maintenance">—</strong></div><p class="muted">Maintenance assumes the selected additional machines each receive service at the stated interval throughout the planning period. This does not estimate when customers will sign or machines will be installed.</p></section></div>
-<section class="panel"><h2>3. Your capital comparison</h2><div class="grid"><div>
-<div class="line"><span>Accessible cash</span><strong id="vCash">—</strong></div>
-<div class="line"><span>Confirmed financing</span><strong id="vFinancing">—</strong></div>
-<div class="line"><span>Less: protected personal reserves</span><strong id="vReserve">—</strong></div>
-<div class="line"><span>Estimated deployable funds</span><strong id="vAvailable">—</strong></div>
-<div class="line"><span>Additional commitments</span><strong id="vOther">—</strong></div></div><div>
-<div class="line"><span>Published initial investment, low end</span><strong id="vLow">—</strong></div>
-<div class="line"><span>Published initial investment, high end</span><strong id="vHigh">—</strong></div>
-<div class="line"><span>Optional extra equipment + maintenance</span><strong id="vExtras">—</strong></div>
-<div class="line"><span>Capital gap, low / high case</span><strong id="vGap">—</strong></div>
-</div></div><p id="conclusion" class="notice"></p>
-</section>
-<section class="panel"><h2>4. Ongoing cost references</h2><p class="muted">These are expense references, not net income, revenue or profitability projections. Some fees may already be included in other budgets; do not add them twice.</p>
-<div class="grid"><div>
-<div class="line"><span>Software / technology fee (monthly)</span><strong id="software">—</strong></div>
-<div class="line"><span>National convention fee (annual)</span><strong id="convention">—</strong></div>
-<div class="line"><span>Continuing royalty rate</span><strong id="royalty">—</strong></div>
-</div><div><div class="line"><span>Preventative maintenance per visit</span><strong id="maintVisit">—</strong></div><div class="line"><span>Visits per machine / year</span><strong id="maintFreq">—</strong></div><div class="line"><span>Franchise fee (included in published range)</span><strong id="franchise">—</strong></div></div></div>
-<p class="notice">The royalty percentage is displayed solely as a contractual fee reference. This tool does not calculate royalties because it does not model gross sales.</p>
-</section>
-<section class="panel"><h2>What this means—and what it doesn't</h2><p class="muted">Capital affects what you may be able to fund, not how many customers you will obtain. This tool does not forecast sales, leasing income, profits, cash flow, return on investment, or equipment payback. Actual requirements vary by territory, financing terms, timing, service costs, taxes, and the governing Franchise Disclosure Document. A larger net worth does not necessarily mean more spendable capital.</p><div class="actions"><button type="button" onclick="window.print()">Print private summary</button><button class="ghost" type="button" id="reset">Reset my inputs</button></div><p class="footer">Cost reference source: <span id="source"></span>. Last updated <span id="updated"></span>. This educational planning aid is not a franchise offer, approval for financing, or a determination of financial suitability. It does not replace the FDD, consultation with qualified legal/financial advisers, or a lender assessment.</p></section>
+  <div class="cards" aria-live="polite">
+    <div class="card"><div class="muted">Published initial investment range</div><div class="metric" id="investmentRange">—</div><div class="muted">Current tool reference; confirm against the governing FDD</div></div>
+    <div class="card"><div class="muted">Estimated deployable funds</div><div class="metric" id="available">—</div><div class="muted">Accessible cash less protected reserves, plus committed funding</div></div>
+    <div class="card"><div class="muted">Total capital gap — low to high</div><div class="metric" id="gap">—</div><div class="muted">Includes selected extra costs and commitments; never a profit forecast</div></div>
+  </div>
+
+  <div class="grid">
+    <section class="panel">
+      <div class="step">STEP 1</div><h2>Your funding position</h2>
+      <p class="muted">Enter amounts you can actually access. These are private, editable estimates. Zero is used for calculations when a field is blank; it does not mean an unreported amount is known to be zero.</p>
+      <div class="fields">
+        <div><label for="cash">Cash available for business ($)</label><input id="cash" type="number" min="0" step="500" value="0"><div class="hint">Do not include retirement or unliquidated property</div></div>
+        <div><label for="financing">Committed / available financing ($)</label><input id="financing" type="number" min="0" step="500" value="0"><div class="hint">Exclude applications and conditional preapprovals</div></div>
+        <div><label for="reserve">Personal cash to keep untouched ($)</label><input id="reserve" type="number" min="0" step="500" value="0"><div class="hint">Set aside from accessible cash, not borrowed funds</div></div>
+        <div><label for="other">Extra startup obligations not in FDD range ($)</label><input id="other" type="number" min="0" step="500" value="0"><div class="hint">Only costs not already counted in the published range</div></div>
+      </div>
+      <p class="notice">Your net worth and annual salary are not automatically available investment capital. You can enter them later in the optional Financial Snapshot without affecting the funding calculation.</p>
+    </section>
+    <section class="panel">
+      <div class="step">STEP 2</div><h2>Optional extra equipment costs</h2>
+      <p class="muted">Use this only for purchases that would be <strong>in addition to</strong> the published initial investment range, not for equipment that is already included.</p>
+      <div class="fields">
+        <div><label for="units">Extra equipment placements</label><input id="units" type="number" min="0" max="5000" step="1" value="0"></div>
+        <div><label for="months">Maintenance planning period (months)</label><input id="months" type="number" min="0" max="120" step="6" value="12"></div>
+      </div>
+      <label class="checkbox-line" for="equipmentOutside"><input type="checkbox" id="equipmentOutside"> I confirm these are <strong>additional</strong> costs outside the startup investment estimate.</label>
+      <div class="line"><span>Equipment + installation per extra placement</span><strong id="perPlacement">—</strong></div>
+      <div class="line"><span>Extra equipment + installations</span><strong id="equipment">—</strong></div>
+      <div class="line"><span>Maintenance planning allowance</span><strong id="maintenance">—</strong></div>
+      <p id="equipmentNote" class="hint" role="status"></p>
+      <p class="muted">Illustrates costs for a chosen number of placements, not how many customers will sign. All included equipment is assumed purchased upfront for this cost-only comparison.</p>
+    </section>
+  </div>
+
+  <section class="panel">
+    <div class="step">STEP 3</div><h2>Your capital comparison</h2>
+    <div class="grid"><div>
+      <div class="line"><span>Accessible cash</span><strong id="vCash">—</strong></div>
+      <div class="line"><span>Less: protected cash reserves</span><strong id="vReserve">—</strong></div>
+      <div class="line"><span>Committed financing</span><strong id="vFinancing">—</strong></div>
+      <div class="line emphasis"><span>Deployable funds</span><strong id="vAvailable">—</strong></div>
+    </div><div>
+      <div class="line"><span>Published startup range</span><strong id="vStartup">—</strong></div>
+      <div class="line"><span>Additional commitments</span><strong id="vOther">—</strong></div>
+      <div class="line"><span>Optional additional equipment and maintenance</span><strong id="vExtras">—</strong></div>
+      <div class="line emphasis"><span>Selected total capital requirement</span><strong id="vTotal">—</strong></div>
+      <div class="line emphasis"><span>Selected capital gap, low to high</span><strong id="vGap">—</strong></div>
+    </div></div>
+    <p class="notice" id="conclusion"></p>
+  </section>
+
+  <section class="panel">
+    <div class="step">OPTIONAL · PRIVATE</div>
+    <details id="snapshot">
+      <summary><span><strong>Your Financial Snapshot</strong><small>Expand to explore liquidity, assets, liabilities, income and financing questions. Not required.</small></span><span aria-hidden="true">＋</span></summary>
+      <p class="notice">This section is for your own review. Enter numbers only if you want to. Fields left blank remain unknown; zero is a deliberate value. Entries are not saved, uploaded or submitted to Iceworks. Don't enter identity numbers or account details.</p>
+      <h3>Income, available budget & financing context</h3>
+      <div class="fields">
+        <div><label for="annualIncome">Annual gross employment/other income ($)</label><input id="annualIncome" type="number" min="0" placeholder="Optional"></div>
+        <div><label for="investmentBudget">Amount you intend to invest ($)</label><input id="investmentBudget" type="number" min="0" placeholder="Optional"><div class="hint">An intention, not proof of available funds</div></div>
+        <div><label for="pendingFinancing">Financing under consideration ($)</label><input id="pendingFinancing" type="number" min="0" placeholder="Optional"><div class="hint">Not counted as committed funding</div></div>
+        <div><label for="fundingStage">Additional financing status</label>
+          <select id="fundingStage"><option value="none">Not specified / none</option><option value="exploring">Exploring options</option><option value="applied">Application submitted</option><option value="preapproved">Conditionally preapproved</option><option value="committed">Funding approved and available</option></select>
+        </div>
+      </div>
+      <h3>Assets — keep spendable funds separate</h3>
+      <div class="fields">
+        <div><label for="snapCash">Total cash / savings ($)</label><input id="snapCash" type="number" min="0" placeholder="Optional"></div>
+        <div><label for="snapInvestments">Non-retirement investments ($)</label><input id="snapInvestments" type="number" min="0" placeholder="Optional"></div>
+        <div><label for="snapRetirement">Retirement / restricted assets ($)</label><input id="snapRetirement" type="number" min="0" placeholder="Optional"></div>
+        <div><label for="snapProperty">Real estate market value ($)</label><input id="snapProperty" type="number" min="0" placeholder="Optional"></div>
+        <div><label for="snapOtherAssets">Other assets ($)</label><input id="snapOtherAssets" type="number" min="0" placeholder="Optional"></div>
+      </div>
+      <h3>Liabilities and personal obligations</h3>
+      <div class="fields">
+        <div><label for="snapMortgage">Mortgages ($)</label><input id="snapMortgage" type="number" min="0" placeholder="Optional"></div>
+        <div><label for="snapDebt">Credit cards and other loans ($)</label><input id="snapDebt" type="number" min="0" placeholder="Optional"></div>
+        <div><label for="snapOtherLiabilities">Other liabilities ($)</label><input id="snapOtherLiabilities" type="number" min="0" placeholder="Optional"></div>
+        <div><label for="monthlyDebt">Monthly personal debt payments ($)</label><input id="monthlyDebt" type="number" min="0" placeholder="Optional"><div class="hint">For context only, not a lending decision</div></div>
+        <div><label for="reportedNW">Net worth you previously reported ($)</label><input id="reportedNW" type="number" step="100" placeholder="Optional"><div class="hint">Used only to flag reconciliation differences</div></div>
+      </div>
+      <label class="checkbox-line" for="snapshotComplete"><input type="checkbox" id="snapshotComplete"> I entered my full asset and liability picture (including explicit zeroes).</label>
+      <div class="grid">
+        <div class="summary-sub">
+          <div class="line"><span>Assets entered</span><strong id="assetsEntered">—</strong></div>
+          <div class="line"><span>Liabilities entered</span><strong id="liabilitiesEntered">—</strong></div>
+          <div class="line emphasis"><span id="netWorthLabel">Partial net worth estimate</span><strong id="netWorth">—</strong></div><div class="line"><span>Gross monthly income (if reported)</span><strong id="grossMonthly">—</strong></div><div class="line"><span>Debt payments / gross monthly income</span><strong id="debtRatio">—</strong></div>
+        </div>
+        <div class="summary-sub"><h3>Check these figures</h3><ul id="snapshotFlags" class="review-list"><li>Enter figures to see reconciliation checks.</li></ul></div>
+      </div>
+      <p class="muted">Debt payments divided by gross monthly income is a simple contextual ratio, not a lender debt-to-income determination or approval. Annual income, net worth, retirement savings, and uncommitted financing do not increase deployable funds automatically.</p>
+    </details>
+  </section>
+
+  <section class="panel" id="readiness">
+    <div class="step">YOUR TAKEAWAY</div><h2>Your Capital Readiness Summary</h2>
+    <p class="muted">This is an explanation of the figures entered above. It is not a pass/fail score, financing decision or forecast.</p>
+    <div class="grid">
+      <div class="summary-sub"><div class="line"><span>Deployable funds</span><strong id="summaryFunds">—</strong></div><div class="line"><span>Capital to explore, low to high</span><strong id="summaryGap">—</strong></div></div>
+      <div class="summary-sub"><div class="line"><span>Uncommitted financing</span><strong id="summaryPending">Not entered</strong></div><div class="line"><span>Additional financing status</span><strong id="summaryStage">Not specified</strong></div><div class="line"><span>Intended investment budget</span><strong id="summaryBudget">Not entered</strong></div></div>
+    </div>
+    <p class="notice" id="summaryText"></p>
+    <h3>Questions worth resolving next</h3><ul id="nextSteps" class="review-list"></ul>
+  </section>
+
+  <section class="panel">
+    <h2>Ongoing cost references</h2><p class="muted">Expense and contractual fee references only. Some items may already be covered in the startup range or other budgets—avoid counting them twice.</p>
+    <div class="grid"><div>
+      <div class="line"><span>Software & technology fee / month</span><strong id="software">—</strong></div>
+      <div class="line"><span>National convention fee / year</span><strong id="convention">—</strong></div>
+      <div class="line"><span>Continuing royalty rate</span><strong id="royalty">—</strong></div>
+    </div><div>
+      <div class="line"><span>Preventative maintenance / visit</span><strong id="maintVisit">—</strong></div>
+      <div class="line"><span>Maintenance visits per machine / year</span><strong id="maintFreq">—</strong></div>
+      <div class="line"><span>Franchise fee already in the startup range</span><strong id="franchise">—</strong></div>
+    </div></div>
+    <p class="notice">The royalty percentage is a contractual fee reference. This tool does not model gross sales, calculate royalties, or estimate business earnings.</p>
+  </section>
+
+  <section class="panel"><h2>What this tool can—and cannot—tell you</h2>
+    <p class="muted">It compares stated funding sources with published startup costs and user-selected extra expenses. It does not predict customers, machine placements, leasing revenue, profits, payback, cash flow, investment returns or franchise success. Net worth isn't necessarily spendable cash. Actual expenses, financing conditions and franchise terms may differ. Consult the governing Franchise Disclosure Document, your lender and your professional advisers.</p>
+    <div class="actions"><button type="button" id="print">Print your private summary</button><button class="ghost" type="button" id="reset">Clear all my inputs</button></div>
+    <p class="footer">Cost reference: <span id="source"></span>. Cost-reference date: <span id="updated"></span>. This private educational aid is not a franchise offer, financing approval or suitability determination. No data collection or analytics scripts are included. Printing or saving a PDF is controlled by your browser.</p>
+  </section>
 </main>
 <script>
 (() => {
 "use strict";
-const cfg=window.ICEWORKS_CAPITAL_CONFIG;if(!cfg){document.body.textContent="Missing configuration. Contact Iceworks.";return}
-const el=id=>document.getElementById(id), money=n=>new Intl.NumberFormat("en-US",{style:"currency",currency:"USD",maximumFractionDigits:0}).format(n),num=id=>Math.max(0,Number(el(id).value)||0),set=(id,v)=>el(id).textContent=v;
-const baseIds=["cash","financing","reserve","other","units","months"];
+const cfg=window.ICEWORKS_CAPITAL_CONFIG;
+if(!cfg){document.body.textContent="Cost configuration unavailable. Please contact Iceworks.";return}
+const el=id=>document.getElementById(id);
+const money=n=>new Intl.NumberFormat("en-US",{style:"currency",currency:"USD",maximumFractionDigits:0}).format(n);
+const set=(id,value)=>{el(id).textContent=value};
+const optionalIds=["annualIncome","investmentBudget","pendingFinancing","snapCash","snapInvestments","snapRetirement","snapProperty","snapOtherAssets","snapMortgage","snapDebt","snapOtherLiabilities","monthlyDebt","reportedNW"];
+const inputIds=["cash","financing","reserve","other","units","months"].concat(optionalIds);
+const n=id=>{const x=Number(el(id).value);return Number.isFinite(x)?Math.max(0,Math.min(x,100000000000)):0};
+const opt=id=>{const raw=el(id).value.trim();if(raw==="")return null;const x=Number(raw);return Number.isFinite(x)?Math.max(0,Math.min(x,100000000000)):null};
+const optSigned=id=>{const raw=el(id).value.trim();if(raw==="")return null;const x=Number(raw);return Number.isFinite(x)?x:null};
+const list=(id,messages)=>{const box=el(id);box.replaceChildren();for(const msg of messages){const li=document.createElement("li");li.textContent=msg;box.appendChild(li)}};
 function render(){
-const cash=num("cash"),financing=num("financing"),reserve=num("reserve"),other=num("other"),units=Math.floor(num("units")),months=num("months"),funds=Math.max(0,cash+financing-reserve),per=cfg.equipmentCost+cfg.installationCost;
-const eq=units*per,maint=units*cfg.maintenancePerVisit*(cfg.maintenanceVisitsPerYear*months/12),extra=eq+maint,low=cfg.investmentLow+extra+other,high=cfg.investmentHigh+extra+other,gapLow=Math.max(0,low-funds),gapHigh=Math.max(0,high-funds);
-set("investmentRange",money(cfg.investmentLow)+"–"+money(cfg.investmentHigh));set("available",money(funds));set("gap",money(Math.max(0,cfg.investmentLow-funds))+"–"+money(Math.max(0,cfg.investmentHigh-funds)));
-set("perPlacement",money(per));set("equipment",money(eq));set("maintenance",money(maint));
-for(const [id,v] of Object.entries({vCash:cash,vFinancing:financing,vReserve:reserve,vAvailable:funds,vOther:other,vLow:cfg.investmentLow,vHigh:cfg.investmentHigh,vExtras:extra}))set(id,money(v));
-set("vGap",money(gapLow)+" / "+money(gapHigh));set("software",money(cfg.softwareMonthly));set("convention",money(cfg.conventionAnnual));set("royalty",cfg.royaltyPercent+"% of gross revenues");set("maintVisit",money(cfg.maintenancePerVisit));set("maintFreq",cfg.maintenanceVisitsPerYear.toString());set("franchise",money(cfg.franchiseFeeIncluded));
-const msg=funds<low?"Your stated funding is below the selected capital requirement range. You may need to review financing, reserves, or timing.":funds<high?"Your stated funding covers the low end, but not the high end, of the selected cost range. Plan for contingencies and confirm the current FDD.":"Your stated funding covers this illustrative cost range. This does not confirm financing, future expenses, investment suitability, or operating performance.";
-set("conclusion",msg+(reserve>cash+financing?" Your reserve target exceeds stated sources of funding.":""));
+ const cash=n("cash"),fin=n("financing"),reserve=n("reserve"),other=n("other"),units=Math.floor(Math.min(5000,n("units"))),months=Math.min(120,n("months"));
+ // Personal reserves must come from personal cash; borrowed funds are not personal reserves.
+ const funds=Math.max(0,cash-reserve)+fin;
+ const confirmedAdditional=el("equipmentOutside").checked;
+ const equipment=confirmedAdditional?units*(cfg.equipmentCost+cfg.installationCost):0;
+ const maintenance=confirmedAdditional?units*cfg.maintenancePerVisit*cfg.maintenanceVisitsPerYear*(months/12):0;
+ const extra=equipment+maintenance;
+ const costLow=cfg.investmentLow+extra+other,costHigh=cfg.investmentHigh+extra+other;
+ const gapLow=Math.max(0,costLow-funds),gapHigh=Math.max(0,costHigh-funds);
+ const range=(a,b)=>money(a)+"–"+money(b);
+ set("investmentRange",range(cfg.investmentLow,cfg.investmentHigh));
+ set("available",money(funds));set("gap",range(gapLow,gapHigh));
+ set("perPlacement",money(cfg.equipmentCost+cfg.installationCost));
+ set("equipment",money(equipment));set("maintenance",money(maintenance));
+ set("equipmentNote",units&&!confirmedAdditional?"Additional purchases are NOT counted yet. Confirm the checkbox if these costs are outside the published startup range.":units?"Optional outside-range purchases are included in all capital gap figures.":"No extra equipment is included in the funding comparison.");
+ for(const [id,v] of Object.entries({vCash:cash,vReserve:reserve,vFinancing:fin,vAvailable:funds,vOther:other,vExtras:extra}))set(id,money(v));
+ set("vStartup",range(cfg.investmentLow,cfg.investmentHigh));
+ set("vTotal",range(costLow,costHigh));set("vGap",range(gapLow,gapHigh));
+ const readiness=gapLow>0?"Your stated deployable funds are below the low end of your selected capital requirements. Explore additional confirmed funding or revisit planned costs.":gapHigh>0?"Your stated deployable funds cover the lower end, but not the higher end, of your selected capital requirements. Review reserves and possible contingencies.":"Your stated deployable funds cover this selected cost range. This is NOT a financing approval or judgment that the investment is appropriate.";
+ set("conclusion",readiness);
+ for(const [id,v] of Object.entries({software:money(cfg.softwareMonthly),convention:money(cfg.conventionAnnual),royalty:cfg.royaltyPercent+"% of gross revenues",maintVisit:money(cfg.maintenancePerVisit),maintFreq:String(cfg.maintenanceVisitsPerYear),franchise:money(cfg.franchiseFeeIncluded)}))set(id,v);
+ const optionalAssetIds=["snapCash","snapInvestments","snapRetirement","snapProperty","snapOtherAssets"];
+ const optionalLiabilityIds=["snapMortgage","snapDebt","snapOtherLiabilities"];
+ const assetsPresent=optionalAssetIds.some(id=>opt(id)!==null);
+ const liabilitiesPresent=optionalLiabilityIds.some(id=>opt(id)!==null);
+ const missingAssetCategories=optionalAssetIds.concat(optionalLiabilityIds).filter(id=>opt(id)===null);const complete=el("snapshotComplete").checked&&missingAssetCategories.length===0;
+ const hasSnapshot=assetsPresent||liabilitiesPresent;
+ const assets=optionalAssetIds.reduce((a,id)=>a+(opt(id)??0),0);
+ const liabilities=optionalLiabilityIds.reduce((a,id)=>a+(opt(id)??0),0);
+ const net=assets-liabilities;
+ set("assetsEntered",assetsPresent?money(assets):"Not entered");
+ set("liabilitiesEntered",liabilitiesPresent?money(liabilities):"Not entered");
+ set("netWorth",hasSnapshot?money(net):"Not entered");
+ set("netWorthLabel",complete?"Calculated net worth (as entered)":"Partial net worth estimate");const annualIncome=opt("annualIncome"),monthlyDebt=opt("monthlyDebt");set("grossMonthly",annualIncome===null?"Not entered":money(annualIncome/12));set("debtRatio",annualIncome!==null&&annualIncome>0&&monthlyDebt!==null?(100*monthlyDebt/(annualIncome/12)).toFixed(1)+"%":"Not enough information");
+ const flags=[];
+ if(el("snapshotComplete").checked&&missingAssetCategories.length>0)flags.push("You checked that your assets and liabilities are complete, but some categories are blank. Enter explicit zeroes or uncheck the box.");
+ if(hasSnapshot&&!complete)flags.push("Net worth uses only the categories entered. Blank fields are unknown—not zero. Check the completeness box only when every category has been considered.");
+ const reported=optSigned("reportedNW");
+ if(reported!==null&&hasSnapshot&&Math.abs(reported-net)>1)flags.push("Reported net worth differs from the amount calculated from entered assets and liabilities by "+money(Math.abs(reported-net))+". Review asset and liability entries.");
+ if((opt("snapMortgage")??0)>0&&opt("snapProperty")===null)flags.push("Mortgage entered without a property value. Add the real estate market value if applicable.");
+ if((opt("snapMortgage")??0)>0&&opt("snapProperty")===0)flags.push("Mortgage entered but real estate value is zero. Confirm that both entries are intentional.");
+ const reportedCash=opt("snapCash"),reportedInv=opt("snapInvestments"),budget=opt("investmentBudget"),pending=opt("pendingFinancing");
+ if(reportedCash!==null&&cash>reportedCash+(reportedInv??0))flags.push("Cash available for business exceeds listed cash and non-retirement investments. Clarify the additional source.");
+ if(budget!==null&&budget>funds)flags.push("Intended investment budget exceeds currently deployable funding by "+money(budget-funds)+". Identify the funding source before counting it as available.");
+ if(reserve>cash)flags.push("Personal reserves exceed accessible personal cash. Financing is not automatically used to cover this difference.");
+ if(pending!==null&&pending>0)flags.push("Pending or uncommitted financing is excluded from deployable funding and capital-gap calculations.");
+ if(fin>0&&["applied","preapproved","exploring"].includes(el("fundingStage").value))flags.push("Confirmed financing is entered while additional financing status indicates the application may not be final. Confirm that the funding entered above is truly committed and accessible.");
+ if(!hasSnapshot&&reported===null&&budget===null&&pending===null)flags.push("Enter optional figures to view reconciliation questions. Leaving this section blank is fine.");
+ if(flags.length===0)flags.push("No basic reconciliation flags from the figures entered. This does not verify completeness or accuracy.");
+ list("snapshotFlags",flags);
+ set("summaryFunds",money(funds));set("summaryGap",range(gapLow,gapHigh));
+ set("summaryPending",pending===null?"Not entered":money(pending));const statusLabels={none:"Not specified",exploring:"Exploring options",applied:"Application submitted",preapproved:"Conditionally preapproved",committed:"Approved / available"};set("summaryStage",statusLabels[el("fundingStage").value]);
+ set("summaryBudget",budget===null?"Not entered":money(budget));
+ set("summaryText",readiness+" Personal assets, annual income and borrowing plans may provide context but do not automatically increase spendable business funds.");
+ const steps=[];
+ if(gapHigh>0)steps.push("Review the "+range(gapLow,gapHigh)+" funding gap across the selected low/high startup costs.");
+ if(reserve===0)steps.push("Establish a personal cash reserve before deciding how much capital you can invest.");
+ if(pending!==null&&pending>0||el("fundingStage").value==="preapproved"||el("fundingStage").value==="applied")steps.push("Verify whether contemplated financing can become committed and available; do not count it until then.");
+ if(budget!==null&&budget>funds)steps.push("Reconcile the investment budget with confirmed sources of capital.");
+ if(reportedCash!==null&&cash>reportedCash+(reportedInv??0))steps.push("Confirm where funds available for the business would come from.");
+ if(hasSnapshot&&!complete)steps.push("Confirm whether the Financial Snapshot includes all relevant assets and liabilities before treating its net-worth total as complete.");
+ if(reported!==null&&hasSnapshot&&Math.abs(reported-net)>1)steps.push("Resolve the difference between stated and calculated net worth.");
+ if((opt("snapMortgage")??0)>0&&(opt("snapProperty")===null||opt("snapProperty")===0))steps.push("Confirm real estate value associated with the mortgage.");
+ if(units>0&&!confirmedAdditional)steps.push("Check whether those equipment costs are already in the published startup range to avoid double-counting.");
+ steps.push("Review the current FDD, realistic business obligations, personal reserves and financing terms with qualified advisers.");
+ list("nextSteps",steps);
 }
-for(const id of baseIds)el(id).addEventListener("input",render);
-el("reset").addEventListener("click",()=>{for(const [id,v] of Object.entries({cash:0,financing:0,reserve:0,other:0,units:0,months:12}))el(id).value=v;render()});
+for(const id of inputIds)el(id).addEventListener("input",render);
+for(const id of ["equipmentOutside","snapshotComplete","fundingStage"])el(id).addEventListener("change",render);
+el("print").addEventListener("click",()=>window.print());
+el("reset").addEventListener("click",()=>{
+ for(const id of inputIds)el(id).value="";
+ el("months").value="12";
+ for(const id of ["equipmentOutside","snapshotComplete"])el(id).checked=false;
+ el("fundingStage").value="none";
+ el("snapshot").open=false;
+ render();
+});
 set("source",cfg.sourceLabel);set("updated",cfg.updated);render();
 })();
 </script></body></html>
