@@ -1,4 +1,4 @@
-# Iceworks Capital Readiness Explorer v1.1
+# Iceworks Capital Readiness Explorer v1.2
 
 ## Purpose
 Cost-only, educational planning tool for early-stage prospective franchise owners. It is intentionally **not** a financial performance representation or a promise of financing. Do not add sales, lease-revenue, gross-margin, profit, cash-flow, customer-growth, ROI or payback projections.
@@ -36,3 +36,10 @@ Update the approved cost assumptions in `capital-readiness-config.js` through Gi
 - A $330,000 mortgage with no real estate value and mismatched reported vs calculated net worth must raise reconciliation questions.
 
 This tool is informational, not an eligibility decision or the actual signed suitability form.
+
+## V1.2 UI and accessibility
+- Five clearly labeled full-width sections replace the former side-by-side Step 1 / Step 2 layout. Financial Snapshot remains collapsible/optional.
+- Every financial entry label, financing-status selection, and confirmation checkbox has a short **?** explanation with everyday-language definitions and practical examples (22 explanations total).
+- Mouse users can hover over the ?; mouse/touch users can click to keep it open; keyboard users can focus and activate the ? button, then close it with Escape. Every button is associated with its explanation using accessible properties.
+- Narrow screens show the inputs in one column; the help panels fit the screen and use internal scrolling if necessary.
+- No changes were made to business financial calculations, cost assumptions, storage behavior, or the default homepage.

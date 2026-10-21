@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Iceworks | Capital Readiness Explorer v1.1</title>
+<title>Iceworks | Capital Readiness Explorer v1.2</title>
 <style>
 :root{font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:#19364a;background:#f3f8fa}*{box-sizing:border-box}body{margin:0}header{background:#073c53;color:white;padding:38px max(22px,calc((100vw - 1030px)/2))}header h1{font-size:clamp(28px,4vw,39px);margin:8px 0}header p{color:#c9e5ec;max-width:710px;line-height:1.5}main{max-width:1060px;margin:25px auto;padding:0 16px 50px}.tag{font-size:12px;letter-spacing:1.6px;font-weight:700;text-transform:uppercase;color:#61e1df}.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:13px}.card,.panel{background:white;border:1px solid #dbe7eb;border-radius:16px;padding:23px;box-shadow:0 5px 15px #102d4308}.card .metric{font-weight:800;font-size:27px;margin:8px 0}.muted{color:#617782;font-size:13px;line-height:1.5}h2{font-size:20px;margin:2px 0 8px}h3{font-size:16px;margin:0 0 13px}section{margin-top:18px}.grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}.fields{display:grid;grid-template-columns:1fr 1fr;gap:15px}label{font-size:13px;display:block;font-weight:650;margin:0 0 6px}input{width:100%;border:1px solid #bfcfd7;border-radius:8px;padding:12px;font:inherit;color:#173448;background:white}input:focus{outline:2px solid #50bfc4}button{background:#087e94;color:white;border:0;border-radius:8px;padding:12px 17px;font-size:14px;font-weight:700;cursor:pointer}button.ghost{background:white;color:#086c83;border:1px solid #9bcbd2} .line{display:flex;justify-content:space-between;gap:15px;padding:10px 0;border-bottom:1px solid #e8f0f3;font-size:14px}.line strong{white-space:nowrap}.notice{background:#f2f8fb;border-left:4px solid #178aa1;padding:14px;font-size:13px;color:#355568;line-height:1.55;border-radius:8px}.range{color:#078ba2} .negative{color:#b04c33}.positive{color:#087a67} .footer{margin-top:21px;font-size:12px;line-height:1.6;color:#657784}.pill{display:inline-block;border-radius:25px;background:#e7f6f5;color:#076d74;font-size:12px;padding:6px 10px;font-weight:700} .actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px}@media(max-width:760px){.cards,.grid,.fields{grid-template-columns:1fr}header{padding:28px 20px}.card .metric{font-size:24px}}@media print{.actions{display:none}header{padding:20px}.panel{break-inside:avoid}body{background:white}}
 /* Version 1.1 additions */
@@ -21,37 +21,60 @@ details>h3{margin-top:24px}
 .warning{color:#a65a28}
 #investmentRange{font-size:23px}
 @media(max-width:760px){#investmentRange{font-size:21px}.summary-sub{padding:0}}
+
+/* V1.2: full-width steps and plain-language contextual help */
+.steps-stack{display:grid;grid-template-columns:minmax(0,1fr);gap:20px;margin-top:21px}
+.steps-stack .panel{margin:0}
+main>.panel{margin-top:21px}
+.panel{padding:clamp(21px,3.2vw,34px);overflow:visible}
+.fields{column-gap:25px;row-gap:23px}
+.panel h2{font-size:clamp(22px,2.7vw,26px);letter-spacing:-.45px;line-height:1.3}
+.panel h3{font-size:17px;margin-top:20px}
+.step{display:inline-flex;align-items:center;border-radius:7px;padding:6px 10px;background:#e8f5f7;letter-spacing:1px}
+.start-hint{margin:0 0 20px;padding:13px 17px;border-left:4px solid #148c9c;background:#e8f5f7;border-radius:9px;color:#225567;font-size:14px;line-height:1.6}
+.field-heading,.checkbox-heading{position:relative;display:flex;gap:8px;align-items:center;min-width:0;margin-bottom:8px}
+.checkbox-heading{align-items:flex-start;margin:17px 0}
+.field-heading label{margin:0;line-height:1.45}
+.checkbox-heading label.checkbox-line{flex:0 1 auto;margin:0;min-width:0}
+button.help-trigger{background:#eff6f9;color:#0c6178;flex:none;display:inline-flex;align-items:center;justify-content:center;width:23px;height:23px;min-width:23px;padding:0;border:1px solid #91c5d0;border-radius:50%;font-size:13px;font-weight:800;line-height:1;cursor:pointer;box-shadow:none}
+button.help-trigger:hover,button.help-trigger[aria-expanded="true"]{background:#d8eff4;border-color:#418d9d;color:#064c5f}
+button.help-trigger:focus-visible{outline:3px solid #3c9db2;outline-offset:2px}
+.field-help{display:none;position:absolute;z-index:40;top:calc(100% + 9px);left:0;width:min(435px,calc(100vw - 65px));max-height:55vh;overflow:auto;border:1px solid #a6cfd7;border-radius:12px;background:#fff;color:#234456;box-shadow:0 14px 38px rgba(12,45,65,.22);padding:16px 18px;font-size:13px;line-height:1.65;font-weight:400;text-align:left;white-space:normal}
+button.help-trigger:hover + .field-help,button.help-trigger:focus-visible + .field-help,button.help-trigger[aria-expanded="true"] + .field-help{display:block}
+@media (max-width:760px){.panel{padding:22px 18px}.fields{grid-template-columns:1fr;gap:20px}.start-hint{font-size:13px}.field-help{max-height:45vh}.steps-stack{gap:12px}}
+@media print{.help-trigger,.field-help,.start-hint{display:none!important}.steps-stack{display:block}.panel{break-inside:avoid}}
 </style>
 <script src="capital-readiness-config.js"></script>
 </head><body>
-<header><span class="tag">Iceworks Franchise Group</span><h1>Capital Readiness Explorer <span style="font-size:14px;opacity:.75;font-weight:500">v1.1</span></h1><p>Explore startup costs and capital gaps, then optionally review your financial position—without submitting private information or modeling franchise earnings. No income or profit forecasts—just costs, capital, and planning.</p><span class="pill">Private in your browser · No financial details submitted</span></header>
+<header><span class="tag">Iceworks Franchise Group</span><h1>Capital Readiness Explorer <span style="font-size:14px;opacity:.75;font-weight:500">v1.2</span></h1><p>Explore startup costs and capital gaps, then optionally review your financial position—without submitting private information or modeling franchise earnings. No income or profit forecasts—just costs, capital, and planning.</p><span class="pill">Private in your browser · No financial details submitted</span></header>
 <main>
+  <p class="start-hint">Start with Steps 1–3. The Financial Snapshot is optional. Select any <strong>?</strong> for an everyday-language explanation and examples.</p>
   <div class="cards" aria-live="polite">
     <div class="card"><div class="muted">Published initial investment range</div><div class="metric" id="investmentRange">—</div><div class="muted">Current tool reference; confirm against the governing FDD</div></div>
     <div class="card"><div class="muted">Estimated deployable funds</div><div class="metric" id="available">—</div><div class="muted">Accessible cash less protected reserves, plus committed funding</div></div>
     <div class="card"><div class="muted">Total capital gap — low to high</div><div class="metric" id="gap">—</div><div class="muted">Includes selected extra costs and commitments; never a profit forecast</div></div>
   </div>
 
-  <div class="grid">
+  <div class="steps-stack">
     <section class="panel">
-      <div class="step">STEP 1</div><h2>Your funding position</h2>
+      <div class="step">STEP 1 OF 5 · FUNDING</div><h2>Your funding position</h2>
       <p class="muted">Enter amounts you can actually access. These are private, editable estimates. Zero is used for calculations when a field is blank; it does not mean an unreported amount is known to be zero.</p>
       <div class="fields">
-        <div><label for="cash">Cash available for business ($)</label><input id="cash" type="number" min="0" step="500" value="0"><div class="hint">Do not include retirement or unliquidated property</div></div>
-        <div><label for="financing">Committed / available financing ($)</label><input id="financing" type="number" min="0" step="500" value="0"><div class="hint">Exclude applications and conditional preapprovals</div></div>
-        <div><label for="reserve">Personal cash to keep untouched ($)</label><input id="reserve" type="number" min="0" step="500" value="0"><div class="hint">Set aside from accessible cash, not borrowed funds</div></div>
-        <div><label for="other">Extra startup obligations not in FDD range ($)</label><input id="other" type="number" min="0" step="500" value="0"><div class="hint">Only costs not already counted in the published range</div></div>
+        <div><div class="field-heading"><label for="cash">Cash available for business ($)</label><button type="button" class="help-trigger" aria-label="What does Cash available for business ($) mean?" aria-expanded="false" aria-controls="help-cash" aria-describedby="help-cash">?</button><div class="field-help" id="help-cash" role="tooltip">Enter money you can use for the business now, such as available checking or savings funds. Do not include your home's value, retirement balances, or a loan you have only applied for. Your personal reserve is entered separately below.</div></div><input id="cash" type="number" min="0" step="500" value="0"><div class="hint">Do not include retirement or unliquidated property</div></div>
+        <div><div class="field-heading"><label for="financing">Committed / available financing ($)</label><button type="button" class="help-trigger" aria-label="What does Committed / available financing ($) mean?" aria-expanded="false" aria-controls="help-financing" aria-describedby="help-financing">?</button><div class="field-help" id="help-financing" role="tooltip">Enter only the dollar amount of funding that has been formally committed and is available for this investment. A loan application, verbal estimate, or conditional preapproval should go in the optional Financial Snapshot instead.</div></div><input id="financing" type="number" min="0" step="500" value="0"><div class="hint">Exclude applications and conditional preapprovals</div></div>
+        <div><div class="field-heading"><label for="reserve">Personal cash to keep untouched ($)</label><button type="button" class="help-trigger" aria-label="What does Personal cash to keep untouched ($) mean?" aria-expanded="false" aria-controls="help-reserve" aria-describedby="help-reserve">?</button><div class="field-help" id="help-reserve" role="tooltip">Enter the portion of your accessible personal cash that you want to keep for living costs, emergencies, or unexpected expenses. For example, if you have $30,000 in cash but want to leave $20,000 untouched, enter $20,000 here.</div></div><input id="reserve" type="number" min="0" step="500" value="0"><div class="hint">Set aside from accessible cash, not borrowed funds</div></div>
+        <div><div class="field-heading"><label for="other">Extra startup obligations not in FDD range ($)</label><button type="button" class="help-trigger" aria-label="What does Extra startup obligations not in FDD range ($) mean?" aria-expanded="false" aria-controls="help-other" aria-describedby="help-other">?</button><div class="field-help" id="help-other" role="tooltip">Enter additional startup costs you expect to pay that are not already included in the published Iceworks investment range. Do not enter a mortgage balance, ordinary personal bills, or expenses already covered by the range. Use zero if you have none; otherwise verify what the range includes.</div></div><input id="other" type="number" min="0" step="500" value="0"><div class="hint">Only costs not already counted in the published range</div></div>
       </div>
       <p class="notice">Your net worth and annual salary are not automatically available investment capital. You can enter them later in the optional Financial Snapshot without affecting the funding calculation.</p>
     </section>
     <section class="panel">
-      <div class="step">STEP 2</div><h2>Optional extra equipment costs</h2>
+      <div class="step">STEP 2 OF 5 · EQUIPMENT PLANNING</div><h2>Optional extra equipment costs</h2>
       <p class="muted">Use this only for purchases that would be <strong>in addition to</strong> the published initial investment range, not for equipment that is already included.</p>
       <div class="fields">
-        <div><label for="units">Extra equipment placements</label><input id="units" type="number" min="0" max="5000" step="1" value="0"></div>
-        <div><label for="months">Maintenance planning period (months)</label><input id="months" type="number" min="0" max="120" step="6" value="12"></div>
+        <div><div class="field-heading"><label for="units">Extra equipment placements</label><button type="button" class="help-trigger" aria-label="What does Extra equipment placements mean?" aria-expanded="false" aria-controls="help-units" aria-describedby="help-units">?</button><div class="field-help" id="help-units" role="tooltip">How many extra commercial ice-machine placements do you want to budget for beyond any equipment already included in the published startup investment? This is your chosen cost example, not the number of customers Iceworks expects you to sign.</div></div><input id="units" type="number" min="0" max="5000" step="1" value="0"></div>
+        <div><div class="field-heading"><label for="months">Maintenance planning period (months)</label><button type="button" class="help-trigger" aria-label="What does Maintenance planning period (months) mean?" aria-expanded="false" aria-controls="help-months" aria-describedby="help-months">?</button><div class="field-help" id="help-months" role="tooltip">How many months of maintenance costs would you like to set aside for those extra machines? For example, 12 months represents two scheduled visits per machine if service occurs every six months. It is a cost allowance, not a schedule of future customers.</div></div><input id="months" type="number" min="0" max="120" step="6" value="12"></div>
       </div>
-      <label class="checkbox-line" for="equipmentOutside"><input type="checkbox" id="equipmentOutside"> I confirm these are <strong>additional</strong> costs outside the startup investment estimate.</label>
+      <div class="checkbox-heading"><label class="checkbox-line" for="equipmentOutside"><input type="checkbox" id="equipmentOutside"> I confirm these are <strong>additional</strong> costs outside the startup investment estimate.</label><button type="button" class="help-trigger" aria-label="What does I confirm these are additional costs outside the startup investment estimate. mean?" aria-expanded="false" aria-controls="help-equipmentOutside" aria-describedby="help-equipmentOutside">?</button><div class="field-help" id="help-equipmentOutside" role="tooltip">Check this only after confirming that the additional machines, installation, and related maintenance you entered are NOT already counted in the published initial investment range. Leaving it unchecked prevents those optional equipment costs from being added a second time.</div></div>
       <div class="line"><span>Equipment + installation per extra placement</span><strong id="perPlacement">—</strong></div>
       <div class="line"><span>Extra equipment + installations</span><strong id="equipment">—</strong></div>
       <div class="line"><span>Maintenance planning allowance</span><strong id="maintenance">—</strong></div>
@@ -61,7 +84,7 @@ details>h3{margin-top:24px}
   </div>
 
   <section class="panel">
-    <div class="step">STEP 3</div><h2>Your capital comparison</h2>
+    <div class="step">STEP 3 OF 5 · CAPITAL COMPARISON</div><h2>Your capital comparison</h2>
     <div class="grid"><div>
       <div class="line"><span>Accessible cash</span><strong id="vCash">—</strong></div>
       <div class="line"><span>Less: protected cash reserves</span><strong id="vReserve">—</strong></div>
@@ -78,36 +101,36 @@ details>h3{margin-top:24px}
   </section>
 
   <section class="panel">
-    <div class="step">OPTIONAL · PRIVATE</div>
+    <div class="step">STEP 4 OF 5 · OPTIONAL FINANCIAL SNAPSHOT</div>
     <details id="snapshot">
       <summary><span><strong>Your Financial Snapshot</strong><small>Expand to explore liquidity, assets, liabilities, income and financing questions. Not required.</small></span><span aria-hidden="true">＋</span></summary>
       <p class="notice">This section is for your own review. Enter numbers only if you want to. Fields left blank remain unknown; zero is a deliberate value. Entries are not saved, uploaded or submitted to Iceworks. Don't enter identity numbers or account details.</p>
       <h3>Income, available budget & financing context</h3>
       <div class="fields">
-        <div><label for="annualIncome">Annual gross employment/other income ($)</label><input id="annualIncome" type="number" min="0" placeholder="Optional"></div>
-        <div><label for="investmentBudget">Amount you intend to invest ($)</label><input id="investmentBudget" type="number" min="0" placeholder="Optional"><div class="hint">An intention, not proof of available funds</div></div>
-        <div><label for="pendingFinancing">Financing under consideration ($)</label><input id="pendingFinancing" type="number" min="0" placeholder="Optional"><div class="hint">Not counted as committed funding</div></div>
-        <div><label for="fundingStage">Additional financing status</label>
+        <div><div class="field-heading"><label for="annualIncome">Annual gross employment/other income ($)</label><button type="button" class="help-trigger" aria-label="What does Annual gross employment/other income ($) mean?" aria-expanded="false" aria-controls="help-annualIncome" aria-describedby="help-annualIncome">?</button><div class="field-help" id="help-annualIncome" role="tooltip">Enter the total amount you earn over a year before taxes from employment and other income sources you choose to include. For example, a $90,000 annual salary means entering $90,000. Income may provide financial context but is not cash immediately available to invest.</div></div><input id="annualIncome" type="number" min="0" placeholder="Optional"></div>
+        <div><div class="field-heading"><label for="investmentBudget">Amount you intend to invest ($)</label><button type="button" class="help-trigger" aria-label="What does Amount you intend to invest ($) mean?" aria-expanded="false" aria-controls="help-investmentBudget" aria-describedby="help-investmentBudget">?</button><div class="field-help" id="help-investmentBudget" role="tooltip">Enter the total amount you would feel comfortable committing to the business, even if you would need financing to reach it. For example, you might intend to invest $25,000 but only have $10,000 accessible today. The tool will flag that difference rather than treating your intention as cash.</div></div><input id="investmentBudget" type="number" min="0" placeholder="Optional"><div class="hint">An intention, not proof of available funds</div></div>
+        <div><div class="field-heading"><label for="pendingFinancing">Financing under consideration ($)</label><button type="button" class="help-trigger" aria-label="What does Financing under consideration ($) mean?" aria-expanded="false" aria-controls="help-pendingFinancing" aria-describedby="help-pendingFinancing">?</button><div class="field-help" id="help-pendingFinancing" role="tooltip">Enter the amount of funding you're exploring but have not yet secured, such as a loan application or a possible credit line. This amount does not increase your available capital until the funding is actually approved and available, at which point you can enter it in Step 1.</div></div><input id="pendingFinancing" type="number" min="0" placeholder="Optional"><div class="hint">Not counted as committed funding</div></div>
+        <div><div class="field-heading"><label for="fundingStage">Additional financing status</label><button type="button" class="help-trigger" aria-label="What does Additional financing status mean?" aria-expanded="false" aria-controls="help-fundingStage" aria-describedby="help-fundingStage">?</button><div class="field-help" id="help-fundingStage" role="tooltip">Select where you are in obtaining additional financing: researching options, applied, conditionally preapproved, or fully approved and available. Conditional preapproval is not spendable money. When funding is truly committed and accessible, enter its amount in Step 1.</div></div>
           <select id="fundingStage"><option value="none">Not specified / none</option><option value="exploring">Exploring options</option><option value="applied">Application submitted</option><option value="preapproved">Conditionally preapproved</option><option value="committed">Funding approved and available</option></select>
         </div>
       </div>
       <h3>Assets — keep spendable funds separate</h3>
       <div class="fields">
-        <div><label for="snapCash">Total cash / savings ($)</label><input id="snapCash" type="number" min="0" placeholder="Optional"></div>
-        <div><label for="snapInvestments">Non-retirement investments ($)</label><input id="snapInvestments" type="number" min="0" placeholder="Optional"></div>
-        <div><label for="snapRetirement">Retirement / restricted assets ($)</label><input id="snapRetirement" type="number" min="0" placeholder="Optional"></div>
-        <div><label for="snapProperty">Real estate market value ($)</label><input id="snapProperty" type="number" min="0" placeholder="Optional"></div>
-        <div><label for="snapOtherAssets">Other assets ($)</label><input id="snapOtherAssets" type="number" min="0" placeholder="Optional"></div>
+        <div><div class="field-heading"><label for="snapCash">Total cash / savings ($)</label><button type="button" class="help-trigger" aria-label="What does Total cash / savings ($) mean?" aria-expanded="false" aria-controls="help-snapCash" aria-describedby="help-snapCash">?</button><div class="field-help" id="help-snapCash" role="tooltip">Enter the total balance of your checking accounts, savings accounts, and similar cash holdings, including any money you intend to keep for personal reserves. This is your overall cash picture, not just the portion you'd invest. Do not add this a second time to Step 1.</div></div><input id="snapCash" type="number" min="0" placeholder="Optional"></div>
+        <div><div class="field-heading"><label for="snapInvestments">Non-retirement investments ($)</label><button type="button" class="help-trigger" aria-label="What does Non-retirement investments ($) mean?" aria-expanded="false" aria-controls="help-snapInvestments" aria-describedby="help-snapInvestments">?</button><div class="field-help" id="help-snapInvestments" role="tooltip">Enter the approximate current value of investments OUTSIDE retirement accounts, such as stocks, bonds, or mutual funds in a regular brokerage account. They may fluctuate or require selling before you can use the money, so the tool doesn't automatically treat them as available business cash.</div></div><input id="snapInvestments" type="number" min="0" placeholder="Optional"></div>
+        <div><div class="field-heading"><label for="snapRetirement">Retirement / restricted assets ($)</label><button type="button" class="help-trigger" aria-label="What does Retirement / restricted assets ($) mean?" aria-expanded="false" aria-controls="help-snapRetirement" aria-describedby="help-snapRetirement">?</button><div class="field-help" id="help-snapRetirement" role="tooltip">Enter the approximate current value of retirement or otherwise restricted accounts, such as a 401(k), IRA, or similar retirement savings. These assets may contribute to net worth but are not necessarily accessible without taxes, penalties, or other restrictions. They are not counted as funding for Iceworks.</div></div><input id="snapRetirement" type="number" min="0" placeholder="Optional"></div>
+        <div><div class="field-heading"><label for="snapProperty">Real estate market value ($)</label><button type="button" class="help-trigger" aria-label="What does Real estate market value ($) mean?" aria-expanded="false" aria-controls="help-snapProperty" aria-describedby="help-snapProperty">?</button><div class="field-help" id="help-snapProperty" role="tooltip">Enter what your house, land, rental property, or other real estate could reasonably SELL FOR today, before subtracting any mortgage. It is not the price you paid and not the equity you own. Example: a home worth $400,000 with a $250,000 mortgage has a $400,000 market value; enter the $250,000 mortgage separately under liabilities.</div></div><input id="snapProperty" type="number" min="0" placeholder="Optional"></div>
+        <div><div class="field-heading"><label for="snapOtherAssets">Other assets ($)</label><button type="button" class="help-trigger" aria-label="What does Other assets ($) mean?" aria-expanded="false" aria-controls="help-snapOtherAssets" aria-describedby="help-snapOtherAssets">?</button><div class="field-help" id="help-snapOtherAssets" role="tooltip">Enter the approximate current resale value of valuable things you own that are not listed above, such as vehicles or an ownership stake in another business. Use what you could reasonably sell them for today, not what you originally paid. Avoid counting an asset twice.</div></div><input id="snapOtherAssets" type="number" min="0" placeholder="Optional"></div>
       </div>
       <h3>Liabilities and personal obligations</h3>
       <div class="fields">
-        <div><label for="snapMortgage">Mortgages ($)</label><input id="snapMortgage" type="number" min="0" placeholder="Optional"></div>
-        <div><label for="snapDebt">Credit cards and other loans ($)</label><input id="snapDebt" type="number" min="0" placeholder="Optional"></div>
-        <div><label for="snapOtherLiabilities">Other liabilities ($)</label><input id="snapOtherLiabilities" type="number" min="0" placeholder="Optional"></div>
-        <div><label for="monthlyDebt">Monthly personal debt payments ($)</label><input id="monthlyDebt" type="number" min="0" placeholder="Optional"><div class="hint">For context only, not a lending decision</div></div>
-        <div><label for="reportedNW">Net worth you previously reported ($)</label><input id="reportedNW" type="number" step="100" placeholder="Optional"><div class="hint">Used only to flag reconciliation differences</div></div>
+        <div><div class="field-heading"><label for="snapMortgage">Mortgages ($)</label><button type="button" class="help-trigger" aria-label="What does Mortgages ($) mean?" aria-expanded="false" aria-controls="help-snapMortgage" aria-describedby="help-snapMortgage">?</button><div class="field-help" id="help-snapMortgage" role="tooltip">Enter the total amount of mortgage PRINCIPAL you still owe on your home, land, or investment properties. For example, if a home could sell for $400,000 and you still owe $250,000, enter $250,000 here. This is the loan balance, not the monthly mortgage payment.</div></div><input id="snapMortgage" type="number" min="0" placeholder="Optional"></div>
+        <div><div class="field-heading"><label for="snapDebt">Credit cards and other loans ($)</label><button type="button" class="help-trigger" aria-label="What does Credit cards and other loans ($) mean?" aria-expanded="false" aria-controls="help-snapDebt" aria-describedby="help-snapDebt">?</button><div class="field-help" id="help-snapDebt" role="tooltip">Enter the total outstanding balances on credit cards, auto loans, student loans, personal loans, and other debts not listed as mortgages. This is the amount still owed, not the amount of the monthly payments. Don't include a mortgage already entered above.</div></div><input id="snapDebt" type="number" min="0" placeholder="Optional"></div>
+        <div><div class="field-heading"><label for="snapOtherLiabilities">Other liabilities ($)</label><button type="button" class="help-trigger" aria-label="What does Other liabilities ($) mean?" aria-expanded="false" aria-controls="help-snapOtherLiabilities" aria-describedby="help-snapOtherLiabilities">?</button><div class="field-help" id="help-snapOtherLiabilities" role="tooltip">Enter money you owe that doesn't fit into the mortgage or other-loan categories—for example, an outstanding tax obligation or another documented debt. Use the remaining balance, not the monthly payment, and don't count an obligation twice.</div></div><input id="snapOtherLiabilities" type="number" min="0" placeholder="Optional"></div>
+        <div><div class="field-heading"><label for="monthlyDebt">Monthly personal debt payments ($)</label><button type="button" class="help-trigger" aria-label="What does Monthly personal debt payments ($) mean?" aria-expanded="false" aria-controls="help-monthlyDebt" aria-describedby="help-monthlyDebt">?</button><div class="field-help" id="help-monthlyDebt" role="tooltip">Enter the TOTAL of required monthly payments on your personal debts, such as mortgage, car loan, student loan, and minimum credit-card payments. Example: $1,800 mortgage + $400 car + $100 credit card = $2,300 per month. Do not enter your total debt balance, groceries, or other ordinary living expenses here.</div></div><input id="monthlyDebt" type="number" min="0" placeholder="Optional"><div class="hint">For context only, not a lending decision</div></div>
+        <div><div class="field-heading"><label for="reportedNW">Net worth you previously reported ($)</label><button type="button" class="help-trigger" aria-label="What does Net worth you previously reported ($) mean?" aria-expanded="false" aria-controls="help-reportedNW" aria-describedby="help-reportedNW">?</button><div class="field-help" id="help-reportedNW" role="tooltip">If you have previously calculated or reported a net-worth figure on a separate form, enter that total here. The tool compares it with the assets minus liabilities entered above and flags any difference. Leave it empty if you have never reported a number; a negative value is allowed.</div></div><input id="reportedNW" type="number" step="100" placeholder="Optional"><div class="hint">Used only to flag reconciliation differences</div></div>
       </div>
-      <label class="checkbox-line" for="snapshotComplete"><input type="checkbox" id="snapshotComplete"> I entered my full asset and liability picture (including explicit zeroes).</label>
+      <div class="checkbox-heading"><label class="checkbox-line" for="snapshotComplete"><input type="checkbox" id="snapshotComplete"> I entered my full asset and liability picture (including explicit zeroes).</label><button type="button" class="help-trigger" aria-label="What does I entered my full asset and liability picture (including explicit zeroes). mean?" aria-expanded="false" aria-controls="help-snapshotComplete" aria-describedby="help-snapshotComplete">?</button><div class="field-help" id="help-snapshotComplete" role="tooltip">Check this only when you have reviewed EVERY asset and liability field in this optional section, putting a zero wherever the true amount is zero. Leaving a field empty means 'not provided,' not 'none.' This checkbox does not verify the numbers.</div></div>
       <div class="grid">
         <div class="summary-sub">
           <div class="line"><span>Assets entered</span><strong id="assetsEntered">—</strong></div>
@@ -121,7 +144,7 @@ details>h3{margin-top:24px}
   </section>
 
   <section class="panel" id="readiness">
-    <div class="step">YOUR TAKEAWAY</div><h2>Your Capital Readiness Summary</h2>
+    <div class="step">STEP 5 OF 5 · YOUR READINESS SUMMARY</div><h2>Your Capital Readiness Summary</h2>
     <p class="muted">This is an explanation of the figures entered above. It is not a pass/fail score, financing decision or forecast.</p>
     <div class="grid">
       <div class="summary-sub"><div class="line"><span>Deployable funds</span><strong id="summaryFunds">—</strong></div><div class="line"><span>Capital to explore, low to high</span><strong id="summaryGap">—</strong></div></div>
@@ -244,6 +267,18 @@ el("reset").addEventListener("click",()=>{
  el("snapshot").open=false;
  render();
 });
+
+/* V1.2: Help icons open on hover, keyboard focus, click or touch. */
+const helpButtons=[...document.querySelectorAll(".help-trigger")];
+const closeHelp=()=>helpButtons.forEach(b=>b.setAttribute("aria-expanded","false"));
+helpButtons.forEach(b=>b.addEventListener("click",event=>{
+  event.preventDefault();event.stopPropagation();
+  const next=b.getAttribute("aria-expanded")!=="true";
+  closeHelp();b.setAttribute("aria-expanded",String(next));
+}));
+document.addEventListener("click",event=>{if(!event.target.closest(".field-help"))closeHelp()});
+document.addEventListener("keydown",event=>{if(event.key==="Escape"){closeHelp();if(document.activeElement?.classList?.contains("help-trigger"))document.activeElement.blur()}});
+
 set("source",cfg.sourceLabel);set("updated",cfg.updated);render();
 })();
 </script></body></html>
