@@ -46,10 +46,10 @@ button.help-trigger:hover + .field-help,button.help-trigger:focus-visible + .fie
 
 /* V1.3 — opt-in personalized invitations, compact sticky totals, market preview */
 .cards{position:sticky;top:8px;z-index:18;transition:box-shadow .2s;isolation:isolate}
-.cards.is-condensed{gap:8px;filter:drop-shadow(0 8px 11px rgba(13,52,67,.15))}
-.cards.is-condensed .card{padding:10px 13px;border-radius:10px}
-.cards.is-condensed .card .metric{font-size:16px!important;margin:3px 0}
-.cards.is-condensed .card .muted{font-size:10px;line-height:1.25}
+.cards.is-condensed{gap:9px;background:#074963;border:1px solid #237995;border-radius:18px;padding:10px;box-shadow:0 12px 36px rgba(5,35,55,.35),0 0 0 1px rgba(255,255,255,.12) inset;backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px)}
+.cards.is-condensed .card{padding:11px 13px;border-radius:11px;background:#eafbff;border:1px solid #c4e4ef;box-shadow:0 2px 6px rgba(0,0,0,.12)}
+.cards.is-condensed .card .metric{font-size:16px!important;margin:3px 0;color:#063f59}
+.cards.is-condensed .card .muted{font-size:10px;line-height:1.25;color:#315870}
 .cards.is-condensed .card .muted:last-child{display:none}
 .cards.is-condensed #investmentRange{font-size:14px!important}
 body.has-modal{overflow:hidden}
@@ -75,10 +75,10 @@ body.has-modal{overflow:hidden}
 .market-panel .private-box button:disabled{opacity:.5;cursor:not-allowed}
 .market-panel .notice{background:#fff;border-left-color:#2889a4}
 .market-panel a{color:#06728b}
-.market-panel #reportResult[hidden],.market-panel #portalAlert[hidden]{display:none}
+.market-panel #portalAlert[hidden]{display:none}
 .sticky-sentinel{height:1px}
 @media(max-width:750px){
-.cards.is-condensed{grid-template-columns:repeat(3,minmax(0,1fr));gap:5px;top:4px}
+.cards.is-condensed{grid-template-columns:repeat(3,minmax(0,1fr));gap:5px;top:4px;padding:6px;border-radius:12px}
 .cards.is-condensed .card{padding:8px 5px}
 .cards.is-condensed .card .muted{font-size:9px}
 .cards.is-condensed .card .metric{font-size:12px!important;overflow-wrap:anywhere}
@@ -227,21 +227,21 @@ body.has-modal{overflow:hidden}
   <section class="panel"><h2>What this tool can—and cannot—tell you</h2>
     <p class="muted">It compares stated funding sources with published startup costs and user-selected extra expenses. It does not predict customers, machine placements, leasing revenue, profits, payback, cash flow, investment returns or franchise success. Net worth isn't necessarily spendable cash. Actual expenses, financing conditions and franchise terms may differ. Consult the governing Franchise Disclosure Document, your lender and your professional advisers.</p>
     <div class="actions"><button type="button" id="print">Print your private summary</button><button class="ghost" type="button" id="reset">Clear all my inputs</button></div>
-    <p class="footer">Cost reference: <span id="source"></span>. Cost-reference date: <span id="updated"></span>. This educational aid is not a franchise offer, financing approval or suitability determination. Detailed Financial Snapshot entries remain local. A limited readiness summary is transmitted only if you explicitly consent through a verified secure invitation. No analytics scripts are included. Printing or saving a PDF is controlled by your browser.</p>
+    <p class="footer">Cost reference: <span id="source"></span>. Cost-reference date: <span id="updated"></span>. This educational aid is not a franchise offer, financing approval or suitability determination. Detailed Financial Snapshot entries remain local. A limited readiness summary is transmitted only if you explicitly consent through a verified secure invitation. Submitting a summary never unlocks a PUDI score or report; Iceworks may discuss selected market research separately. No analytics scripts are included. Printing or saving a PDF is controlled by your browser.</p>
   </section>
 
 <section class="market-panel" id="marketAnalysis">
   <div class="eyebrow">ICEWORKS · TERRITORY RESEARCH</div>
   <h2><span id="marketTitle">Market Research Preview</span></h2>
-  <p id="marketIntro">We research potential commercial foodservice customer concentration and service-area conditions before discussing new franchise territories. Specific market findings are shared only when a verified, approved report is available.</p>
+  <p id="marketIntro">We research potential commercial foodservice customer concentration and service-area conditions before discussing new franchise territories. Iceworks can discuss detailed, reviewed research privately at a later meeting, at its discretion.</p>
   <div class="market-tiles">
     <div class="market-tile"><strong>Foodservice establishments</strong> We assess potential commercial kitchens and other businesses that might use commercial ice equipment.</div>
     <div class="market-tile"><strong>Market boundaries</strong> We distinguish a city from its surrounding metropolitan service area so counts use comparable boundaries.</div>
     <div class="market-tile"><strong>Location density</strong> Our internal PUDI research compares the concentration of qualifying establishments; it does not forecast customers, installs, or earnings.</div>
   </div>
   <p class="notice" id="researchStatus">Market-specific research has not been verified for this invitation. No PUDI score or confidential underlying formula is included in this public page.</p>
-  <h3>Request a detailed market report</h3>
-  <p>A completed market report may include establishment counts, data sources, geographical boundaries, the PUDI score, and an explanation of how it was calculated. It is not a financial performance projection. You can use the capital tool freely without sharing anything.</p>
+  <h3>Request a follow-up market discussion</h3>
+  <p>Our territory research can inform a later conversation about market boundaries, foodservice locations, and local conditions. Completing this tool or submitting a summary does <strong>not</strong> unlock any PUDI score, formula, or market report. Iceworks may choose to discuss selected research with you during a follow-up meeting. You can use this tool without sharing anything.</p>
   <button id="viewShare" type="button" class="ghost">Review optional summary sharing</button>
   <div class="private-box" id="sharePanel" hidden>
     <h3>Review exactly what Iceworks would receive</h3>
@@ -252,15 +252,9 @@ body.has-modal{overflow:hidden}
     <div class="line"><span>Financing status</span><strong id="sharedFinancing">—</strong></div>
     <div class="line"><span>General readiness considerations</span><strong id="sharedFlags">—</strong></div>
     <p class="muted">We also record your invitation identifier, submission time, and consent. Iceworks uses this summary for franchise discovery and follow-up. Do not submit someone else's financial information.</p>
-    <label for="submitConsent"><input id="submitConsent" type="checkbox">I choose to share only the summary displayed above with Iceworks for franchise discovery. I understand this is voluntary and does not guarantee territory availability, a franchise offer, financing, or access to a report that has not been completed.</label>
-    <div class="actions"><button type="button" id="sendSummary" disabled>Submit summary and request report</button><button type="button" class="ghost" id="cancelShare">Cancel — keep private</button></div>
+    <label for="submitConsent"><input id="submitConsent" type="checkbox">I choose to share only the summary displayed above with Iceworks for franchise discovery. I understand this is voluntary. No PUDI scores, detailed findings, or underlying formulas will be revealed automatically. Iceworks will review my summary and may discuss market research at a separate meeting.</label>
+    <div class="actions"><button type="button" id="sendSummary" disabled>Submit summary for Iceworks review</button><button type="button" class="ghost" id="cancelShare">Cancel — keep private</button></div>
     <p id="portalAlert" class="notice" role="status" aria-live="polite" hidden></p>
-  </div>
-  <div class="private-box" id="reportResult" hidden>
-    <h3 id="reportHeading">Territory report</h3>
-    <p id="reportOverview"></p>
-    <div id="reportDetails"></div>
-    <p class="muted">Market analysis is informational and does not predict signed customers, unit installations, sales, revenues, or investment outcomes.</p>
   </div>
 </section>
 </main>
@@ -297,16 +291,7 @@ function setWelcome(first,market,message,footnote){
 }
 function setMarket(place,ready){
  el("marketTitle").textContent=place?"Market Research · "+scrub(place,100):"Market Research Preview";
- el("researchStatus").textContent=ready?"A market-specific report has been prepared for this invitation. You can request access after voluntarily sharing your limited capital-readiness summary.":"A verified, market-specific report is not currently available for this invitation. No PUDI score or confidential underlying calculation is stored in this public page.";
-}
-function displayReport(report){
- if(!report||typeof report!=="object")return;
- el("reportHeading").textContent=scrub(report.title||"Market report",150);
- el("reportOverview").textContent=scrub(report.overview||"Market information provided by Iceworks.",700);
- const box=el("reportDetails");box.replaceChildren();
- const pairs=[["PUDI score",report.pudi_score],["Establishment count",report.establishment_count],["Population basis",report.population],["Market boundaries",report.boundaries],["Methodology",report.methodology],["Sources / as-of date",report.source_notes]];
- for(const [label,value] of pairs){if(value===null||value===undefined||value==="")continue;const item=document.createElement("div"),head=document.createElement("strong"),detail=document.createElement("span");item.className="line";head.textContent=label;detail.textContent=String(value).slice(0,1200);item.append(head,detail);box.append(item)}
- el("reportResult").hidden=false;
+ el("researchStatus").textContent=ready?"Iceworks has reviewed market research for this territory. Detailed findings are discussed by Iceworks separately; submission does not automatically unlock any report.":"No approved market-specific findings are available to show in this preview. Iceworks will determine what research can be discussed in a later conversation.";
 }
 async function initInvitation(){
  inviteToken=readToken();
@@ -316,7 +301,7 @@ async function initInvitation(){
   const name=scrub(params.get("first")||"Jim",50);
   const market=scrub(params.get("market")||"Tucson, Arizona",95);
   setMarket(market,false);
-  setWelcome(name,market,"This is a demonstration of a personalized Iceworks invitation for "+market+". The capital explorer is fully interactive; any financial entries remain in this browser. Secure submission and private reports are not enabled in this demo.","Demo invitation — not a verified market report or official franchise offer.");
+  setWelcome(name,market,"This is a demonstration of a personalized Iceworks invitation for "+market+". The capital explorer is fully interactive; any financial entries remain in this browser. Secure submission is not enabled in this demo, and reports are never unlocked automatically.","Demo invitation — not a verified market report or official franchise offer.");
   el("researchStatus").textContent="Example market preview only. No market-specific PUDI research or score is represented by this demo.";
   return
  }
@@ -327,7 +312,8 @@ async function initInvitation(){
     if(!invitation)throw Error("Invitation not found");
     setMarket(invitation.market_label,!!invitation.report_ready);
     setWelcome(invitation.first_name,invitation.market_label,invitation.welcome_message);
-    if(result.submitted&&result.report)displayReport(result.report);
+    if(result.submitted){el("portalAlert").hidden=false;el("portalAlert").textContent="A limited summary was previously submitted with this invitation. Iceworks will review it before any separate market discussion.";}
+
     return
    }catch(e){setMarket("",false);el("researchStatus").textContent="We couldn't verify the invitation. Please ask Iceworks for a new link.";return}
  }
@@ -449,22 +435,21 @@ const initialFocus=()=>{el("begin").addEventListener("click",()=>{
 });
  el("viewShare").addEventListener("click",()=>{
   el("sharePanel").hidden=false;el("sharePanel").scrollIntoView({behavior:"smooth",block:"nearest"});
-  const allowed=!!(invitation&&inviteToken&&portal.enabled&&!readonlyDemo&&invitation.report_ready);
+  const allowed=!!(invitation&&inviteToken&&portal.enabled&&!readonlyDemo);
   el("sendSummary").disabled=!allowed||!el("submitConsent").checked;
   el("portalAlert").hidden=false;
-  el("portalAlert").textContent=allowed?"Please review the summary and choose whether to consent.":"Preview only: secure report requests will become available when Iceworks activates an invitation and publishes the market research. Nothing has been submitted.";
+  el("portalAlert").textContent=allowed?"Please review the summary and choose whether to consent.":"Preview only: secure summary sharing is not enabled for this link. Nothing has been submitted. No market report is released automatically.";
  });
  el("cancelShare").addEventListener("click",()=>{el("sharePanel").hidden=true;el("submitConsent").checked=false;el("sendSummary").disabled=true});
  el("submitConsent").addEventListener("change",()=>{
-  el("sendSummary").disabled=!(el("submitConsent").checked&&invitation?.report_ready&&inviteToken&&portal.enabled&&!readonlyDemo)
+  el("sendSummary").disabled=!(el("submitConsent").checked&&invitation&&inviteToken&&portal.enabled&&!readonlyDemo)
  });
  el("sendSummary").addEventListener("click",async()=>{
-  if(!lastCapitalSummary||!invitation?.report_ready||!el("submitConsent").checked||readonlyDemo)return;
+  if(!lastCapitalSummary||!invitation||!el("submitConsent").checked||readonlyDemo)return;
   const btn=el("sendSummary");btn.disabled=true;el("portalAlert").hidden=false;el("portalAlert").textContent="Submitting your limited summary securely…";
   try{
    const result=await portalRequest("submit",{consent:true,consent_version:"capital-summary-v1.3",summary:lastCapitalSummary});
-   if(result.report){displayReport(result.report);el("portalAlert").textContent="Summary submitted. Your detailed market report is available below."}
-   else el("portalAlert").textContent="Your summary was submitted. A detailed report isn't available for this invitation yet.";
+   if(result.submitted){el("portalAlert").textContent="Your limited summary was received for Iceworks review. No PUDI score or report is unlocked; our team may discuss appropriate market research in a later meeting.";}
   }catch(e){el("portalAlert").textContent="Your summary wasn't confirmed as submitted. Please try again or contact Iceworks."}
   btn.disabled=false;el("submitConsent").checked=false;
  });
