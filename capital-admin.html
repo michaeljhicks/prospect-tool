@@ -1,0 +1,133 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Iceworks | Capital Portal Administration</title>
+<style>
+:root{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:#173a4a;background:#f1f7f9}*{box-sizing:border-box}body{margin:0}
+header{background:#064359;color:white;padding:34px max(20px,calc((100vw - 1080px)/2))}header h1{margin:8px 0;font-size:clamp(27px,4vw,37px)}header p{color:#c6e1e9;line-height:1.5}
+.tag{color:#89e7e5;font-size:12px;letter-spacing:1.5px;font-weight:800}
+main{max-width:1120px;margin:24px auto;padding:0 17px 60px}.panel{background:white;padding:25px;border:1px solid #d4e3e9;border-radius:15px;margin-bottom:20px;box-shadow:0 4px 18px #0c304008}
+h2{margin:0 0 12px;font-size:22px}h3{margin:0 0 6px}p{line-height:1.6}label{display:block;font-size:13px;font-weight:650;margin:12px 0 6px}
+input,select,textarea{font:inherit;width:100%;border:1px solid #b4cbd5;border-radius:8px;padding:11px;color:#153747;background:#fff}textarea{min-height:105px;resize:vertical}
+button{font:inherit;background:#08778c;color:#fff;border:none;border-radius:8px;padding:11px 16px;font-weight:750;cursor:pointer}
+button.secondary{background:#eff8fa;color:#05677b;border:1px solid #95c3cd}button.danger{background:#fff;color:#a53a3a;border:1px solid #dfa3a3}
+button:disabled{opacity:.45;cursor:not-allowed}.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}.spread{display:flex;justify-content:space-between;gap:12px;align-items:center}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}.muted{font-size:13px;color:#557583}
+.notice{border-left:4px solid #08778c;background:#ebf7fa;padding:13px 15px;border-radius:8px;line-height:1.5;font-size:13px}
+.record{border:1px solid #dae7ec;border-radius:11px;padding:17px;margin-top:13px}.statrow{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.stat{background:#ebf8fa;border-radius:10px;padding:13px}.stat strong{display:block;font-size:27px;color:#0d6176}
+.linkbox{padding:14px;border:1px solid #d8bd64;background:#fff7e1;border-radius:10px}#generatedLink{font-size:12px}
+[hidden]{display:none!important}
+@media(max-width:680px){.grid,.statrow{grid-template-columns:1fr}.spread{flex-direction:column;align-items:flex-start}.panel{padding:19px}}
+</style></head>
+<body><header><div class="tag">ICEWORKS FRANCHISE GROUP · ADMINISTRATION</div><h1>Capital Readiness Administration</h1><p>Invite prospective owners, review voluntarily submitted capital summaries, and authorize coworkers. Detailed PUDI research remains internal.</p></header>
+<main>
+<section class="panel" id="loginPanel">
+<h2>Authorized staff sign-in</h2>
+<p class="muted">Sign in using an approved work email. We'll email you a secure one-time login link. Access requires both a verified Supabase account and an active Iceworks authorization.</p>
+<form id="loginForm"><label for="loginEmail">Work email</label><input id="loginEmail" type="email" required autocomplete="email" placeholder="michael@iceworksus.com"><button type="submit" style="margin-top:12px">Email sign-in link</button></form>
+<form id="otpForm"><label for="otpCode">If your email contains a one-time code</label><div class="row"><input id="otpCode" maxlength="8" inputmode="numeric" placeholder="Enter code" style="max-width:180px"><button class="secondary" type="submit">Verify code</button></div></form>
+<p id="loginStatus" role="status" class="notice">Only authorized Iceworks staff can access records.</p>
+</section>
+<div id="dashboard" hidden>
+<section class="panel"><div class="spread"><div><h2>Administration Dashboard</h2><p class="muted" id="staffLabel">Loading…</p></div><div class="row"><button id="refresh" class="secondary">Refresh</button><button id="logout" class="secondary">Sign out</button></div></div>
+<div class="statrow"><div class="stat"><small>Invitations</small><strong id="countInvites">0</strong></div><div class="stat"><small>Summaries received</small><strong id="countSubmitted">0</strong></div><div class="stat"><small>Active links</small><strong id="countActive">0</strong></div></div>
+<p class="notice">Only the consented readiness summary is received. Detailed personal assets, debts, salary, retirement and PUDI analyses are not shared with prospects or stored through this portal.</p></section>
+<section class="panel" id="createPanel"><h2>Create a personalized invitation</h2><p class="muted">Provide the first name, target market and optional welcome message. Every link is unique, expires automatically and should only be sent to the intended prospect.</p>
+<form id="createForm"><div class="grid"><div><label for="firstName">Prospect's first name</label><input id="firstName" maxlength="80" required placeholder="Jim"></div><div><label for="marketName">Prospect market</label><input id="marketName" maxlength="140" required placeholder="Tucson, Arizona"></div><div><label for="expiresDays">Link expiration</label><select id="expiresDays"><option value="7">7 days</option><option value="14" selected>14 days</option><option value="30">30 days</option></select></div></div>
+<label for="welcomeText">Personal greeting (optional)</label><textarea maxlength="650" id="welcomeText" placeholder="Thanks again for taking a minute to speak with me about Iceworks. Here's a simple tool to explore startup capital at your own pace."></textarea><button type="submit" style="margin-top:12px">Generate invitation link</button></form>
+<div id="linkPanel" class="linkbox" style="margin-top:16px" hidden><strong>Copy your personalized link now</strong><p class="muted">For security, the full link is only shown immediately after creation. If you lose it, create a new invitation.</p><input id="generatedLink" readonly><button id="copyLink" class="secondary" style="margin-top:10px">Copy link</button></div>
+</section>
+<section class="panel"><h2>Invitations and submitted summaries</h2><p class="muted">Amounts are self-reported and unverified. A submission does not qualify someone financially or automatically release PUDI research.</p><div id="records"></div></section>
+<section class="panel" id="staffPanel" hidden><h2>Authorize a coworker</h2><p class="muted">Owner: grant access and manage staff. Editor: create and revoke invitations. Viewer: read prospect statuses and summaries. Only existing approved staff can access this page.</p>
+<form id="grantForm"><div class="grid"><div><label for="grantEmail">Coworker email</label><input type="email" id="grantEmail" required placeholder="coworker@iceworksus.com"></div><div><label for="grantRole">Role</label><select id="grantRole"><option value="viewer">Viewer</option><option value="editor">Editor</option><option value="owner">Owner</option></select></div></div><button style="margin-top:12px" type="submit">Authorize coworker</button></form>
+</section>
+<p class="muted">Consent-based financial summary retention: 90 days. Invitations expire automatically. Staff actions are logged. <a href="capital-privacy.html">Privacy and retention information</a>.</p>
+</div></main>
+<script type="module">
+import {createClient} from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.75.0/+esm";
+const supabase=createClient("https://dzfbhppoyhnmrchcnzsl.supabase.co","sb_publishable_BaIJx-VkkEJnOw1jIQwlpg_iMqe1_R4",{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}});
+const endpoint="https://dzfbhppoyhnmrchcnzsl.supabase.co/functions/v1/iceworks-capital-admin";
+const $=id=>document.getElementById(id), fmt=n=>Number(n||0).toLocaleString("en-US",{style:"currency",currency:"USD",maximumFractionDigits:0});
+let role="";
+const node=(tag,content)=>{const n=document.createElement(tag);n.textContent=String(content);return n};
+const date=v=>v?new Date(v).toLocaleDateString():"–";
+async function api(action,args={}){
+ const {data:{session}}=await supabase.auth.getSession();
+ if(!session?.access_token)throw Error("Your login has expired. Please sign in.");
+ const r=await fetch(endpoint,{method:"POST",headers:{"Content-Type":"application/json","Authorization":"Bearer "+session.access_token},body:JSON.stringify({action,...args}),cache:"no-store"});
+ let value={};try{value=await r.json()}catch(_){}
+ if(!r.ok)throw Error(r.status===403?"This account is not authorized for Iceworks.":"Request failed ("+r.status+").");
+ return value;
+}
+function addPair(box,label,value){
+ const p=node("div","");p.style.cssText="display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;margin:7px 0";
+ p.append(node("span",label),node("strong",value));box.append(p);
+}
+function showRecords(invitations,submissions){
+ const box=$("records");box.replaceChildren();const byId=new Map(submissions.map(s=>[s.invitation_id,s]));
+ $("countInvites").textContent=invitations.length;$("countSubmitted").textContent=submissions.length;
+ $("countActive").textContent=invitations.filter(i=>!i.revoked_at&&new Date(i.expires_at)>new Date()).length;
+ if(!invitations.length)box.append(node("p","No invitations yet."));
+ for(const i of invitations){
+  const card=node("article","");card.className="record";
+  const heading=node("h3",i.first_name+" · "+i.market_label);card.append(heading,node("small","Expires "+date(i.expires_at)+(i.revoked_at?" · Revoked":"")));
+  const s=byId.get(i.id);
+  if(s){
+   card.append(node("p","Consented capital summary received "+date(s.consent_at)));
+   addPair(card,"Deployable funds",fmt(s.summary.deployable_funds));
+   addPair(card,"Total planned cost range",fmt(s.summary.selected_cost_low)+"–"+fmt(s.summary.selected_cost_high));
+   addPair(card,"Capital gap",fmt(s.summary.capital_gap_low)+"–"+fmt(s.summary.capital_gap_high));
+   addPair(card,"Financing status",s.summary.financing_status);
+   addPair(card,"Readiness flags",s.summary.flags?.length?s.summary.flags.join(", ").replaceAll("_"," "):"None");
+  }else card.append(node("p","No voluntarily shared summary."));
+  if(role!=="viewer"&&!i.revoked_at&&new Date(i.expires_at)>new Date()){
+   const btn=node("button","Revoke invitation");btn.className="danger";btn.addEventListener("click",async()=>{
+    if(!confirm("Revoke this invitation?"))return;
+    try{await api("revoke",{invitation_id:i.id});await load()}catch(e){alert(e.message)}
+   });card.append(btn);
+  }
+  box.append(card);
+ }
+}
+async function load(){
+ const person=await api("whoami");role=person.role;
+ $("staffLabel").textContent=person.email+" · "+role;
+ $("loginPanel").hidden=true;$("dashboard").hidden=false;
+ $("staffPanel").hidden=role!=="owner";$("createPanel").hidden=role==="viewer";
+ const list=await api("list");showRecords(list.invitations||[],list.submissions||[]);
+}
+$("loginForm").addEventListener("submit",async e=>{
+ e.preventDefault();
+ try{
+  const email=$("loginEmail").value.trim().toLowerCase();
+  const {error}=await supabase.auth.signInWithOtp({email,options:{shouldCreateUser:true,emailRedirectTo:location.origin+location.pathname}});
+  if(error)throw error;
+  $("loginStatus").textContent="Check your email for the login link. Return here through that link.";
+ }catch(e){$("loginStatus").textContent="Unable to send the login email. Check email settings and try again."}
+});
+$("otpForm").addEventListener("submit",async e=>{
+ e.preventDefault();
+ try{
+  const {error}=await supabase.auth.verifyOtp({email:$("loginEmail").value.trim().toLowerCase(),token:$("otpCode").value.trim(),type:"email"});
+  if(error)throw error;await load();
+ }catch(e){$("loginStatus").textContent="Code invalid or email not authorized."}
+});
+$("createForm").addEventListener("submit",async e=>{
+ e.preventDefault();
+ try{
+  const r=await api("create",{first_name:$("firstName").value.trim(),market_label:$("marketName").value.trim(),welcome_message:$("welcomeText").value.trim(),expires_days:Number($("expiresDays").value)});
+  $("generatedLink").value=r.invite_link;$("linkPanel").hidden=false;await load();
+ }catch(e){alert(e.message)}
+});
+$("copyLink").addEventListener("click",async()=>{
+ try{await navigator.clipboard.writeText($("generatedLink").value);$("copyLink").textContent="Copied"}catch(e){$("generatedLink").select();alert("Copy the highlighted invitation link.")}
+});
+$("grantForm").addEventListener("submit",async e=>{
+ e.preventDefault();
+ try{await api("grant",{email:$("grantEmail").value.trim().toLowerCase(),role:$("grantRole").value});alert("Coworker authorized. They can now request a login link.");$("grantForm").reset()}
+ catch(e){alert(e.message)}
+});
+$("refresh").addEventListener("click",()=>load().catch(e=>alert(e.message)));
+$("logout").addEventListener("click",async()=>{await supabase.auth.signOut();location.href=location.pathname});
+const {data:{session}}=await supabase.auth.getSession();
+if(session){try{await load()}catch(e){$("loginStatus").textContent=e.message}}
+</script></body></html>
