@@ -43,3 +43,6 @@ This tool is informational, not an eligibility decision or the actual signed sui
 - Mouse users can hover over the ?; mouse/touch users can click to keep it open; keyboard users can focus and activate the ? button, then close it with Escape. Every button is associated with its explanation using accessible properties.
 - Narrow screens show the inputs in one column; the help panels fit the screen and use internal scrolling if necessary.
 - No changes were made to business financial calculations, cost assumptions, storage behavior, or the default homepage.
+
+## V1.3 personalized discovery
+The tool now has a responsive sticky financial summary, personalized invitation modal, and a PUDI research teaser. Preview with `?demo=1&first=Jim&market=Tucson`. For privacy and safety, financial summary submission and PUDI unlock are OFF until a Supabase backend is provisioned, permissions verified and the public portal configuration explicitly enabled. See `CAPITAL-PORTAL-SETUP.md` and the Supabase schema / Edge Function sources. The optional Financial Snapshot never leaves the browser.
