@@ -112,11 +112,11 @@ details>h3{margin-top:24px}
         <div class="summary-sub">
           <div class="line"><span>Assets entered</span><strong id="assetsEntered">—</strong></div>
           <div class="line"><span>Liabilities entered</span><strong id="liabilitiesEntered">—</strong></div>
-          <div class="line emphasis"><span id="netWorthLabel">Partial net worth estimate</span><strong id="netWorth">—</strong></div>
+          <div class="line emphasis"><span id="netWorthLabel">Partial net worth estimate</span><strong id="netWorth">—</strong></div><div class="line"><span>Gross monthly income (if reported)</span><strong id="grossMonthly">—</strong></div><div class="line"><span>Debt payments / gross monthly income</span><strong id="debtRatio">—</strong></div>
         </div>
         <div class="summary-sub"><h3>Check these figures</h3><ul id="snapshotFlags" class="review-list"><li>Enter figures to see reconciliation checks.</li></ul></div>
       </div>
-      <p class="muted">Annual income, net worth, retirement savings, and financing still under consideration do not increase deployable funds automatically. A lender may examine them separately.</p>
+      <p class="muted">Debt payments divided by gross monthly income is a simple contextual ratio, not a lender debt-to-income determination or approval. Annual income, net worth, retirement savings, and uncommitted financing do not increase deployable funds automatically.</p>
     </details>
   </section>
 
@@ -125,7 +125,7 @@ details>h3{margin-top:24px}
     <p class="muted">This is an explanation of the figures entered above. It is not a pass/fail score, financing decision or forecast.</p>
     <div class="grid">
       <div class="summary-sub"><div class="line"><span>Deployable funds</span><strong id="summaryFunds">—</strong></div><div class="line"><span>Capital to explore, low to high</span><strong id="summaryGap">—</strong></div></div>
-      <div class="summary-sub"><div class="line"><span>Uncommitted financing</span><strong id="summaryPending">Not entered</strong></div><div class="line"><span>Intended investment budget</span><strong id="summaryBudget">Not entered</strong></div></div>
+      <div class="summary-sub"><div class="line"><span>Uncommitted financing</span><strong id="summaryPending">Not entered</strong></div><div class="line"><span>Additional financing status</span><strong id="summaryStage">Not specified</strong></div><div class="line"><span>Intended investment budget</span><strong id="summaryBudget">Not entered</strong></div></div>
     </div>
     <p class="notice" id="summaryText"></p>
     <h3>Questions worth resolving next</h3><ul id="nextSteps" class="review-list"></ul>
@@ -181,7 +181,7 @@ function render(){
  set("perPlacement",money(cfg.equipmentCost+cfg.installationCost));
  set("equipment",money(equipment));set("maintenance",money(maintenance));
  set("equipmentNote",units&&!confirmedAdditional?"Additional purchases are NOT counted yet. Confirm the checkbox if these costs are outside the published startup range.":units?"Optional outside-range purchases are included in all capital gap figures.":"No extra equipment is included in the funding comparison.");
- for(const [id,v] of Object.entries({vCash:cash,vReserve:Math.min(reserve,cash),vFinancing:fin,vAvailable:funds,vOther:other,vExtras:extra}))set(id,money(v));
+ for(const [id,v] of Object.entries({vCash:cash,vReserve:reserve,vFinancing:fin,vAvailable:funds,vOther:other,vExtras:extra}))set(id,money(v));
  set("vStartup",range(cfg.investmentLow,cfg.investmentHigh));
  set("vTotal",range(costLow,costHigh));set("vGap",range(gapLow,gapHigh));
  const readiness=gapLow>0?"Your stated deployable funds are below the low end of your selected capital requirements. Explore additional confirmed funding or revisit planned costs.":gapHigh>0?"Your stated deployable funds cover the lower end, but not the higher end, of your selected capital requirements. Review reserves and possible contingencies.":"Your stated deployable funds cover this selected cost range. This is NOT a financing approval or judgment that the investment is appropriate.";
@@ -191,7 +191,7 @@ function render(){
  const optionalLiabilityIds=["snapMortgage","snapDebt","snapOtherLiabilities"];
  const assetsPresent=optionalAssetIds.some(id=>opt(id)!==null);
  const liabilitiesPresent=optionalLiabilityIds.some(id=>opt(id)!==null);
- const complete=el("snapshotComplete").checked;
+ const missingAssetCategories=optionalAssetIds.concat(optionalLiabilityIds).filter(id=>opt(id)===null);const complete=el("snapshotComplete").checked&&missingAssetCategories.length===0;
  const hasSnapshot=assetsPresent||liabilitiesPresent;
  const assets=optionalAssetIds.reduce((a,id)=>a+(opt(id)??0),0);
  const liabilities=optionalLiabilityIds.reduce((a,id)=>a+(opt(id)??0),0);
@@ -199,8 +199,9 @@ function render(){
  set("assetsEntered",assetsPresent?money(assets):"Not entered");
  set("liabilitiesEntered",liabilitiesPresent?money(liabilities):"Not entered");
  set("netWorth",hasSnapshot?money(net):"Not entered");
- set("netWorthLabel",complete?"Calculated net worth (as entered)":"Partial net worth estimate");
+ set("netWorthLabel",complete?"Calculated net worth (as entered)":"Partial net worth estimate");const annualIncome=opt("annualIncome"),monthlyDebt=opt("monthlyDebt");set("grossMonthly",annualIncome===null?"Not entered":money(annualIncome/12));set("debtRatio",annualIncome!==null&&annualIncome>0&&monthlyDebt!==null?(100*monthlyDebt/(annualIncome/12)).toFixed(1)+"%":"Not enough information");
  const flags=[];
+ if(el("snapshotComplete").checked&&missingAssetCategories.length>0)flags.push("You checked that your assets and liabilities are complete, but some categories are blank. Enter explicit zeroes or uncheck the box.");
  if(hasSnapshot&&!complete)flags.push("Net worth uses only the categories entered. Blank fields are unknown—not zero. Check the completeness box only when every category has been considered.");
  const reported=optSigned("reportedNW");
  if(reported!==null&&hasSnapshot&&Math.abs(reported-net)>1)flags.push("Reported net worth differs from the amount calculated from entered assets and liabilities by "+money(Math.abs(reported-net))+". Review asset and liability entries.");
@@ -211,11 +212,12 @@ function render(){
  if(budget!==null&&budget>funds)flags.push("Intended investment budget exceeds currently deployable funding by "+money(budget-funds)+". Identify the funding source before counting it as available.");
  if(reserve>cash)flags.push("Personal reserves exceed accessible personal cash. Financing is not automatically used to cover this difference.");
  if(pending!==null&&pending>0)flags.push("Pending or uncommitted financing is excluded from deployable funding and capital-gap calculations.");
+ if(fin>0&&["applied","preapproved","exploring"].includes(el("fundingStage").value))flags.push("Confirmed financing is entered while additional financing status indicates the application may not be final. Confirm that the funding entered above is truly committed and accessible.");
  if(!hasSnapshot&&reported===null&&budget===null&&pending===null)flags.push("Enter optional figures to view reconciliation questions. Leaving this section blank is fine.");
  if(flags.length===0)flags.push("No basic reconciliation flags from the figures entered. This does not verify completeness or accuracy.");
  list("snapshotFlags",flags);
  set("summaryFunds",money(funds));set("summaryGap",range(gapLow,gapHigh));
- set("summaryPending",pending===null?"Not entered":money(pending));
+ set("summaryPending",pending===null?"Not entered":money(pending));const statusLabels={none:"Not specified",exploring:"Exploring options",applied:"Application submitted",preapproved:"Conditionally preapproved",committed:"Approved / available"};set("summaryStage",statusLabels[el("fundingStage").value]);
  set("summaryBudget",budget===null?"Not entered":money(budget));
  set("summaryText",readiness+" Personal assets, annual income and borrowing plans may provide context but do not automatically increase spendable business funds.");
  const steps=[];
