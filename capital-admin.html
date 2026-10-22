@@ -1,5 +1,5 @@
 <!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Iceworks | Capital Portal Administration</title>
+<title>Iceworks | Capital Readiness Administration</title>
 <style>
 :root{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:#173a4a;background:#f1f7f9}*{box-sizing:border-box}body{margin:0}
 header{background:#064359;color:white;padding:34px max(20px,calc((100vw - 1080px)/2))}header h1{margin:8px 0;font-size:clamp(27px,4vw,37px)}header p{color:#c6e1e9;line-height:1.5}
@@ -17,9 +17,60 @@ button:disabled{opacity:.45;cursor:not-allowed}.row{display:flex;gap:10px;align-
 .linkbox{padding:14px;border:1px solid #d8bd64;background:#fff7e1;border-radius:10px}#generatedLink{font-size:12px}
 [hidden]{display:none!important}
 @media(max-width:680px){.grid,.statrow{grid-template-columns:1fr}.spread{flex-direction:column;align-items:flex-start}.panel{padding:19px}}
+
+/* Shared Iceworks editorial layout, adapted to a private staff dashboard. */
+:root{--ice-ink:#073247;--ice-deep:#042839;--ice-teal:#06778f;--ice-paper:#f2f5f3;--ice-rule:#b6cbd0;--ice-serif:"Didot","Bodoni MT","Times New Roman",Georgia,serif;--ice-display:"Arial Black",Impact,"Helvetica Neue",Arial,sans-serif}
+body{background:var(--ice-paper);color:var(--ice-ink)}
+.site-navigation{display:flex;justify-content:space-between;align-items:center;gap:16px;border-bottom:1px solid var(--ice-rule);padding:15px max(22px,calc((100vw - 1090px)/2));font-size:11px}
+.site-logo{display:flex;align-items:center;gap:10px;color:var(--ice-deep);font-size:12px;text-decoration:none;letter-spacing:-.025em;font-weight:840}
+.site-logo small{display:block;font-size:9px;letter-spacing:.13em;font-weight:700;margin-top:2px}
+.brand-square{background:var(--ice-deep);color:white;display:grid;place-content:center;position:relative;height:37px;width:37px;font-size:14px;letter-spacing:-.08em}
+.brand-star{font-size:9px;position:absolute;right:3px;top:1px;letter-spacing:0}
+.nav-links{display:flex;gap:30px}.nav-links a{color:var(--ice-ink);font-size:11px;text-decoration:none;font-weight:770}.nav-links a:hover{text-decoration:underline;text-underline-offset:4px}
+header.subpage-header{background:var(--ice-paper);color:var(--ice-deep);padding:26px 20px 20px}
+.subpage-inner{max-width:1090px;margin:auto}.heavy-rule{height:7px;background:var(--ice-deep)}
+.subpage-eyebrow{font-size:11px;letter-spacing:.13em;font-weight:820;color:var(--ice-ink);margin:17px 0 29px}
+header.subpage-header h1{font-family:var(--ice-display);font-size:clamp(48px,8.9vw,112px);letter-spacing:-.08em;line-height:.85;font-weight:1000;margin:0 0 35px;color:var(--ice-deep)}
+header.subpage-header h1 span{color:var(--ice-teal)}
+.subpage-deck{display:grid;grid-template-columns:1fr 1fr;gap:25px;border-top:1px solid var(--ice-rule);border-bottom:1px solid var(--ice-rule);padding:18px 0;align-items:start}
+.subpage-deck strong{font-family:var(--ice-serif);font-size:clamp(29px,4vw,50px);font-weight:400;line-height:1.03;letter-spacing:-.055em}
+header.subpage-header .subpage-deck p{font-size:15px;color:#395d6c;line-height:1.7;margin:2px 0 5px}
+main#adminMain{max-width:1120px;margin:18px auto;padding:0 15px 75px}
+.panel{border:1px solid #ccdce0;border-radius:2px;box-shadow:none;padding:clamp(25px,3.4vw,40px);margin-bottom:22px}
+.panel h2{font-family:var(--ice-display);font-size:clamp(23px,2.9vw,34px);font-weight:900;line-height:1.1;letter-spacing:-.05em;margin-bottom:14px}
+.panel h3{font-size:18px;letter-spacing:-.025em}
+.panel p{font-size:14px;line-height:1.7}
+.panel .muted{font-size:13px;line-height:1.65}
+.panel button,.panel input,.panel select,.panel textarea{border-radius:2px}
+.panel input:focus,.panel textarea:focus,.panel select:focus{outline:2px solid #2e93a8;outline-offset:1px}
+.panel .notice{border-radius:1px;background:#eaf4f6}
+.panel .stat{border-radius:2px;border-top:4px solid #0d8299;background:#e5f3f5;padding:17px}
+.panel .stat strong{font-family:var(--ice-display);font-size:34px}
+.panel .record{border-radius:1px;border-left:4px solid #a3d1d9}
+.panel .linkbox{border-radius:1px}
+.panel button{background:var(--ice-teal)}.panel button.secondary{background:#edf6f7;color:#085e73}.panel button.danger{background:#fff;color:#a53a3a}
+.panel .spread{gap:25px}
+#dashboard>.panel:nth-child(1){border-top:5px solid var(--ice-deep)}
+#dashboard>.panel:nth-child(2){border-top:5px solid var(--ice-teal)}
+#staffPanel{border-top:5px solid var(--ice-deep)}
+#loginPanel{border-top:5px solid var(--ice-teal)}
+@media(max-width:790px){.subpage-deck{grid-template-columns:1fr;gap:13px}.site-navigation{padding:12px 18px}.nav-links{gap:14px}header.subpage-header h1{font-size:clamp(40px,8.4vw,75px)}}
+@media(max-width:540px){header.subpage-header h1{font-size:clamp(37px,10vw,60px)}.panel{padding:22px 17px}.subpage-eyebrow{margin-bottom:22px}.panel .grid,.panel .statrow{grid-template-columns:1fr}.panel .spread{align-items:flex-start;flex-direction:column}}
 </style></head>
-<body><header><div class="tag">ICEWORKS FRANCHISE GROUP · ADMINISTRATION</div><h1>Capital Readiness Administration</h1><p>Invite prospective owners, review voluntarily submitted capital summaries, and authorize coworkers. Detailed PUDI research remains internal.</p></header>
-<main>
+<body>
+<nav class="site-navigation" aria-label="Site navigation">
+  <a class="site-logo" href="./" aria-label="Iceworks Capital Readiness home"><span class="brand-square">IW<span class="brand-star">✱</span></span><span>ICEWORKS <small>FRANCHISE GROUP</small></span></a>
+  <div class="nav-links"><a href="./">Explorer</a><a href="capital-privacy.html">Privacy</a></div>
+</nav>
+<header class="subpage-header">
+  <div class="subpage-inner">
+    <div class="heavy-rule" aria-hidden="true"></div>
+    <div class="subpage-eyebrow">ICEWORKS / STAFF ACCESS</div>
+    <h1>CAPITAL<br><span>ADMINISTRATION.</span></h1>
+    <div class="subpage-deck"><strong>Invitation and summary management</strong><p>Create personalized invitations, review voluntarily shared capital summaries, and manage coworker access. Detailed PUDI research is kept separately within Iceworks.</p></div>
+  </div>
+</header>
+<main id="adminMain">
 <section class="panel" id="loginPanel">
 <h2>Authorized staff sign-in</h2>
 <p class="muted">Sign in using an approved work email. We'll email you a secure one-time login link. Access requires both a verified Supabase account and an active Iceworks authorization.</p>
