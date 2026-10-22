@@ -71,6 +71,28 @@ Deno.serve(async req=>{
    await audit(email,"update_invitation_reason",data.id);
    return respond({ok:true});
   }
+  if(action==="refresh_link"){
+   if(!writeAccess||typeof params.invitation_id!=="string"||!uuid.test(params.invitation_id))return reject(400);
+   const days=Number(params.expires_days??14);
+   if(!Number.isInteger(days)||days<1||days>30)return reject(400);
+   const {data:existing,error:lookupError}=await db.from("iceworks_capital_invitations")
+     .select("id,first_name,market_label,revoked_at,expires_at")
+     .eq("id",params.invitation_id).maybeSingle();
+   if(lookupError||!existing||existing.revoked_at)return reject(404);
+   const {data:submitted,error:submittedError}=await db.from("iceworks_capital_submissions")
+     .select("id").eq("invitation_id",existing.id).maybeSingle();
+   if(submittedError)return reject(503);
+   if(submitted)return respond({error:"This prospect already submitted a summary; please create a new invitation if needed."},409);
+   const token=[...crypto.getRandomValues(new Uint8Array(24))].map(n=>n.toString(16).padStart(2,"0")).join("");
+   const token_hash=await hash(token);
+   const expires_at=new Date(Date.now()+days*86400000).toISOString();
+   const {data:updated,error:updateError}=await db.from("iceworks_capital_invitations")
+     .update({token_hash,expires_at}).eq("id",existing.id).is("revoked_at",null)
+     .select("id").maybeSingle();
+   if(updateError||!updated)return reject(503);
+   await audit(email,"rotate_or_renew_invitation",existing.id,{market:existing.market_label,previously_expired:Date.parse(existing.expires_at)<=Date.now(),days});
+   return respond({invitation_id:existing.id,expires_at,invite_link:"https://michaeljhicks.github.io/prospect-tool/capital-readiness.html#invite="+token,previous_link_invalidated:true});
+  }
   if(action==="revoke"){
    if(!writeAccess||typeof params.invitation_id!=="string"||!uuid.test(params.invitation_id))return reject(400);
    const {data,error}=await db.from("iceworks_capital_invitations")
