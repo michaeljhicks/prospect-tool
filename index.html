@@ -268,6 +268,34 @@ html:focus-within{scroll-behavior:smooth}
  .cards{position:static!important}
  .panel{break-inside:avoid}
 }
+
+/* Site-wide editorial guide refinements; the calculator and private portal retain their original behavior. */
+.franchise-education{border-top:1px solid var(--ice-rule);padding:44px 0 18px;margin:12px 0 22px}
+.education-head{display:grid;grid-template-columns:1.25fr .75fr;gap:28px;align-items:end;padding-bottom:26px}
+.education-section-label,.education-number{font-size:10px;letter-spacing:.14em;font-weight:820;color:#117e93}
+.education-head h2{font-size:clamp(38px,5vw,64px);line-height:.98;letter-spacing:-.055em;font-family:var(--ice-display);margin:15px 0 4px;font-weight:950}
+.education-head h2 em{font-family:var(--ice-serif);font-weight:400;letter-spacing:-.065em;font-style:normal}
+.editorial-header .education-head>p{font-size:16px;line-height:1.65;max-width:355px;margin:0}
+.education-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));border-top:1px solid var(--ice-rule)}
+.education-item{padding:28px 30px 31px 0;border-bottom:1px solid var(--ice-rule)}
+.education-item:nth-child(even){border-left:1px solid var(--ice-rule);padding-left:30px;padding-right:0}
+.education-item h3{font-size:clamp(21px,2.6vw,29px);font-family:var(--ice-display);font-weight:880;letter-spacing:-.05em;line-height:1.15;margin:14px 0}
+.editorial-header .education-item p{font-size:14px;line-height:1.75;max-width:none;color:#27495a;margin:10px 0}
+.education-details{border-top:1px solid #c6d9db;margin-top:17px;padding-top:12px}
+.education-details summary{font-family:inherit;font-weight:760;font-size:13px;display:list-item;list-style:disclosure-closed;cursor:pointer;color:#096e83}
+.education-details[open] summary{list-style:disclosure-open}
+.education-details p{margin-top:12px!important}
+.fee-examples{margin:18px 0 8px;border-top:1px solid var(--ice-rule)}
+.fee-examples>div{display:flex;gap:12px;justify-content:space-between;padding:10px 0;border-bottom:1px solid #cddde0;align-items:baseline;font-size:12px}
+.fee-examples strong{font-weight:850;font-size:13px;white-space:nowrap}
+.editorial-header .education-footnote{font-size:11px!important;color:#5d7883!important}
+.editorial-header .education-reference{font-size:12px;color:#5b7987;line-height:1.7;border-top:1px solid var(--ice-rule);padding-top:16px;margin:0 0 8px}
+.hero-masthead.long-person-name .masthead-second{font-size:clamp(46px,9vw,120px)}
+.eyebrow-spread{min-height:18px}
+.hero-masthead{min-height:210px}
+.market-spacer span:last-child{text-align:right}
+@media(max-width:790px){.education-head{grid-template-columns:1fr}.education-grid{grid-template-columns:1fr}.education-item,.education-item:nth-child(even){padding:22px 0;border-left:0}.franchise-education{padding-top:25px}.hero-masthead{min-height:unset}.education-head h2{font-size:clamp(38px,7vw,55px)}}
+@media(max-width:540px){.site-navigation .nav-links{gap:8px;flex-wrap:wrap;justify-content:flex-end}.site-navigation .nav-links a{font-size:9px}.education-item h3{font-size:23px}.hero-masthead.long-person-name .masthead-second{font-size:clamp(32px,8vw,56px)}.market-spacer{align-items:flex-start}.market-spacer span:last-child{max-width:48%;overflow-wrap:anywhere}}
 </style>
 <script src="capital-readiness-config.js"></script>
 <script src="capital-portal-config.js"></script>
@@ -288,30 +316,71 @@ html:focus-within{scroll-behavior:smooth}
       <span class="brand-square">IW<span class="brand-star">✱</span></span>
       <span>ICEWORKS <small>FRANCHISE GROUP</small></span>
     </a>
-    <div class="nav-links"><a href="#explorer">Explore</a><a href="#marketAnalysis">Market research</a><a href="capital-privacy.html">Privacy</a></div>
+    <div class="nav-links"><a href="#franchiseBasics">Franchise basics</a><a href="#explorer">Explorer</a><a href="#marketAnalysis">Territory</a><a href="capital-privacy.html">Privacy</a></div>
   </nav>
-  <div class="editorial-hero">
-    <div class="heavy-rule" aria-hidden="true"></div>
-    <div class="eyebrow-spread"><span>01 / FRANCHISE DISCOVERY</span><span>BUILT FOR WHAT'S NEXT</span></div>
-    <div class="hero-masthead" aria-label="Iceworks Capital Readiness">
-      <span class="masthead-first">ICEWORKS</span><span class="masthead-second">CAPITAL<span class="masthead-period">.</span></span>
-    </div>
-    <div class="hero-story">
-      <div class="hero-serif">Know your<br><em>numbers.</em></div>
-      <div class="hero-story-aside">
-        <p>Exploring franchise ownership? Understand the estimated costs, evaluate your funding position, and decide what questions to ask next.</p>
-        <p class="hero-small">No franchise revenue forecasts. No financial application required. Share a limited summary only if you choose.</p>
-        <a class="hero-action" href="#explorer">Begin exploring <span aria-hidden="true">↗</span></a>
-      </div>
-    </div>
-    <div class="hero-bottom-note"><span>ICEWORKS / CAPITAL READINESS EXPLORER</span><span>YOUR DECISION. YOUR PACE.</span></div>
+  <div class="editorial-hero" id="franchiseBasics">
+  <div class="heavy-rule" aria-hidden="true"></div>
+  <div class="eyebrow-spread"><span>01 / FRANCHISE BASICS</span></div>
+  <div class="hero-masthead" aria-label="Hey there" id="heroMasthead">
+    <span class="masthead-first">HEY</span>
+    <span class="masthead-second" id="heroPersonName">THERE<span class="masthead-period">.</span></span>
   </div>
+  <div class="hero-story">
+    <div class="hero-serif">Before you<br><em>invest.</em></div>
+    <div class="hero-story-aside">
+      <p>A franchise is a business you own and operate under an agreement with another company. Before deciding whether Iceworks is right for you, it's worth understanding the startup investment, ongoing fees, responsibilities, and risks.</p>
+      <p class="hero-small">This guide explains the basics and gives you a place to evaluate your available capital. It does not estimate your future sales or profits.</p>
+      <a class="hero-action" href="#explorer">Explore startup costs <span aria-hidden="true">↗</span></a>
+    </div>
+  </div>
+  <section class="franchise-education" aria-labelledby="franchiseEducationTitle">
+    <div class="education-head">
+      <div><div class="education-section-label">A SHORT GUIDE TO FRANCHISING</div>
+        <h2 id="franchiseEducationTitle">What to understand<br><em>before signing.</em></h2></div>
+      <p>The purpose of this page is to help you ask better questions—not to tell you whether you should purchase a franchise.</p>
+    </div>
+    <div class="education-grid">
+      <article class="education-item">
+        <div class="education-number">01 / THE BUSINESS</div>
+        <h3>What does owning a franchise mean?</h3>
+        <p>You operate your own business while licensing an established company's brand and systems. You generally pay an initial franchise fee and ongoing fees, follow the franchise agreement, and remain responsible for funding and operating your business. Franchisor support does not eliminate business risk.</p>
+      </article>
+      <article class="education-item">
+        <div class="education-number">02 / THE DOCUMENT</div>
+        <h3>What is an FDD?</h3>
+        <p><strong>FDD</strong> stands for <strong>Franchise Disclosure Document</strong>. It's the formal disclosure document you receive before entering a franchise agreement. It describes fees, estimated startup costs, the franchisor's obligations, restrictions, franchisee information, and other important terms. Read it carefully and have your lawyer and accountant review it.</p>
+        <details class="education-details"><summary>Which FDD sections should I look at?</summary>
+          <p><strong>Item 5</strong> — initial fees; <strong>Item 6</strong> — other fees; <strong>Item 7</strong> — estimated initial investment; <strong>Item 19</strong> — financial performance representations, if any; <strong>Item 20</strong> — franchise outlets and franchisee contacts. These are starting points, not a substitute for reading the entire FDD.</p>
+        </details>
+      </article>
+      <article class="education-item">
+        <div class="education-number">03 / THE COSTS</div>
+        <h3>Which fees should I expect?</h3>
+        <p>The initial franchise fee is just one component of getting started. You should also review equipment and installation, available working capital, insurance, ongoing software charges, royalties, and any annual fees.</p>
+        <div class="fee-examples">
+          <div><span>Initial franchise fee</span><strong id="educationFranchiseFee">—</strong></div>
+          <div><span>Continuing royalty</span><strong id="educationRoyalty">—</strong></div>
+          <div><span>Technology fee</span><strong id="educationTechnology">—</strong></div>
+          <div><span>Convention fee</span><strong id="educationConvention">—</strong></div>
+        </div>
+        <p class="education-footnote">These are the current tool's cost references. The effective FDD and franchise agreement control; verify the latest amounts and which charges apply.</p>
+      </article>
+      <article class="education-item">
+        <div class="education-number">04 / YOUR DUE DILIGENCE</div>
+        <h3>What should I investigate?</h3>
+        <p>Ask what equipment and expenses are included in the estimated startup range, what additional cash reserves you may need, whether financing is actually available, and what responsibilities you'll have for customers and service. Review territory terms, talk with existing franchise owners, and understand the conditions for renewal, transfer, or termination.</p>
+        <p><strong>Important:</strong> Available cash is different from net worth. The calculator below focuses on how much capital you can reasonably commit—not what the franchise will earn.</p>
+      </article>
+    </div>
+    <p class="education-reference">The costs shown here are informational and should be reconciled to the most current Iceworks Franchise Disclosure Document. No part of this page guarantees territory availability, franchise acceptance, financing, or future financial performance.</p>
+  </section>
+</div>
 </header>
 <main id="explorer">
   <div class="sticky-sentinel" id="cardSentinel" aria-hidden="true"></div>
   <div class="explorer-intro">
     <div class="explorer-label"><span>02 / THE EXPLORER</span><span>YOUR CAPITAL AT A GLANCE</span></div>
-    <div class="explorer-heading"><h2>Start with<br><em>the facts.</em></h2><p>Begin with the basics. Each step builds on the last, using your numbers—not promises about future sales or profits.</p></div>
+    <div class="explorer-heading"><h2>Capital<br><em>readiness.</em></h2><p>Enter your available funding, consider the startup costs, and identify questions to review with Iceworks. The optional Financial Snapshot provides additional context without being submitted.</p></div>
   </div>
   <p class="start-hint">Start with Steps 1–3. The Financial Snapshot is optional. Select any <strong>?</strong> for an everyday-language explanation and examples.</p>
   <div class="cards" aria-label="Capital readiness at a glance" aria-live="polite">
@@ -358,7 +427,7 @@ html:focus-within{scroll-behavior:smooth}
 
   <div class="steps-stack">
     <section class="panel">
-      <div class="step">STEP 1 OF 5 · FUNDING</div><p class="editorial-sidehead">What you have.</p><h2>Your funding position</h2>
+      <div class="step">STEP 1 OF 5 · FUNDING</div><p class="editorial-sidehead">Available funds</p><h2>Your funding position</h2>
       <p class="muted">Enter amounts you can actually access. These are private, editable estimates. Zero is used for calculations when a field is blank; it does not mean an unreported amount is known to be zero.</p>
       <div class="fields">
         <div><div class="field-heading"><label for="cash">Cash available for business ($)</label><button type="button" class="help-trigger" aria-label="What does Cash available for business ($) mean?" aria-expanded="false" aria-controls="help-cash" aria-describedby="help-cash">?</button><div class="field-help" id="help-cash" role="tooltip">Enter money you can use for the business now, such as available checking or savings funds. Do not include your home's value, retirement balances, or a loan you have only applied for. Your personal reserve is entered separately below.</div></div><input id="cash" type="number" min="0" step="500" value="0"><div class="hint">Do not include retirement or unliquidated property</div></div>
@@ -369,7 +438,7 @@ html:focus-within{scroll-behavior:smooth}
       <p class="notice">Your net worth and annual salary are not automatically available investment capital. You can enter them later in the optional Financial Snapshot without affecting the funding calculation.</p>
     </section>
     <section class="panel">
-      <div class="step">STEP 2 OF 5 · EQUIPMENT PLANNING</div><p class="editorial-sidehead">What it could cost.</p><h2>Optional extra equipment costs</h2>
+      <div class="step">STEP 2 OF 5 · EQUIPMENT PLANNING</div><p class="editorial-sidehead">Equipment costs</p><h2>Optional extra equipment costs</h2>
       <p class="muted">Use this only for purchases that would be <strong>in addition to</strong> the published initial investment range, not for equipment that is already included.</p>
       <div class="fields">
         <div><div class="field-heading"><label for="units">Extra equipment placements</label><button type="button" class="help-trigger" aria-label="What does Extra equipment placements mean?" aria-expanded="false" aria-controls="help-units" aria-describedby="help-units">?</button><div class="field-help" id="help-units" role="tooltip">How many extra commercial ice-machine placements do you want to budget for beyond any equipment already included in the published startup investment? This is your chosen cost example, not the number of customers Iceworks expects you to sign.</div></div><input id="units" type="number" min="0" max="5000" step="1" value="0"></div>
@@ -385,7 +454,7 @@ html:focus-within{scroll-behavior:smooth}
   </div>
 
   <section class="panel">
-    <div class="step">STEP 3 OF 5 · CAPITAL COMPARISON</div><p class="editorial-sidehead">Put the pieces together.</p>
+    <div class="step">STEP 3 OF 5 · CAPITAL COMPARISON</div><p class="editorial-sidehead">Funding comparison</p>
     <div class="section-heading"><h2>Your capital comparison</h2>
       <button type="button" class="help-trigger" aria-label="Explain Step 3 capital comparison" aria-controls="help-step3" aria-expanded="false">?</button>
       <div class="field-help" id="help-step3" role="tooltip">
@@ -411,7 +480,7 @@ html:focus-within{scroll-behavior:smooth}
   </section>
 
   <section class="panel">
-    <div class="step">STEP 4 OF 5 · OPTIONAL FINANCIAL SNAPSHOT</div><p class="editorial-sidehead">A closer look, if you want it.</p>
+    <div class="step">STEP 4 OF 5 · OPTIONAL FINANCIAL SNAPSHOT</div><p class="editorial-sidehead">Financial information</p>
     <details id="snapshot">
       <summary><span><strong>Your Financial Snapshot</strong><small>Expand to explore liquidity, assets, liabilities, income and financing questions. Not required.</small></span><span aria-hidden="true">＋</span></summary>
       <p class="notice">This section is for your own review. Enter numbers only if you want to. Fields left blank remain unknown; zero is a deliberate value. Entries are not saved, uploaded or submitted to Iceworks. Don't enter identity numbers or account details.</p>
@@ -454,7 +523,7 @@ html:focus-within{scroll-behavior:smooth}
   </section>
 
   <section class="panel" id="readiness">
-    <div class="step">STEP 5 OF 5 · YOUR READINESS SUMMARY</div><p class="editorial-sidehead">Make sense of the numbers.</p><h2>Your Capital Readiness Summary</h2>
+    <div class="step">STEP 5 OF 5 · YOUR READINESS SUMMARY</div><p class="editorial-sidehead">Readiness summary</p><h2>Your Capital Readiness Summary</h2>
     <p class="muted">This is an explanation of the figures entered above. It is not a pass/fail score, financing decision or forecast.</p>
     <div class="grid">
       <div class="summary-sub"><div class="line"><span>Deployable funds</span><strong id="summaryFunds">—</strong></div><div class="line"><span>Capital to explore, low to high</span><strong id="summaryGap">—</strong></div></div>
@@ -484,7 +553,7 @@ html:focus-within{scroll-behavior:smooth}
     <p class="footer">Cost reference: <span id="source"></span>. Cost-reference date: <span id="updated"></span>. This educational aid is not a franchise offer, financing approval or suitability determination. Detailed Financial Snapshot entries remain local. A limited readiness summary is transmitted only if you explicitly consent through a verified secure invitation. Iceworks deletes submitted summaries after 90 days; see our privacy page for details. Submitting a summary never unlocks a PUDI score or report; Iceworks may discuss selected market research separately. No analytics scripts are included. Printing or saving a PDF is controlled by your browser.</p>
   </section>
 
-<div class="market-spacer" aria-hidden="true"><span>03 / THE TERRITORY</span><span>RESEARCH, NOT PROJECTIONS</span></div>
+<div class="market-spacer"><span>03 / YOUR POTENTIAL TERRITORY</span><span id="marketRegionLabel">MARKET NOT SELECTED</span></div>
 <section class="market-panel" id="marketAnalysis">
   <div class="eyebrow">ICEWORKS · TERRITORY RESEARCH</div>
   <h2><span id="marketTitle">Market Research Preview</span></h2>
@@ -517,7 +586,7 @@ html:focus-within{scroll-behavior:smooth}
 <footer class="editorial-footer">
  <div class="footer-inner">
    <div class="footer-wordmark">ICEWORKS<span>.</span></div>
-   <div class="footer-bottom"><span>Franchise discovery · Albuquerque, New Mexico</span><span><a href="capital-privacy.html">Privacy & retention</a> · <a href="mailto:michael@iceworksus.com">Contact Iceworks</a></span></div>
+   <div class="footer-bottom"><span>Iceworks Franchise Group · Albuquerque, New Mexico</span><span><a href="capital-privacy.html">Privacy & retention</a> · <a href="mailto:michael@iceworksus.com">Contact Iceworks</a></span></div>
  </div>
 </footer>
 <script>
@@ -544,15 +613,29 @@ async function portalRequest(action,details){
   return data
  } finally{clearTimeout(stop)}
 }
+function setHeroName(name){
+ const clean=scrub(name,60);
+ const masthead=el("heroMasthead"),target=el("heroPersonName");
+ if(!masthead||!target)return;
+ const display=clean?clean.toLocaleUpperCase("en-US"):"THERE";
+ target.replaceChildren(document.createTextNode(display));
+ const period=document.createElement("span");period.className="masthead-period";period.textContent=".";
+ target.append(period);
+ masthead.setAttribute("aria-label","Hey "+(clean||"there"));
+ masthead.classList.toggle("long-person-name",display.length>9);
+}
 function setWelcome(first,market,message,footnote){
  const name=scrub(first,60),place=scrub(market,100);
+ setHeroName(name);
  el("welcomeTitle").textContent=name?"Welcome, "+name+"!":"Welcome to Iceworks";
  el("welcomeMessage").textContent=message?String(message).slice(0,650):"We've prepared a simple way to explore franchise startup costs and capital readiness"+(place?" for the "+place+" market":"")+". We invite you to take a look at your own pace.";
  el("welcomeFootnote").textContent=footnote||"Your detailed Financial Snapshot stays in your browser. Sharing a limited summary is optional.";
  el("welcomeOverlay").hidden=false;document.body.classList.add("has-modal");el("begin").focus();
 }
 function setMarket(place,ready){
- el("marketTitle").textContent=place?"Market Research · "+scrub(place,100):"Market Research Preview";
+ const locationLabel=scrub(place,100);
+ el("marketRegionLabel").textContent=locationLabel?locationLabel.toUpperCase():"MARKET NOT SELECTED";
+ el("marketTitle").textContent=locationLabel?"Market Research · "+locationLabel:"Market Research Preview";
  el("researchStatus").textContent=ready?"Iceworks has reviewed market research for this territory. Detailed findings are discussed by Iceworks separately; submission does not automatically unlock any report.":"No approved market-specific findings are available to show in this preview. Iceworks will determine what research can be discussed in a later conversation.";
 }
 async function initInvitation(){
@@ -721,6 +804,10 @@ const initialFocus=()=>{el("begin").addEventListener("click",()=>{
 };
 initialFocus();initInvitation();
 
+set("educationFranchiseFee",money(cfg.franchiseFeeIncluded));
+set("educationRoyalty",cfg.royaltyPercent+"% of gross revenue");
+set("educationTechnology",money(cfg.softwareMonthly)+" / month");
+set("educationConvention",money(cfg.conventionAnnual)+" / year");
 set("source",cfg.sourceLabel);set("updated",cfg.updated);render();
 })();
 </script></body></html>
