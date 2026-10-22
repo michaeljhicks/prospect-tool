@@ -56,6 +56,12 @@ main#adminMain{max-width:1120px;margin:18px auto;padding:0 15px 75px}
 #loginPanel{border-top:5px solid var(--ice-teal)}
 @media(max-width:790px){.subpage-deck{grid-template-columns:1fr;gap:13px}.site-navigation{padding:12px 18px}.nav-links{gap:14px}header.subpage-header h1{font-size:clamp(40px,8.4vw,75px)}}
 @media(max-width:540px){header.subpage-header h1{font-size:clamp(37px,10vw,60px)}.panel{padding:22px 17px}.subpage-eyebrow{margin-bottom:22px}.panel .grid,.panel .statrow{grid-template-columns:1fr}.panel .spread{align-items:flex-start;flex-direction:column}}
+
+/* Staff-controlled reason copy is displayed prominently but never interpreted as HTML. */
+.reason-editor{margin:15px 0 16px;padding:15px;border-top:1px solid #bfcfd4;background:#eff7f8}
+.reason-editor textarea{min-height:95px;margin-bottom:11px}
+.record-reason{border-left:3px solid #10819a;background:#eef7f9;padding:10px 12px;font-size:13px;white-space:pre-wrap}
+.record button.secondary{margin:10px 10px 8px 0}
 </style></head>
 <body>
 <nav class="site-navigation" aria-label="Site navigation">
@@ -82,9 +88,13 @@ main#adminMain{max-width:1120px;margin:18px auto;padding:0 15px 75px}
 <section class="panel"><div class="spread"><div><h2>Administration Dashboard</h2><p class="muted" id="staffLabel">Loading…</p></div><div class="row"><button id="refresh" class="secondary">Refresh</button><button id="logout" class="secondary">Sign out</button></div></div>
 <div class="statrow"><div class="stat"><small>Invitations</small><strong id="countInvites">0</strong></div><div class="stat"><small>Summaries received</small><strong id="countSubmitted">0</strong></div><div class="stat"><small>Active links</small><strong id="countActive">0</strong></div></div>
 <p class="notice">Only the consented readiness summary is received. Detailed personal assets, debts, salary, retirement and PUDI analyses are not shared with prospects or stored through this portal.</p></section>
-<section class="panel" id="createPanel"><h2>Create a personalized invitation</h2><p class="muted">Provide the first name, target market and optional welcome message. Every link is unique, expires automatically and should only be sent to the intended prospect.</p>
+<section class="panel" id="createPanel"><h2>Create a personalized invitation</h2><p class="muted">Add the prospect’s name and market, your personal welcome, and an explanation of why their experience interested Iceworks. Each invitation receives a unique, expiring link.</p>
 <form id="createForm"><div class="grid"><div><label for="firstName">Prospect's first name</label><input id="firstName" maxlength="80" required placeholder="Jim"></div><div><label for="marketName">Prospect market</label><input id="marketName" maxlength="140" required placeholder="Tucson, Arizona"></div><div><label for="expiresDays">Link expiration</label><select id="expiresDays"><option value="7">7 days</option><option value="14" selected>14 days</option><option value="30">30 days</option></select></div></div>
-<label for="welcomeText">Personal greeting (optional)</label><textarea maxlength="650" id="welcomeText" placeholder="Thanks again for taking a minute to speak with me about Iceworks. Here's a simple tool to explore startup capital at your own pace."></textarea><button type="submit" style="margin-top:12px">Generate invitation link</button></form>
+<label for="welcomeText">Personal greeting (optional)</label><p class="muted">Appears in the introductory welcome window.</p><textarea maxlength="650" id="welcomeText" placeholder="Thanks again for taking a minute to speak with me about Iceworks. Here's a simple tool to explore startup capital at your own pace."></textarea>
+<label for="selectionReason">Why have we selected this person?</label>
+<p class="muted">Appears on the prospect's page under “Why we're reaching out.” Be specific about their experience and the territory; don't imply an employment offer or guarantee of franchise approval.</p>
+<textarea maxlength="1200" id="selectionReason" rows="5" placeholder="We see that you've spent nearly 40 years with US Foods, building an impressive background in sales and developing markets. We're looking for someone to own and build an Iceworks franchise in Tucson, and your experience is the kind we're hoping to find."></textarea>
+<button type="submit" style="margin-top:12px">Generate invitation link</button></form>
 <div id="linkPanel" class="linkbox" style="margin-top:16px" hidden><strong>Copy your personalized link now</strong><p class="muted">For security, the full link is only shown immediately after creation. If you lose it, create a new invitation.</p><input id="generatedLink" readonly><button id="copyLink" class="secondary" style="margin-top:10px">Copy link</button></div>
 </section>
 <section class="panel"><h2>Invitations and submitted summaries</h2><p class="muted">Amounts are self-reported and unverified. A submission does not qualify someone financially or automatically release PUDI research.</p><div id="records"></div></section>
@@ -121,6 +131,27 @@ function showRecords(invitations,submissions){
  for(const i of invitations){
   const card=node("article","");card.className="record";
   const heading=node("h3",i.first_name+" · "+i.market_label);card.append(heading,node("small","Expires "+date(i.expires_at)+(i.revoked_at?" · Revoked":"")));
+  if(i.selection_reason){
+   const reason=node("p","Why we selected this person: "+i.selection_reason);
+   reason.className="record-reason";
+   card.append(reason);
+  }
+  if(role!=="viewer"&&!i.revoked_at){
+   const editor=document.createElement("div");
+   editor.className="reason-editor";editor.hidden=true;
+   const reasonLabel=node("label","Why have we selected this person?");
+   const field=document.createElement("textarea");field.maxLength=1200;field.value=i.selection_reason||"";
+   const save=node("button","Save selection reason");save.type="button";save.className="secondary";
+   save.addEventListener("click",async()=>{
+     save.disabled=true;
+     try{await api("update_reason",{invitation_id:i.id,selection_reason:field.value.trim()});await load()}
+     catch(e){alert(e.message);save.disabled=false}
+   });
+   editor.append(reasonLabel,field,save);
+   const toggle=node("button","Edit selection reason");toggle.type="button";toggle.className="secondary";
+   toggle.addEventListener("click",()=>{editor.hidden=!editor.hidden});
+   card.append(toggle,editor);
+  }
   const s=byId.get(i.id);
   if(s){
    card.append(node("p","Consented capital summary received "+date(s.consent_at)));
@@ -165,7 +196,7 @@ $("otpForm").addEventListener("submit",async e=>{
 $("createForm").addEventListener("submit",async e=>{
  e.preventDefault();
  try{
-  const r=await api("create",{first_name:$("firstName").value.trim(),market_label:$("marketName").value.trim(),welcome_message:$("welcomeText").value.trim(),expires_days:Number($("expiresDays").value)});
+  const r=await api("create",{first_name:$("firstName").value.trim(),market_label:$("marketName").value.trim(),welcome_message:$("welcomeText").value.trim(),selection_reason:$("selectionReason").value.trim(),expires_days:Number($("expiresDays").value)});
   $("generatedLink").value=r.invite_link;$("linkPanel").hidden=false;await load();
  }catch(e){alert(e.message)}
 });
