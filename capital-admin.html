@@ -162,12 +162,20 @@ function showRecords(invitations,submissions){
   if(canEdit&&!s){
    const bar=document.createElement("div");bar.className="invite-link-tools";
    const cached=activeLinks.get(i.id);
-   if(cached&&!expired){
-     const copy=node("button","Copy current link");copy.type="button";copy.className="secondary";
-     copy.addEventListener("click",()=>copyInvitation(cached,copy));
+   if(!expired&&(i.link_recoverable||cached)){
+     const copy=node("button","Copy invitation URL");copy.type="button";copy.className="secondary";
+     copy.addEventListener("click",async()=>{
+       copy.disabled=true;
+       try{
+         const result=await api("get_link",{invitation_id:i.id});
+         activeLinks.set(i.id,result.invite_link);
+         await copyInvitation(result.invite_link,copy);
+       }catch(e){alert(e.message)}
+       finally{copy.disabled=false}
+     });
      bar.append(copy);
    }
-   const renew=node("button",expired?"Renew & copy fresh link":"Generate & copy fresh link");
+   const renew=node("button",expired?"Reactivate for 14 days":i.link_recoverable?"Replace current URL":"Create recoverable URL");
    renew.className="secondary";renew.type="button";
    renew.title="Creates a new secure URL. Previously issued links for this invitation stop working.";
    renew.addEventListener("click",async()=>{
@@ -185,7 +193,7 @@ function showRecords(invitations,submissions){
      }catch(e){alert(e.message);renew.disabled=false}
    });
    bar.append(renew);
-   bar.append(node("p","For security, older invitation tokens cannot be retrieved. Generating a new link invalidates the previous URL; existing prospect details stay in place."));
+   bar.append(node("p","Active links can be copied again at any time when recoverable. Older invitations may require a one-time URL replacement. Reactivation or replacement preserves prospect details but invalidates previously issued URLs."));
    card.append(bar);
   }
   if(s){
