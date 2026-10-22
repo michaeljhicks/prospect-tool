@@ -846,12 +846,16 @@ function initSingleMachineNumbers(){
   eln("flourishBox").hidden=false;
   eln("flourishSource").href="https://public.flourish.studio/visualisation/"+id+"/";
   eln("loadFlourish").addEventListener("click",()=>{
-    const frame=document.createElement("iframe");
-    frame.src="https://flo.uri.sh/visualisation/"+id+"/embed";
-    frame.loading="lazy";frame.title="Additional Iceworks interactive graphic powered by Flourish";
-    frame.referrerPolicy="no-referrer";
-    frame.setAttribute("sandbox","allow-same-origin allow-scripts allow-forms allow-popups");
-    eln("flourishCanvas").replaceChildren(frame);
+    const placeholder=document.createElement("div");
+    placeholder.className="flourish-embed flourish-chart";
+    placeholder.dataset.src="visualisation/"+id;
+    placeholder.setAttribute("aria-label","Interactive Iceworks visualization powered by Flourish");
+    eln("flourishCanvas").replaceChildren(placeholder);
+    const script=document.createElement("script");
+    script.src="https://public.flourish.studio/resources/embed.js";
+    script.async=true;
+    script.onerror=()=>{eln("flourishCanvas").append(document.createTextNode("Unable to load the chart. Open it using the Flourish source link below."))};
+    document.head.appendChild(script);
     eln("loadFlourish").hidden=true;
   },{once:true});
  }
