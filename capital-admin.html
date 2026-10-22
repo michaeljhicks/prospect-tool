@@ -62,6 +62,9 @@ main#adminMain{max-width:1120px;margin:18px auto;padding:0 15px 75px}
 .reason-editor textarea{min-height:95px;margin-bottom:11px}
 .record-reason{border-left:3px solid #10819a;background:#eef7f9;padding:10px 12px;font-size:13px;white-space:pre-wrap}
 .record button.secondary{margin:10px 10px 8px 0}
+.invite-link-tools{display:flex;gap:9px;flex-wrap:wrap;align-items:center;border-top:1px solid #d3e1e5;margin-top:14px;padding-top:12px}
+.invite-link-tools>p{width:100%;margin:3px 0 0;font-size:12px;color:#526e7d;line-height:1.55}
+.invite-link-tools button{margin:2px 0}
 </style></head>
 <body>
 <nav class="site-navigation" aria-label="Site navigation">
@@ -109,6 +112,7 @@ const supabase=createClient("https://dzfbhppoyhnmrchcnzsl.supabase.co","sb_publi
 const endpoint="https://dzfbhppoyhnmrchcnzsl.supabase.co/functions/v1/iceworks-capital-admin";
 const $=id=>document.getElementById(id), fmt=n=>Number(n||0).toLocaleString("en-US",{style:"currency",currency:"USD",maximumFractionDigits:0});
 let role="";
+const activeLinks=new Map(); // ephemeral; no raw invitation tokens persist to storage
 const node=(tag,content)=>{const n=document.createElement(tag);n.textContent=String(content);return n};
 const date=v=>v?new Date(v).toLocaleDateString():"–";
 async function api(action,args={}){
@@ -153,6 +157,45 @@ function showRecords(invitations,submissions){
    card.append(toggle,editor);
   }
   const s=byId.get(i.id);
+  const canEdit=role!=="viewer"&&!i.revoked_at;
+  const expired=new Date(i.expires_at)<=new Date();
+  if(canEdit&&!s){
+   const bar=document.createElement("div");bar.className="invite-link-tools";
+   const cached=activeLinks.get(i.id);
+   if(!expired&&(i.link_recoverable||cached)){
+     const copy=node("button","Copy invitation URL");copy.type="button";copy.className="secondary";
+     copy.addEventListener("click",async()=>{
+       copy.disabled=true;
+       try{
+         const result=await api("get_link",{invitation_id:i.id});
+         activeLinks.set(i.id,result.invite_link);
+         await copyInvitation(result.invite_link,copy);
+       }catch(e){alert(e.message)}
+       finally{copy.disabled=false}
+     });
+     bar.append(copy);
+   }
+   const renew=node("button",expired?"Reactivate for 14 days":i.link_recoverable?"Replace current URL":"Create recoverable URL");
+   renew.className="secondary";renew.type="button";
+   renew.title="Creates a new secure URL. Previously issued links for this invitation stop working.";
+   renew.addEventListener("click",async()=>{
+     const ask=expired
+       ?"Renew this expired invitation for another 14 days? The previously issued URL will no longer work."
+       :"Generate a new URL for this invitation? Any previously emailed URL will stop working. You will need to send the replacement link.";
+     if(!confirm(ask))return;
+     renew.disabled=true;
+     try{
+       const result=await api("refresh_link",{invitation_id:i.id,expires_days:14});
+       activeLinks.set(i.id,result.invite_link);
+       showNewInvitationLink(result.invite_link);
+       await copyInvitation(result.invite_link);
+       await load();
+     }catch(e){alert(e.message);renew.disabled=false}
+   });
+   bar.append(renew);
+   bar.append(node("p","Active links can be copied again at any time when recoverable. Older invitations may require a one-time URL replacement. Reactivation or replacement preserves prospect details but invalidates previously issued URLs."));
+   card.append(bar);
+  }
   if(s){
    card.append(node("p","Consented capital summary received "+date(s.consent_at)));
    addPair(card,"Deployable funds",fmt(s.summary.deployable_funds));
@@ -169,6 +212,15 @@ function showRecords(invitations,submissions){
   }
   box.append(card);
  }
+}
+function showNewInvitationLink(url){
+ $("generatedLink").value=url;
+ $("linkPanel").hidden=false;
+ $("copyLink").textContent="Copy link";
+}
+async function copyInvitation(url,button){
+ try{await navigator.clipboard.writeText(url);if(button)button.textContent="Copied"}
+ catch(e){showNewInvitationLink(url);$("generatedLink").select();alert("Clipboard access wasn't available. Use the highlighted link in the invitation box.")}
 }
 async function load(){
  const person=await api("whoami");role=person.role;
@@ -197,11 +249,11 @@ $("createForm").addEventListener("submit",async e=>{
  e.preventDefault();
  try{
   const r=await api("create",{first_name:$("firstName").value.trim(),market_label:$("marketName").value.trim(),welcome_message:$("welcomeText").value.trim(),selection_reason:$("selectionReason").value.trim(),expires_days:Number($("expiresDays").value)});
-  $("generatedLink").value=r.invite_link;$("linkPanel").hidden=false;await load();
+  activeLinks.set(r.invitation_id,r.invite_link);showNewInvitationLink(r.invite_link);await load();
  }catch(e){alert(e.message)}
 });
 $("copyLink").addEventListener("click",async()=>{
- try{await navigator.clipboard.writeText($("generatedLink").value);$("copyLink").textContent="Copied"}catch(e){$("generatedLink").select();alert("Copy the highlighted invitation link.")}
+ await copyInvitation($("generatedLink").value,$("copyLink"));
 });
 $("grantForm").addEventListener("submit",async e=>{
  e.preventDefault();

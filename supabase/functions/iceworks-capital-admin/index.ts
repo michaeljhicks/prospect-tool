@@ -14,6 +14,30 @@ const db=createClient(Deno.env.get("SUPABASE_URL")||"",Deno.env.get("SUPABASE_SE
 const uuid=/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 const emailPattern=/^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const hash=async(t:string)=>[...new Uint8Array(await crypto.subtle.digest("SHA-256",new TextEncoder().encode(t)))].map(n=>n.toString(16).padStart(2,"0")).join("");
+// Bearer URLs are sealed with AES-GCM using a key derived from the server-only
+// Supabase service credential. No token plaintext or decryption key is exposed
+// to the browser, database client roles, repository, or function responses except
+// during a specifically authorized copy request.
+const tokenKey=async()=>{
+ const keyMaterial=Deno.env.get("SUPABASE_SERVICE_ROLE_KEY");
+ if(!keyMaterial)throw Error("Missing backend encryption secret");
+ const raw=await crypto.subtle.digest("SHA-256",new TextEncoder().encode("iceworks-invitation-recovery-v1:"+keyMaterial));
+ return crypto.subtle.importKey("raw",raw,{name:"AES-GCM"},false,["encrypt","decrypt"]);
+};
+const b64=(bytes:Uint8Array)=>btoa(String.fromCharCode(...bytes));
+const unb64=(v:string)=>Uint8Array.from(atob(v),c=>c.charCodeAt(0));
+const sealToken=async(token:string)=>{
+ const iv=crypto.getRandomValues(new Uint8Array(12));
+ const encrypted=await crypto.subtle.encrypt({name:"AES-GCM",iv},await tokenKey(),new TextEncoder().encode(token));
+ return b64(iv)+"."+b64(new Uint8Array(encrypted));
+};
+const unsealToken=async(ciphertext:string)=>{
+ const parts=ciphertext.split(".");if(parts.length!==2)throw Error("Invalid encrypted invitation");
+ const plain=await crypto.subtle.decrypt({name:"AES-GCM",iv:unb64(parts[0])},await tokenKey(),unb64(parts[1]));
+ const token=new TextDecoder().decode(plain);
+ if(!/^[a-f0-9]{48}$/.test(token))throw Error("Invalid invitation token");
+ return token;
+};
 const audit=async(email:string,action:string,invitation_id:string|null=null,details:Record<string,unknown>={})=>{
  await db.from("iceworks_portal_audit").insert({actor_email:email,action,invitation_id,details});
 };
@@ -38,12 +62,12 @@ Deno.serve(async req=>{
   if(action==="whoami")return respond({email,role:staff.role});
   if(action==="list"){
    const {data:invitations,error:e1}=await db.from("iceworks_capital_invitations")
-     .select("id,first_name,market_label,welcome_message,selection_reason,created_at,expires_at,revoked_at")
+     .select("id,first_name,market_label,welcome_message,selection_reason,created_at,expires_at,revoked_at,token_ciphertext")
      .order("created_at",{ascending:false}).limit(100);
    const {data:submissions,error:e2}=await db.from("iceworks_capital_submissions")
      .select("invitation_id,consent_at,summary").order("consent_at",{ascending:false}).limit(100);
    if(e1||e2)return reject(503);
-   return respond({invitations,submissions});
+   return respond({invitations:invitations?.map(({token_ciphertext,...row})=>({...row,link_recoverable:!!token_ciphertext}))??[],submissions});
   }
   if(action==="create"){
    if(!writeAccess)return reject();
@@ -55,7 +79,7 @@ Deno.serve(async req=>{
    const token_hash=await hash(token);
    const expires_at=new Date(Date.now()+days*86400000).toISOString();
    const {data:inv,error}=await db.from("iceworks_capital_invitations")
-     .insert({token_hash,first_name:first,market_label:market,welcome_message:message,selection_reason:selectionReason,expires_at})
+     .insert({token_hash,token_ciphertext:await sealToken(token),first_name:first,market_label:market,welcome_message:message,selection_reason:selectionReason,expires_at})
      .select("id").single();
    if(error||!inv)return reject(503);
    await audit(email,"create_invitation",inv.id,{market});
@@ -70,6 +94,41 @@ Deno.serve(async req=>{
    if(error||!data)return reject(404);
    await audit(email,"update_invitation_reason",data.id);
    return respond({ok:true});
+  }
+  if(action==="get_link"){
+   if(!writeAccess||typeof params.invitation_id!=="string"||!uuid.test(params.invitation_id))return reject(400);
+   const {data:record,error}=await db.from("iceworks_capital_invitations")
+     .select("id,token_hash,token_ciphertext,expires_at,revoked_at")
+     .eq("id",params.invitation_id).maybeSingle();
+   if(error||!record||record.revoked_at)return reject(404);
+   if(Date.parse(record.expires_at)<=Date.now())return respond({error:"Invitation expired. Renew it to issue a new link."},410);
+   if(!record.token_ciphertext)return respond({error:"This older invitation has no recoverable URL. Generate a new link to enable copying later."},409);
+   const token=await unsealToken(record.token_ciphertext);
+   if(await hash(token)!==record.token_hash)return reject(503);
+   await audit(email,"copy_invitation_url",record.id);
+   return respond({invite_link:"https://michaeljhicks.github.io/prospect-tool/capital-readiness.html#invite="+token,expires_at:record.expires_at});
+  }
+  if(action==="refresh_link"){
+   if(!writeAccess||typeof params.invitation_id!=="string"||!uuid.test(params.invitation_id))return reject(400);
+   const days=Number(params.expires_days??14);
+   if(!Number.isInteger(days)||days<1||days>30)return reject(400);
+   const {data:existing,error:lookupError}=await db.from("iceworks_capital_invitations")
+     .select("id,first_name,market_label,revoked_at,expires_at")
+     .eq("id",params.invitation_id).maybeSingle();
+   if(lookupError||!existing||existing.revoked_at)return reject(404);
+   const {data:submitted,error:submittedError}=await db.from("iceworks_capital_submissions")
+     .select("id").eq("invitation_id",existing.id).limit(1).maybeSingle();
+   if(submittedError)return reject(503);
+   if(submitted)return respond({error:"This prospect already submitted a summary; please create a new invitation if needed."},409);
+   const token=[...crypto.getRandomValues(new Uint8Array(24))].map(n=>n.toString(16).padStart(2,"0")).join("");
+   const token_hash=await hash(token);
+   const expires_at=new Date(Date.now()+days*86400000).toISOString();
+   const {data:updated,error:updateError}=await db.from("iceworks_capital_invitations")
+     .update({token_hash,token_ciphertext:await sealToken(token),expires_at}).eq("id",existing.id).is("revoked_at",null)
+     .select("id").maybeSingle();
+   if(updateError||!updated)return reject(503);
+   await audit(email,"rotate_or_renew_invitation",existing.id,{market:existing.market_label,previously_expired:Date.parse(existing.expires_at)<=Date.now(),days});
+   return respond({invitation_id:existing.id,expires_at,invite_link:"https://michaeljhicks.github.io/prospect-tool/capital-readiness.html#invite="+token,previous_link_invalidated:true});
   }
   if(action==="revoke"){
    if(!writeAccess||typeof params.invitation_id!=="string"||!uuid.test(params.invitation_id))return reject(400);
