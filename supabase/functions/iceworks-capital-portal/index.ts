@@ -43,13 +43,13 @@ Deno.serve(async req=>{
   const token=body.token;
   if(typeof token!=="string"||!/^[a-f0-9]{48}$/.test(token))return fail("Invalid invitation",404);
   const hash=await tokenHash(token);
-  const {data:inv,error}=await db.from("iceworks_capital_invitations").select("id,first_name,market_label,welcome_message,report_id,expires_at,revoked_at").eq("token_hash",hash).maybeSingle();
+  const {data:inv,error}=await db.from("iceworks_capital_invitations").select("id,first_name,market_label,welcome_message,selection_reason,report_id,expires_at,revoked_at").eq("token_hash",hash).maybeSingle();
   if(error||!inv||inv.revoked_at||Date.parse(inv.expires_at)<Date.now())return fail("Invitation unavailable or expired",404);
   const {data:existing,error:subError}=await db.from("iceworks_capital_submissions").select("id").eq("invitation_id",inv.id).maybeSingle();
   if(subError)return fail("Temporary service issue",503);
   const ready=await hasApprovedReport(inv);
   if(body.action==="resolve"){
-   return json({invitation:{first_name:inv.first_name,market_label:inv.market_label,welcome_message:inv.welcome_message,report_ready:ready},submitted:!!existing});
+   return json({invitation:{first_name:inv.first_name,market_label:inv.market_label,welcome_message:inv.welcome_message,selection_reason:inv.selection_reason,report_ready:ready},submitted:!!existing});
   }
   if(body.action==="submit"){
    if(existing)return json({submitted:true,review_status:"pending_iceworks_review"});

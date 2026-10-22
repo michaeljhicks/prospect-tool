@@ -38,7 +38,7 @@ Deno.serve(async req=>{
   if(action==="whoami")return respond({email,role:staff.role});
   if(action==="list"){
    const {data:invitations,error:e1}=await db.from("iceworks_capital_invitations")
-     .select("id,first_name,market_label,welcome_message,created_at,expires_at,revoked_at")
+     .select("id,first_name,market_label,welcome_message,selection_reason,created_at,expires_at,revoked_at")
      .order("created_at",{ascending:false}).limit(100);
    const {data:submissions,error:e2}=await db.from("iceworks_capital_submissions")
      .select("invitation_id,consent_at,summary").order("consent_at",{ascending:false}).limit(100);
@@ -47,19 +47,29 @@ Deno.serve(async req=>{
   }
   if(action==="create"){
    if(!writeAccess)return reject();
-   const first=String(params.first_name||"").trim(),market=String(params.market_label||"").trim(),message=String(params.welcome_message||"").trim();
+   const first=String(params.first_name||"").trim(),market=String(params.market_label||"").trim(),message=String(params.welcome_message||"").trim(),selectionReason=String(params.selection_reason||"").trim();
    const days=Number(params.expires_days??14);
-   if(!first||first.length>80||!market||market.length>140||message.length>650
+   if(!first||first.length>80||!market||market.length>140||message.length>650||selectionReason.length>1200
      ||!Number.isInteger(days)||days<1||days>30)return reject(400);
    const token=[...crypto.getRandomValues(new Uint8Array(24))].map(n=>n.toString(16).padStart(2,"0")).join("");
    const token_hash=await hash(token);
    const expires_at=new Date(Date.now()+days*86400000).toISOString();
    const {data:inv,error}=await db.from("iceworks_capital_invitations")
-     .insert({token_hash,first_name:first,market_label:market,welcome_message:message,expires_at})
+     .insert({token_hash,first_name:first,market_label:market,welcome_message:message,selection_reason:selectionReason,expires_at})
      .select("id").single();
    if(error||!inv)return reject(503);
    await audit(email,"create_invitation",inv.id,{market});
    return respond({invitation_id:inv.id,expires_at,invite_link:"https://michaeljhicks.github.io/prospect-tool/capital-readiness.html#invite="+token});
+  }
+  if(action==="update_reason"){
+   if(!writeAccess||typeof params.invitation_id!=="string"||!uuid.test(params.invitation_id))return reject(400);
+   if(typeof params.selection_reason!=="string"||params.selection_reason.length>1200)return reject(400);
+   const selectionReason=params.selection_reason.trim();
+   const {data,error}=await db.from("iceworks_capital_invitations")
+     .update({selection_reason:selectionReason}).eq("id",params.invitation_id).is("revoked_at",null).select("id").maybeSingle();
+   if(error||!data)return reject(404);
+   await audit(email,"update_invitation_reason",data.id);
+   return respond({ok:true});
   }
   if(action==="revoke"){
    if(!writeAccess||typeof params.invitation_id!=="string"||!uuid.test(params.invitation_id))return reject(400);
