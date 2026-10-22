@@ -162,7 +162,7 @@ header.editorial-header a{color:inherit}
 .eyebrow-spread{margin:17px 0 45px}
 .hero-masthead{display:flex;flex-direction:column;align-items:flex-start;width:100%;line-height:.77;margin:0 0 41px;color:var(--ice-deep);user-select:none}
 .hero-masthead span{display:block;font-family:var(--ice-display);font-weight:1000;font-stretch:condensed;letter-spacing:-.09em;font-size:clamp(64px,12vw,160px);white-space:nowrap}
-.hero-masthead .masthead-second{align-self:flex-end;font-size:clamp(66px,13vw,175px);margin:0}
+.hero-masthead .masthead-second{align-self:flex-start;font-size:clamp(66px,13vw,175px);margin:0}
 .hero-masthead .masthead-period{display:inline;color:var(--ice-teal);font:inherit}
 .hero-story{border-top:1px solid var(--ice-rule);border-bottom:1px solid var(--ice-rule);display:grid;grid-template-columns:1.15fr .85fr;min-height:245px}
 .hero-serif{font-family:var(--ice-serif);font-weight:400;font-size:clamp(58px,7.15vw,94px);line-height:.89;letter-spacing:-.075em;padding:26px 14px 29px 0}
@@ -296,6 +296,18 @@ html:focus-within{scroll-behavior:smooth}
 .market-spacer span:last-child{text-align:right}
 @media(max-width:790px){.education-head{grid-template-columns:1fr}.education-grid{grid-template-columns:1fr}.education-item,.education-item:nth-child(even){padding:22px 0;border-left:0}.franchise-education{padding-top:25px}.hero-masthead{min-height:unset}.education-head h2{font-size:clamp(38px,7vw,55px)}}
 @media(max-width:540px){.site-navigation .nav-links{gap:8px;flex-wrap:wrap;justify-content:flex-end}.site-navigation .nav-links a{font-size:9px}.education-item h3{font-size:23px}.hero-masthead.long-person-name .masthead-second{font-size:clamp(32px,8vw,56px)}.market-spacer{align-items:flex-start}.market-spacer span:last-child{max-width:48%;overflow-wrap:anywhere}}
+
+/* V1.5: left-stacked personalized salutation and plain-language two-column introduction. */
+.hero-masthead,.hero-masthead .masthead-first,.hero-masthead .masthead-second{align-items:flex-start;text-align:left}
+.hero-masthead .masthead-second{align-self:flex-start!important;margin-left:0!important;text-align:left}
+.hero-welcome{padding:31px 34px 30px 0}
+.hero-welcome h2{font-family:var(--ice-serif);font-size:clamp(56px,7.5vw,98px);font-weight:400;line-height:.94;letter-spacing:-.075em;margin:0 0 22px}
+.editorial-header .hero-welcome p{font-size:16px;line-height:1.73;color:#315363;max-width:475px;margin:0}
+.hero-story-aside h3{font-family:var(--ice-display);font-size:clamp(19px,2.2vw,25px);font-weight:900;letter-spacing:-.055em;line-height:1.2;margin:1px 0 16px}
+.editorial-header .hero-story-aside #selectionReason{font-size:16px;font-weight:520;line-height:1.68}
+.editorial-header .hero-story-aside .hero-small{font-size:12px;line-height:1.65;margin-top:5px}
+@media(max-width:790px){.hero-welcome{padding:26px 0}.hero-welcome h2{font-size:clamp(54px,10vw,84px)}}
+@media(max-width:540px){.hero-welcome h2{font-size:54px}.editorial-header .hero-welcome p{font-size:15px}.editorial-header .hero-story-aside #selectionReason{font-size:15px}}
 </style>
 <script src="capital-readiness-config.js"></script>
 <script src="capital-portal-config.js"></script>
@@ -326,10 +338,14 @@ html:focus-within{scroll-behavior:smooth}
     <span class="masthead-second" id="heroPersonName">THERE<span class="masthead-period">.</span></span>
   </div>
   <div class="hero-story">
-    <div class="hero-serif">Before you<br><em>invest.</em></div>
+    <div class="hero-welcome">
+      <h2>Welcome.</h2>
+      <p>Welcome to our Capital Readiness Explorer tool. Here you can learn about franchise startup costs, review your own available funding, and see what questions to discuss with Iceworks.</p>
+    </div>
     <div class="hero-story-aside">
-      <p>A franchise is a business you own and operate under an agreement with another company. Before deciding whether Iceworks is right for you, it's worth understanding the startup investment, ongoing fees, responsibilities, and risks.</p>
-      <p class="hero-small">This guide explains the basics and gives you a place to evaluate your available capital. It does not estimate your future sales or profits.</p>
+      <h3>Why we're reaching out</h3>
+      <p id="selectionReason">Iceworks looks for prospective owners with relevant industry, sales, or business experience. If we've invited you personally, this is where we'll explain why your background caught our attention.</p>
+      <p class="hero-small">Work through the guide at your own pace. Your detailed financial entries stay in your browser; sharing a limited summary is optional.</p>
       <a class="hero-action" href="#explorer">Explore startup costs <span aria-hidden="true">↗</span></a>
     </div>
   </div>
@@ -349,9 +365,7 @@ html:focus-within{scroll-behavior:smooth}
         <div class="education-number">02 / THE DOCUMENT</div>
         <h3>What is an FDD?</h3>
         <p><strong>FDD</strong> stands for <strong>Franchise Disclosure Document</strong>. It's the formal disclosure document you receive before entering a franchise agreement. It describes fees, estimated startup costs, the franchisor's obligations, restrictions, franchisee information, and other important terms. Read it carefully and have your lawyer and accountant review it.</p>
-        <details class="education-details"><summary>Which FDD sections should I look at?</summary>
-          <p><strong>Item 5</strong> — initial fees; <strong>Item 6</strong> — other fees; <strong>Item 7</strong> — estimated initial investment; <strong>Item 19</strong> — financial performance representations, if any; <strong>Item 20</strong> — franchise outlets and franchisee contacts. These are starting points, not a substitute for reading the entire FDD.</p>
-        </details>
+
       </article>
       <article class="education-item">
         <div class="education-number">03 / THE COSTS</div>
@@ -627,6 +641,12 @@ function setHeroName(name){
  masthead.setAttribute("aria-label","Hey "+(clean||"there"));
  masthead.classList.toggle("long-person-name",display.length>9);
 }
+function setSelectionReason(reason){
+ const field=el("selectionReason");
+ if(!field)return;
+ const clean=String(reason??"").replace(/[<>\u0000-\u001F\u007F]/g,"").trim().slice(0,1200);
+ field.textContent=clean||"Iceworks looks for prospective owners with relevant industry, sales, or business experience. If we've invited you personally, this is where we'll explain why your background caught our attention.";
+}
 function setWelcome(first,market,message,footnote){
  const name=scrub(first,60),place=scrub(market,100);
  setHeroName(name);
@@ -649,6 +669,7 @@ async function initInvitation(){
   const name=scrub(params.get("first")||"Jim",50);
   const market=scrub(params.get("market")||"Tucson, Arizona",95);
   setMarket(market,false);
+  setSelectionReason(params.get("why"));
   setWelcome(name,market,"This is a demonstration of a personalized Iceworks invitation for "+market+". The capital explorer is fully interactive; any financial entries remain in this browser. Secure submission is not enabled in this demo, and reports are never unlocked automatically.","Demo invitation — not a verified market report or official franchise offer.");
   el("researchStatus").textContent="Example market preview only. No market-specific PUDI research or score is represented by this demo.";
   return
@@ -659,6 +680,7 @@ async function initInvitation(){
     invitation=result.invitation;
     if(!invitation)throw Error("Invitation not found");
     setMarket(invitation.market_label,!!invitation.report_ready);
+    setSelectionReason(invitation.selection_reason);
     setWelcome(invitation.first_name,invitation.market_label,invitation.welcome_message);
     if(result.submitted){el("portalAlert").hidden=false;el("portalAlert").textContent="A limited summary was previously submitted with this invitation. Iceworks will review it before any separate market discussion.";}
 
