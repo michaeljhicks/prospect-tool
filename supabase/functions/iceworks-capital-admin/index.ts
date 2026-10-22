@@ -117,7 +117,7 @@ Deno.serve(async req=>{
      .eq("id",params.invitation_id).maybeSingle();
    if(lookupError||!existing||existing.revoked_at)return reject(404);
    const {data:submitted,error:submittedError}=await db.from("iceworks_capital_submissions")
-     .select("id").eq("invitation_id",existing.id).maybeSingle();
+     .select("id").eq("invitation_id",existing.id).limit(1).maybeSingle();
    if(submittedError)return reject(503);
    if(submitted)return respond({error:"This prospect already submitted a summary; please create a new invitation if needed."},409);
    const token=[...crypto.getRandomValues(new Uint8Array(24))].map(n=>n.toString(16).padStart(2,"0")).join("");
