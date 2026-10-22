@@ -308,8 +308,65 @@ html:focus-within{scroll-behavior:smooth}
 .editorial-header .hero-story-aside .hero-small{font-size:12px;line-height:1.65;margin-top:5px}
 @media(max-width:790px){.hero-welcome{padding:26px 0}.hero-welcome h2{font-size:clamp(54px,10vw,84px)}}
 @media(max-width:540px){.hero-welcome h2{font-size:54px}.editorial-header .hero-welcome p{font-size:15px}.editorial-header .hero-story-aside #selectionReason{font-size:15px}}
+
+/* Iceworks business primer, single-unit operating facts and cost-only nine-year graph */
+.iceworks-story{border-top:1px solid var(--ice-rule);padding:37px 0 38px}
+.iceworks-story h2,.numbers-intro h2{font-family:var(--ice-display);font-size:clamp(34px,5vw,62px);font-weight:930;letter-spacing:-.07em;line-height:.98;margin:12px 0 24px}
+.iceworks-story h2 em,.numbers-intro h2 em{font-family:var(--ice-serif);font-style:normal;font-weight:400}
+.iceworks-story-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));border-top:1px solid var(--ice-rule)}
+.iceworks-story-grid article{padding:26px 20px 6px 0}
+.iceworks-story-grid article+article{padding-left:20px;border-left:1px solid var(--ice-rule)}
+.iceworks-story-grid h3{font-family:var(--ice-display);font-weight:840;letter-spacing:-.04em;font-size:20px;line-height:1.16}
+.editorial-header .iceworks-story-grid p{color:#375769;font-size:14px;line-height:1.73}
+.hero-welcome p+p{margin-top:15px!important}
+.education-bottom-rule{display:flex;justify-content:space-between;gap:15px;border-top:7px solid var(--ice-deep);padding-top:18px;margin-top:55px;font-size:10px;letter-spacing:.13em;font-weight:800}
+.franchise-education{margin:0;border-top:0}
+.franchise-education .education-head>p{font-size:16px;line-height:1.7;color:#345868;max-width:355px}
+.franchise-education .education-item p{font-size:14px;line-height:1.75;color:#294959;margin:10px 0}
+.franchise-education .education-footnote{font-size:11px!important;color:#527584!important}
+.franchise-education .education-reference{font-size:12px;color:#527384}
+.numbers-section{border-top:7px solid var(--ice-deep);padding:16px 0 40px;margin:20px 0 36px}
+.numbers-index{display:flex;justify-content:space-between;gap:20px;font-size:10px;font-weight:850;letter-spacing:.12em}
+.numbers-intro{display:grid;grid-template-columns:1fr .9fr;align-items:end;gap:38px;padding:20px 0 28px}
+.numbers-intro p{font-size:16px;line-height:1.65;color:#345569;max-width:430px;margin:0 0 4px}
+.numbers-facts{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.numbers-facts article{background:white;border-top:5px solid var(--ice-teal);padding:22px 22px 17px;min-width:0}
+.numbers-fact-title{font-weight:830;font-size:14px;line-height:1.4}
+.numbers-fact-title span{display:block;color:#547485;font-size:11px;font-weight:500;margin:4px 0}
+.numbers-fact-value{font-family:var(--ice-display);font-size:clamp(25px,3vw,37px);font-weight:930;letter-spacing:-.05em;margin:22px 0 8px}
+.numbers-facts article p{font-size:12px;line-height:1.6;color:#466879}
+.numbers-workspace{background:white;border:1px solid #d2e0e4;padding:clamp(24px,4vw,38px);margin-top:16px}
+.numbers-workspace-head{display:grid;grid-template-columns:1fr .9fr;gap:30px;padding-bottom:16px}
+.numbers-workspace-head h3{font-family:var(--ice-display);font-size:clamp(23px,3.4vw,36px);letter-spacing:-.055em;line-height:1.1;margin:11px 0}
+.numbers-workspace-head p{font-size:13px;line-height:1.7;color:#45687a;margin:0}
+.numbers-controls{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;padding:18px 0;border-top:1px solid #d2e0e4}
+.numbers-controls label{font-size:12px;font-weight:780}
+.numbers-controls input,.numbers-controls select{display:block;margin-top:7px;width:100%;padding:11px;border:1px solid #b4cdd6;border-radius:3px;font:inherit}
+.numbers-chart-wrap{border-top:1px solid #d4e2e5;padding-top:15px}
+.numbers-chart-title{display:flex;justify-content:space-between;gap:10px;font-size:14px}
+.numbers-chart-title span{font-size:12px;color:#5c7888}
+#unitCostChart{display:block;width:100%;height:auto;margin:12px auto 0;touch-action:pan-y}
+.numbers-legend{display:flex;gap:18px;flex-wrap:wrap;font-size:12px;color:#34576b}
+.numbers-legend span{display:flex;align-items:center;gap:7px}
+.numbers-legend i{display:inline-block;height:4px;width:23px;background:#08344a}
+.numbers-legend .legend-equipment{background:#08768f}
+.numbers-legend .legend-pm{background:#6c8da3}
+.numbers-slider-label{display:block;margin:19px 0 6px;font-size:12px;font-weight:750}
+#unitMonth{width:100%;accent-color:var(--ice-teal)}
+.numbers-chart-summary{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:9px;margin-top:15px}
+.numbers-chart-summary>div{background:#e9f4f6;padding:13px 12px;min-width:0}
+.numbers-chart-summary small{display:block;color:#40687b;font-size:11px}
+.numbers-chart-summary strong{display:block;font-family:var(--ice-display);letter-spacing:-.035em;font-size:clamp(15px,2.4vw,24px);margin-top:8px;overflow-wrap:anywhere}
+.numbers-caveat{font-size:12px;line-height:1.7;margin-top:20px;color:#4b6a79}
+.flourish-box{border-top:1px solid #cedee3;padding-top:18px;margin-top:24px}
+.flourish-box p{font-size:13px;line-height:1.6}
+#flourishCanvas iframe{width:100%;height:550px;border:none;margin-top:12px}
+@media(max-width:790px){.iceworks-story-grid,.numbers-facts{grid-template-columns:1fr}.iceworks-story-grid article+article{border-left:0;border-top:1px solid var(--ice-rule);padding-left:0}.numbers-intro,.numbers-workspace-head{grid-template-columns:1fr;gap:8px}.numbers-controls{grid-template-columns:1fr}.numbers-chart-summary{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:540px){.numbers-chart-summary strong{font-size:19px}.numbers-index,.education-bottom-rule{font-size:8px}.numbers-fact-value{font-size:32px}.numbers-chart-title{flex-direction:column;gap:3px}}
+@media print{.numbers-controls,.numbers-slider-label,#unitMonth,.flourish-box{display:none}}
 </style>
 <script src="capital-readiness-config.js"></script>
+<script src="numbers-reference-config.js"></script>
 <script src="capital-portal-config.js"></script>
 </head><body>
 
@@ -332,15 +389,16 @@ html:focus-within{scroll-behavior:smooth}
   </nav>
   <div class="editorial-hero" id="franchiseBasics">
   <div class="heavy-rule" aria-hidden="true"></div>
-  <div class="eyebrow-spread"><span>01 / FRANCHISE BASICS</span></div>
+  <div class="eyebrow-spread"><span>01 / ICEWORKS BASICS</span></div>
   <div class="hero-masthead" aria-label="Hey there" id="heroMasthead">
     <span class="masthead-first">HEY</span>
     <span class="masthead-second" id="heroPersonName">THERE<span class="masthead-period">.</span></span>
   </div>
   <div class="hero-story">
     <div class="hero-welcome">
-      <h2>Welcome.</h2>
-      <p>Welcome to our Capital Readiness Explorer tool. Here you can learn about franchise startup costs, review your own available funding, and see what questions to discuss with Iceworks.</p>
+      <h2>What is<br><em>Iceworks?</em></h2>
+      <p>Iceworks is a locally owned commercial ice-machine leasing business. Instead of asking restaurants and other businesses to purchase an expensive ice machine outright, we provide the equipment and ongoing service through a monthly agreement.</p>
+      <p>We're looking for people who want to own a local Iceworks operation and build it gradually—potentially alongside an existing career, where employer obligations and the time required allow. It's business ownership, not a job offer or a promise of part-time earnings.</p>
     </div>
     <div class="hero-story-aside">
       <h3>Why we're reaching out</h3>
@@ -349,54 +407,76 @@ html:focus-within{scroll-behavior:smooth}
       <a class="hero-action" href="#explorer">Explore startup costs <span aria-hidden="true">↗</span></a>
     </div>
   </div>
-  <section class="franchise-education" aria-labelledby="franchiseEducationTitle">
-    <div class="education-head">
-      <div><div class="education-section-label">A SHORT GUIDE TO FRANCHISING</div>
-        <h2 id="franchiseEducationTitle">What to understand<br><em>before signing.</em></h2></div>
-      <p>The purpose of this page is to help you ask better questions—not to tell you whether you should purchase a franchise.</p>
-    </div>
-    <div class="education-grid">
-      <article class="education-item">
-        <div class="education-number">01 / THE BUSINESS</div>
-        <h3>What does owning a franchise mean?</h3>
-        <p>You operate your own business while licensing an established company's brand and systems. You generally pay an initial franchise fee and ongoing fees, follow the franchise agreement, and remain responsible for funding and operating your business. Franchisor support does not eliminate business risk.</p>
+  <section class="iceworks-story" aria-labelledby="iceworksStoryTitle">
+    <div class="education-section-label">THE ICEWORKS BUSINESS MODEL</div>
+    <h2 id="iceworksStoryTitle">A service business<br><em>built around ice.</em></h2>
+    <div class="iceworks-story-grid">
+      <article><span class="education-number">01 / WHY CUSTOMERS LEASE</span><h3>Equipment comes with responsibilities.</h3>
+        <p>Commercial ice machines and dishwashers can be expensive to purchase and complicated to maintain. Ice equipment also needs regular cleaning and sanitizing, and a malfunction can interrupt a busy kitchen. A monthly lease and service arrangement can simplify those responsibilities for the customer.</p>
       </article>
-      <article class="education-item">
-        <div class="education-number">02 / THE DOCUMENT</div>
-        <h3>What is an FDD?</h3>
-        <p><strong>FDD</strong> stands for <strong>Franchise Disclosure Document</strong>. It's the formal disclosure document you receive before entering a franchise agreement. It describes fees, estimated startup costs, the franchisor's obligations, restrictions, franchisee information, and other important terms. Read it carefully and have your lawyer and accountant review it.</p>
-
+      <article><span class="education-number">02 / WHY EXPERIENCE MATTERS</span><h3>The hard part isn't only installing it.</h3>
+        <p>Knowing how to set up a machine is one skill. Knowing what to do when it fails is another. Iceworks has spent years developing its equipment sourcing, field-service relationships, software, and operating systems, so local owners have support when problems arise.</p>
       </article>
-      <article class="education-item">
-        <div class="education-number">03 / THE COSTS</div>
-        <h3>Which fees should I expect?</h3>
-        <p>The initial franchise fee is just one component of getting started. You should also review equipment and installation, available working capital, insurance, ongoing software charges, royalties, and any annual fees.</p>
-        <div class="fee-examples">
-          <div><span>Initial franchise fee</span><strong id="educationFranchiseFee">—</strong></div>
-          <div><span>Continuing royalty</span><strong id="educationRoyalty">—</strong></div>
-          <div><span>Technology fee</span><strong id="educationTechnology">—</strong></div>
-          <div><span>Convention fee</span><strong id="educationConvention">—</strong></div>
-        </div>
-        <p class="education-footnote">The initial franchise fee is already included in the estimated startup investment range—don't add it twice. The effective FDD and franchise agreement control; confirm current amounts and what's included.</p>
-        <details class="education-details"><summary>What do the fees mean?</summary>
-          <p><strong>Initial franchise fee:</strong> generally a one-time payment for rights under the franchise agreement and the initial support described in your FDD. <strong>Royalty:</strong> the continuing fee based on gross revenue—not profit. <strong>Technology fee:</strong> a recurring charge associated with the technology systems specified in the franchise documents. <strong>Convention fee:</strong> a listed annual charge associated with the franchise convention. Ask exactly what each payment covers, when it's due, and whether other charges apply.</p>
-        </details>
-      </article>
-      <article class="education-item">
-        <div class="education-number">04 / YOUR DUE DILIGENCE</div>
-        <h3>What should I investigate?</h3>
-        <p>Ask what equipment and expenses are included in the estimated startup range, what additional cash reserves you may need, whether financing is actually available, and what responsibilities you'll have for customers and service. Review territory terms, talk with existing franchise owners, and understand the conditions for renewal, transfer, or termination.</p>
-        <p><strong>Important:</strong> Available cash is different from net worth. The calculator below focuses on how much capital you can reasonably commit—not what the franchise will earn.</p>
+      <article><span class="education-number">03 / WHY LOCAL OWNERSHIP</span><h3>Local relationships matter.</h3>
+        <p>Our goal isn't to build another impersonal national service chain. We want locally invested owners who know the businesses they serve and have a long-term interest in their community. Franchisees work with local technicians and centralized Iceworks support.</p>
       </article>
     </div>
-    <p class="education-reference">The costs shown here are informational and should be reconciled to the most current Iceworks Franchise Disclosure Document. No part of this page guarantees territory availability, franchise acceptance, financing, or future financial performance.</p>
   </section>
-</div>
 </header>
 <main id="explorer">
   <div class="sticky-sentinel" id="cardSentinel" aria-hidden="true"></div>
-  <div class="explorer-intro">
-    <div class="explorer-label"><span>02 / THE EXPLORER</span><span>YOUR CAPITAL AT A GLANCE</span></div>
+  <section class="numbers-section" id="numbers" aria-labelledby="numbersTitle">
+  <div class="numbers-index"><span>02 / THE NUMBERS</span><span>SINGLE-MACHINE OPERATING REFERENCES</span></div>
+  <div class="numbers-intro">
+    <h2 id="numbersTitle">The cost of<br><em>one machine.</em></h2>
+    <p>These are reported operating averages—not a forecast of how many leases you'll sign, how much your franchise will earn, or how long an individual customer will stay. Understanding the actual equipment and service obligations is a useful place to start.</p>
+  </div>
+  <div class="numbers-facts" aria-label="Reported per-machine averages">
+    <article><div class="numbers-fact-title">Average monthly lease charge <span>Customer price reference</span></div><div class="numbers-fact-value" id="unitLeaseRef">$245</div><p>One machine's reported monthly lease rate. This is a price reference, not a forecast of collected revenue.</p></article>
+    <article><div class="numbers-fact-title">Equipment + installation <span>Upfront acquisition and setup</span></div><div class="numbers-fact-value" id="unitEquipmentRef">$6,154.79</div><p>A representative one-time outlay for equipment and installation of a modular unit.</p></article>
+    <article><div class="numbers-fact-title">Preventative maintenance <span>Usually twice each year</span></div><div class="numbers-fact-value" id="unitPMRef">$250</div><p>Reported average per service visit. Regular cleaning, sanitizing, and replacement filters are important ongoing obligations.</p></article>
+  </div>
+  <div class="numbers-workspace">
+    <div class="numbers-workspace-head">
+      <div><span class="education-number">NINE-YEAR COST PLANNING EXAMPLE</span><h3>What does one machine cost to keep in service?</h3></div>
+      <p>Adjust the cost assumptions, then select a month on the graph. The chart adds only the equipment/installation and scheduled preventative-maintenance costs. It deliberately does not calculate franchise sales, gross lease collections, profits, or returns.</p>
+    </div>
+    <div class="numbers-controls">
+      <label for="unitCostInput">Equipment + installation ($)<input id="unitCostInput" type="number" min="0" max="250000" step="0.01" value="6154.79"></label>
+      <label for="unitPMInput">Cost per PM visit ($)<input id="unitPMInput" type="number" min="0" max="10000" step="1" value="250"></label>
+      <label for="unitPMFreq">PM visits per year<select id="unitPMFreq"><option value="1">1</option><option value="2" selected>2</option><option value="3">3</option><option value="4">4</option></select></label>
+    </div>
+    <div class="numbers-chart-wrap">
+      <div class="numbers-chart-title"><strong>Illustrative cumulative direct costs</strong><span>Month 0–108 · one machine</span></div>
+      <svg id="unitCostChart" viewBox="0 0 920 315" role="img" aria-label="Nine year illustration of equipment and scheduled maintenance outlays; select a month using the slider below">
+       <rect x="0" y="0" width="920" height="315" fill="transparent"></rect>
+       <g id="unitCostGrid"></g><path id="unitEquipmentLine" fill="none" stroke="#08768f" stroke-width="3.2"></path>
+       <path id="unitPMLine" fill="none" stroke="#6c8da3" stroke-width="3.2" stroke-dasharray="8 5"></path>
+       <path id="unitTotalLine" fill="none" stroke="#08344a" stroke-width="4"></path>
+       <g id="unitCostIndicators"></g>
+      </svg>
+      <div class="numbers-legend"><span><i class="legend-total"></i>Total illustrated costs</span><span><i class="legend-equipment"></i>Equipment + installation</span><span><i class="legend-pm"></i>Scheduled PM</span></div>
+      <label class="numbers-slider-label" for="unitMonth">Select any month to inspect the cost illustration</label>
+      <input id="unitMonth" type="range" min="0" max="108" step="1" value="108">
+      <div class="numbers-chart-summary" aria-live="polite">
+        <div><small>Selected month</small><strong id="unitMonthLabel">108</strong></div>
+        <div><small>Equipment + installation</small><strong id="unitCostEquipmentTotal">$6,154.79</strong></div>
+        <div><small>Scheduled maintenance</small><strong id="unitCostPMTotal">$4,500</strong></div>
+        <div><small>Total illustrated outlay</small><strong id="unitCostTotal">$10,654.79</strong></div>
+      </div>
+    </div>
+    <p class="numbers-caveat"><strong>What this example excludes:</strong> unscheduled repairs, parts not included in PM, customer cancellations, financing costs, royalties, insurance, software, taxes, inflation, equipment replacement and all other franchise expenses. Actual costs may vary. The nine-year horizon is a planning example—not a promised machine life or customer lease duration.</p>
+    <div class="flourish-box" id="flourishBox" hidden>
+      <strong>Additional interactive visualization</strong>
+      <p>Flourish graphics load only when you choose to open them. A published Flourish chart must be reviewed by Iceworks before it is added here.</p>
+      <button id="loadFlourish" type="button" class="ghost">Load interactive Flourish chart</button>
+      <div id="flourishCanvas"></div>
+      <p class="muted"><a id="flourishSource" href="https://flourish.studio/" target="_blank" rel="noopener noreferrer">Chart made with Flourish</a></p>
+    </div>
+  </div>
+</section>
+<div class="explorer-intro">
+    <div class="explorer-label"><span>03 / THE EXPLORER</span><span>YOUR CAPITAL AT A GLANCE</span></div>
     <div class="explorer-heading"><h2>Capital<br><em>readiness.</em></h2><p>Enter your available funding, consider the startup costs, and identify questions to review with Iceworks. The optional Financial Snapshot provides additional context without being submitted.</p></div>
   </div>
   <p class="start-hint">Start with Steps 1–3. The Financial Snapshot is optional. Select any <strong>?</strong> for an everyday-language explanation and examples.</p>
@@ -570,7 +650,7 @@ html:focus-within{scroll-behavior:smooth}
     <p class="footer">Cost reference: <span id="source"></span>. Cost-reference date: <span id="updated"></span>. This educational aid is not a franchise offer, financing approval or suitability determination. Detailed Financial Snapshot entries remain local. A limited readiness summary is transmitted only if you explicitly consent through a verified secure invitation. Iceworks deletes submitted summaries after 90 days; see our privacy page for details. Submitting a summary never unlocks a PUDI score or report; Iceworks may discuss selected market research separately. No analytics scripts are included. Printing or saving a PDF is controlled by your browser.</p>
   </section>
 
-<div class="market-spacer"><span>03 / YOUR POTENTIAL TERRITORY</span><span id="marketRegionLabel">MARKET NOT SELECTED</span></div>
+<div class="market-spacer"><span>04 / YOUR POTENTIAL TERRITORY</span><span id="marketRegionLabel">MARKET NOT SELECTED</span></div>
 <section class="market-panel" id="marketAnalysis">
   <div class="eyebrow">ICEWORKS · TERRITORY RESEARCH</div>
   <h2><span id="marketTitle">Market Research Preview</span></h2>
@@ -599,6 +679,50 @@ html:focus-within{scroll-behavior:smooth}
     <p id="portalAlert" class="notice" role="status" aria-live="polite" hidden></p>
   </div>
 </section>
+  <div class="education-bottom-rule"><span>05 / FRANCHISE EDUCATION</span><span>THE DOCUMENTS, THE FEES, THE QUESTIONS</span></div>
+  <section class="franchise-education" aria-labelledby="franchiseEducationTitle">
+    <div class="education-head">
+      <div><div class="education-section-label">A SHORT GUIDE TO FRANCHISING</div>
+        <h2 id="franchiseEducationTitle">What to understand<br><em>before signing.</em></h2></div>
+      <p>The purpose of this page is to help you ask better questions—not to tell you whether you should purchase a franchise.</p>
+    </div>
+    <div class="education-grid">
+      <article class="education-item">
+        <div class="education-number">01 / THE BUSINESS</div>
+        <h3>What does owning a franchise mean?</h3>
+        <p>You operate your own business while licensing an established company's brand and systems. You generally pay an initial franchise fee and ongoing fees, follow the franchise agreement, and remain responsible for funding and operating your business. Franchisor support does not eliminate business risk.</p>
+      </article>
+      <article class="education-item">
+        <div class="education-number">02 / THE DOCUMENT</div>
+        <h3>What is an FDD?</h3>
+        <p><strong>FDD</strong> stands for <strong>Franchise Disclosure Document</strong>. It's the formal disclosure document you receive before entering a franchise agreement. It describes fees, estimated startup costs, the franchisor's obligations, restrictions, franchisee information, and other important terms. Read it carefully and have your lawyer and accountant review it.</p>
+
+      </article>
+      <article class="education-item">
+        <div class="education-number">03 / THE COSTS</div>
+        <h3>Which fees should I expect?</h3>
+        <p>The initial franchise fee is just one component of getting started. You should also review equipment and installation, available working capital, insurance, ongoing software charges, royalties, and any annual fees.</p>
+        <div class="fee-examples">
+          <div><span>Initial franchise fee</span><strong id="educationFranchiseFee">—</strong></div>
+          <div><span>Continuing royalty</span><strong id="educationRoyalty">—</strong></div>
+          <div><span>Technology fee</span><strong id="educationTechnology">—</strong></div>
+          <div><span>Convention fee</span><strong id="educationConvention">—</strong></div>
+        </div>
+        <p class="education-footnote">The initial franchise fee is already included in the estimated startup investment range—don't add it twice. The effective FDD and franchise agreement control; confirm current amounts and what's included.</p>
+        <details class="education-details"><summary>What do the fees mean?</summary>
+          <p><strong>Initial franchise fee:</strong> generally a one-time payment for rights under the franchise agreement and the initial support described in your FDD. <strong>Royalty:</strong> the continuing fee based on gross revenue—not profit. <strong>Technology fee:</strong> a recurring charge associated with the technology systems specified in the franchise documents. <strong>Convention fee:</strong> a listed annual charge associated with the franchise convention. Ask exactly what each payment covers, when it's due, and whether other charges apply.</p>
+        </details>
+      </article>
+      <article class="education-item">
+        <div class="education-number">04 / YOUR DUE DILIGENCE</div>
+        <h3>What should I investigate?</h3>
+        <p>Ask what equipment and expenses are included in the estimated startup range, what additional cash reserves you may need, whether financing is actually available, and what responsibilities you'll have for customers and service. Review territory terms, talk with existing franchise owners, and understand the conditions for renewal, transfer, or termination.</p>
+        <p><strong>Important:</strong> Available cash is different from net worth. The calculator below focuses on how much capital you can reasonably commit—not what the franchise will earn.</p>
+      </article>
+    </div>
+    <p class="education-reference">The costs shown here are informational and should be reconciled to the most current Iceworks Franchise Disclosure Document. No part of this page guarantees territory availability, franchise acceptance, financing, or future financial performance.</p>
+  </section>
+</div>
 </main>
 <footer class="editorial-footer">
  <div class="footer-inner">
@@ -629,6 +753,109 @@ async function portalRequest(action,details){
   const data=await r.json();if(!r.ok)throw Error("Unable to complete this request. Please contact Iceworks for assistance.");
   return data
  } finally{clearTimeout(stop)}
+}
+
+function initSingleMachineNumbers(){
+ const defaults=window.ICEWORKS_UNIT_REFERENCES||{};
+ const eln=id=>document.getElementById(id);
+ const numberOr=(value,fallback,max)=>{const n=Number(value);return Number.isFinite(n)&&n>=0&&n<=max?n:fallback};
+ const money2=v=>new Intl.NumberFormat("en-US",{style:"currency",currency:"USD",maximumFractionDigits:2}).format(v);
+ const moneyShort=v=>new Intl.NumberFormat("en-US",{style:"currency",currency:"USD",maximumFractionDigits:0}).format(v);
+ const lease=numberOr(defaults.monthlyLeaseRate,245,10000),
+   equip=numberOr(defaults.equipmentAndInstallation,6154.79,250000),
+   pm=numberOr(defaults.preventativeMaintenanceVisit,250,10000),
+   freq=Math.max(1,Math.min(4,Math.round(numberOr(defaults.preventativeMaintenanceVisitsPerYear,2,4))));
+ eln("unitLeaseRef").textContent=money2(lease);
+ eln("unitEquipmentRef").textContent=money2(equip);
+ eln("unitPMRef").textContent=money2(pm);
+ eln("unitCostInput").value=equip.toFixed(2);
+ eln("unitPMInput").value=pm.toFixed(2);
+ eln("unitPMFreq").value=String(freq);
+ const svg=eln("unitCostChart"),ns="http://www.w3.org/2000/svg";
+ const line=(g,x1,y1,x2,y2,stroke,width=1)=>{
+  const v=document.createElementNS(ns,"line");
+  for(const [name,value] of Object.entries({x1,y1,x2,y2,stroke,"stroke-width":width}))v.setAttribute(name,String(value));
+  g.appendChild(v);
+ };
+ const label=(g,x,y,value,size=14)=>{
+  const v=document.createElementNS(ns,"text");
+  for(const [name,val] of Object.entries({x,y,"font-size":size,fill:"#486b7a"}))v.setAttribute(name,String(val));
+  v.textContent=value;g.appendChild(v);
+ };
+ const calculate=(month,expense,visit,visits)=>{
+  // Costs at time zero plus scheduled visits as months advance.
+  const count=Math.floor((month*visits)/12+1e-8);
+  const maintenance=count*visit;
+  return {equip:expense,maintenance,total:expense+maintenance};
+ };
+ function redraw(){
+  const expense=numberOr(eln("unitCostInput").value,equip,250000);
+  const visit=numberOr(eln("unitPMInput").value,pm,10000);
+  const visits=numberOr(eln("unitPMFreq").value,2,4);
+  const current=Math.max(0,Math.min(108,Number(eln("unitMonth").value)||0));
+  const top=36,bottom=266,left=95,right=882,w=right-left,h=bottom-top;
+  const ceiling=Math.max(expense+Math.floor(108*visits/12)*visit,1)*1.12;
+  const posX=m=>left+m/108*w;
+  const posY=y=>bottom-(y/ceiling)*h;
+  const path=(mode)=>{let d="";for(let m=0;m<=108;m++){
+   const c=calculate(m,expense,visit,visits);
+   d+=(m?" L ":"M ")+posX(m).toFixed(2)+" "+posY(mode==="equip"?c.equip:mode==="pm"?c.maintenance:c.total).toFixed(2);
+  }return d};
+  eln("unitEquipmentLine").setAttribute("d",path("equip"));
+  eln("unitPMLine").setAttribute("d",path("pm"));
+  eln("unitTotalLine").setAttribute("d",path("total"));
+  const grid=eln("unitCostGrid"),indicators=eln("unitCostIndicators");
+  grid.replaceChildren();indicators.replaceChildren();
+  for(let i=0;i<=4;i++){
+    const y=bottom-i/4*h;
+    line(grid,left,y,right,y,"#d4e2e7");
+    label(grid,7,y+5,moneyShort(ceiling*i/4),13);
+  }
+  for(let year=0;year<=9;year++){
+   const x=posX(year*12);
+   line(grid,x,bottom,x,bottom+6,"#a5c1ca");
+   label(grid,x-10,bottom+25,year===0?"0":String(year),14);
+  }
+  label(grid,right-55,309,"Years",12);
+  const v=calculate(current,expense,visit,visits);
+  const x=posX(current);
+  line(indicators,x,top,x,bottom,"#075b75",1.3);
+  for(const [n,colour] of [["total","#08344a"],["equip","#08768f"],["maintenance","#6c8da3"]]){
+    const dot=document.createElementNS(ns,"circle");
+    dot.setAttribute("cx",String(x));dot.setAttribute("cy",String(posY(v[n])));
+    dot.setAttribute("r",n==="total"?"7":"5");dot.setAttribute("fill",colour);
+    indicators.appendChild(dot);
+  }
+  eln("unitMonthLabel").textContent=String(current)+" / 108";
+  eln("unitCostEquipmentTotal").textContent=money2(v.equip);
+  eln("unitCostPMTotal").textContent=money2(v.maintenance);
+  eln("unitCostTotal").textContent=money2(v.total);
+ }
+ for(const id of ["unitCostInput","unitPMInput","unitPMFreq","unitMonth"])eln(id).addEventListener("input",redraw);
+ svg.addEventListener("click",e=>{
+  const pt=svg.createSVGPoint();pt.x=e.clientX;pt.y=e.clientY;
+  const matrix=svg.getScreenCTM();if(!matrix)return;
+  const p=pt.matrixTransform(matrix.inverse());
+  const month=Math.round(Math.max(0,Math.min(108,(p.x-95)/787*108)));
+  eln("unitMonth").value=String(month);redraw();
+ });
+ // Third-party embeds never load unless someone actively opts in.
+ const flourish=String(defaults.flourishEmbedUrl||"").trim();
+ const id=(flourish.match(/^https:\/\/(?:public\.flourish\.studio|flo\.uri\.sh)\/visualisation\/([0-9]+)(?:\/(?:embed)?)?$/)||[])[1];
+ if(id){
+  eln("flourishBox").hidden=false;
+  eln("flourishSource").href="https://public.flourish.studio/visualisation/"+id+"/";
+  eln("loadFlourish").addEventListener("click",()=>{
+    const frame=document.createElement("iframe");
+    frame.src="https://flo.uri.sh/visualisation/"+id+"/embed";
+    frame.loading="lazy";frame.title="Additional Iceworks interactive graphic powered by Flourish";
+    frame.referrerPolicy="no-referrer";
+    frame.setAttribute("sandbox","allow-same-origin allow-scripts allow-forms allow-popups");
+    eln("flourishCanvas").replaceChildren(frame);
+    eln("loadFlourish").hidden=true;
+  },{once:true});
+ }
+ redraw();
 }
 function setHeroName(name){
  const clean=scrub(name,60);
@@ -833,6 +1060,6 @@ set("educationFranchiseFee",money(cfg.franchiseFeeIncluded));
 set("educationRoyalty",cfg.royaltyPercent+"% of gross revenue");
 set("educationTechnology",money(cfg.softwareMonthly)+" / month");
 set("educationConvention",money(cfg.conventionAnnual)+" / year");
-set("source",cfg.sourceLabel);set("updated",cfg.updated);render();
+set("source",cfg.sourceLabel);set("updated",cfg.updated);initSingleMachineNumbers();render();
 })();
 </script></body></html>
