@@ -1,4 +1,4 @@
-# Iceworks Capital Readiness Explorer v1.2
+# Iceworks Capital Readiness Explorer v1.3
 
 ## Purpose
 Cost-only, educational planning tool for early-stage prospective franchise owners. It is intentionally **not** a financial performance representation or a promise of financing. Do not add sales, lease-revenue, gross-margin, profit, cash-flow, customer-growth, ROI or payback projections.
@@ -24,10 +24,10 @@ Cost-only, educational planning tool for early-stage prospective franchise owner
 - Debt payments / gross monthly income is **context only**, not a lender DTI determination.
 
 ## Privacy
-The site performs computations only in the browser. It does not submit, save, or collect personal financial input, and has no analytics script. Visitor entries disappear when the page is closed/refreshed. Printing and PDF saving are controlled by the visitor's browser. The only external file loaded by the app is the public cost configuration.
+The public calculator and single-machine cost chart calculate values in the visitor's browser; detailed Financial Snapshot entries and chart-specific cost controls are not part of the optional summary submission. For valid personalized invitation links, the active Supabase portal resolves the invitation on page load and can accept a limited Capital Readiness Summary only after explicit consent. The site includes no Iceworks visitor-analytics script; hosting and invitation-service providers may process standard technical connection logs. The site loads multiple local JavaScript config files. See capital-privacy.html for current disclosure and retention details.
 
 ## Maintenance
-Update the approved cost assumptions in `capital-readiness-config.js` through GitHub, commit to main, and let GitHub Pages deploy. Update the source citation/date and reconcile the values to the current effective FDD and relevant manufacturer/service cost support before sharing with prospects. As of v1.1 no password-protected admin UI exists.
+Update the approved cost assumptions in `capital-readiness-config.js` through GitHub, commit to main, and let GitHub Pages deploy. Update the source citation/date and reconcile the values to the current effective FDD and relevant manufacturer/service cost support before sharing with prospects. The separate admin UI is in capital-admin.html, and current backend access/retention controls should be verified against the deployed Supabase project.
 
 ## Test scenarios
 - $5,000 accessible cash, $0 committed funding, $0 reserve, no added costs ⇒ $51,800–$73,600 capital gap using the configured $56,800–$78,600 startup range.
@@ -45,4 +45,4 @@ This tool is informational, not an eligibility decision or the actual signed sui
 - No changes were made to business financial calculations, cost assumptions, storage behavior, or the default homepage.
 
 ## V1.3 personalized discovery
-The tool now has a responsive sticky financial summary, personalized invitation modal, and a PUDI research teaser. Preview with `?demo=1&first=Jim&market=Tucson`. For privacy and safety, financial summary submission and PUDI unlock are OFF until a Supabase backend is provisioned, permissions verified and the public portal configuration explicitly enabled. See `CAPITAL-PORTAL-SETUP.md` and the Supabase schema / Edge Function sources. The optional Financial Snapshot never leaves the browser.
+The tool now has a responsive sticky financial summary, personalized invitation modal, and a PUDI research teaser. Preview with `?demo=1&first=Jim&market=Tucson`. As of October 22, 2026, secure invitation resolution and consent-based limited summary submission are ON in capital-portal-config.js and the corresponding Supabase service is active. PUDI reports are not automatically unlocked. See `CAPITAL-PORTAL-SETUP.md` and the Supabase schema / Edge Function sources. The optional Financial Snapshot stays in the browser; the limited summary requires explicit consent.
