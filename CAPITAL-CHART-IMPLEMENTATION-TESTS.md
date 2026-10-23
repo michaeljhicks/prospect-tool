@@ -43,7 +43,7 @@ The assistant's isolated JavaScript tests (using mock DOM/Chart) checked:
 - No active Flourish source or configuration references.
 - Version-pinned dependency, chart-adjacent cost-only disclaimer and CDN/privacy notice.
 
-**Important verification limit:** These checks are mocked/static; they do not constitute a real Safari/Chrome or on-device visual/animation test. The PR's GitHub Actions tests must run successfully before merging. The public Pages URL and final animation should additionally be visually checked in a real browser when available, especially mobile/touch, keyboard/slider, replay and print. The custom reveal uses the Chart.js canvas lifecycle, so errors in that lifecycle would only be exposed by an actual browser test.
+**Browser verification performed:** GitHub Actions run [39894657746](https://github.com/michaeljhicks/prospect-tool/actions/runs/39894657746) PASSED with real headless Chromium on Ubuntu 24.04 (Playwright 1.64.1). It verified the pinned Chart.js 4.5.1 asset actually loads (including its Subresource Integrity hash), its initial progressive animation completes, replay starts over, editable expense inputs update correct cents, bad values trigger validation, mobile-sized layout has no horizontal overflow, reduced motion renders immediately, and the user-facing numeric fallback still works with CDN requests blocked. The run uploaded desktop/mobile screenshot artifacts. This is more than static mocking, but is not a physical iPhone/iPad or Safari test. Live GitHub Pages deployment, Safari, print, keyboard focus, and invitation/submission flows were not end-to-end tested by that run; check them after merging.
 
 ## Manual browser acceptance checklist
 
