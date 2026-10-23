@@ -20,7 +20,7 @@ permissions:
 
 jobs:
   chart-smoke:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     timeout-minutes: 5
     steps:
       - name: Check out repository
@@ -35,7 +35,7 @@ jobs:
         run: node --test tests/capital-chart.test.cjs
       - name: Install browser smoke-test runner
         run: |
-          npm install --no-save --ignore-scripts playwright@1.57.0
+          npm install --no-save --ignore-scripts playwright@1.64.1
           npx playwright install --with-deps chromium
       - name: Run headless Chromium and mobile smoke test
         run: |
