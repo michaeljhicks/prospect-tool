@@ -33,3 +33,21 @@ jobs:
         run: node --check capital-chart.js
       - name: Run cost, accessibility and fallback regression tests
         run: node --test tests/capital-chart.test.cjs
+      - name: Install browser smoke-test runner
+        run: |
+          npm install --no-save --ignore-scripts playwright@1.57.0
+          npx playwright install --with-deps chromium
+      - name: Run headless Chromium and mobile smoke test
+        run: |
+          python3 -m http.server 8765 --bind 127.0.0.1 > /tmp/iceworks-static.log 2>&1 &
+          sleep 2
+          node tests/capital-chart.browser.cjs
+      - name: Save visual smoke-test screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: capital-chart-smoke
+          path: |
+            chart-desktop-smoke.png
+            chart-mobile-smoke.png
+          if-no-files-found: ignore
