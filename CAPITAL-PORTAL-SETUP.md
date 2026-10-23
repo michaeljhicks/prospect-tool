@@ -1,14 +1,14 @@
 # Iceworks Capital Readiness Portal v1.3 — Deployment & security
 
 ## Current release status
-The GitHub Pages frontend supports a personalized welcome modal, mobile-aware sticky capital cards, and a visibly separate PUDI preview. **Financial submission is disabled by default. PUDI report unlocking is not provided to prospects.** There are no credentials in this repository. Visitors can explore the calculator privately without an invitation.
+The GitHub Pages frontend supports a personalized welcome modal, mobile-aware sticky capital cards, and a visibly separate PUDI preview. **As of October 22, 2026, the public portal config enables secure invitation lookup and optional consent-based limited summary submission.** The Supabase `iceworks-capital-portal` Edge Function is active. PUDI report unlocking is not provided to prospects. No service-role credentials belong in this repository. Visitors can use the calculator privately without an invitation.
 
-The private database schema and Edge Function are **source files only** until a Supabase project has been selected and provisioned. Never publish a supposed secure upload feature by turning `enabled` on before completing the backend setup, permissions, and testing.
+The private Supabase database and Edge Function have been deployed to the `iceworks-capital-portal` project. The public `capital-portal-config.js` currently has `enabled:true`. Keep the setup checklist below as a reference for future environments or redeployments; do not infer that each numbered item remains pending. Check operational access, consent, retention, and monitoring periodically.
 
 ## Quick UI demonstration
 Visit `https://michaeljhicks.github.io/prospect-tool/capital-readiness.html?demo=1&first=Jim&market=Tucson%2C%20AZ` to preview the welcome and Tucson market teaser without a database. It is **demo-only**, not a validated market report and cannot submit data.
 
-## Backend deployment checklist (owner/admin only)
+## Backend deployment checklist (owner/admin only; reference for redeployments)
 1. Choose a Supabase project authorized to store voluntary franchise-discovery financial summaries. Confirm the data retention, incident-response and access-management policies with IFG.
 2. Review and run `supabase/migrations/20261021_iceworks_capital_portal.sql` as a privileged project administrator. The schema enables row-level security and revokes anon/authenticated table access.
 3. Deploy the Edge Function from `supabase/functions/iceworks-capital-portal/index.ts` under name `iceworks-capital-portal`; turn OFF JWT verification for this invitation endpoint, because authorization uses a high-entropy invitation token. Restrict CORS to `https://michaeljhicks.github.io`. Confirm that `SUPABASE_URL` and `SUPABASE_SERVICE_ROLE_KEY` are only server-side secrets.
@@ -33,10 +33,10 @@ The complete Financial Snapshot (gross salary, retirement, real estate values, m
 ## Invitation privacy and limitations
 Invitations are short-lived bearer tokens, not verified identity. Anyone who obtains a working invitation URL may submit the summary but not access PUDI reports. Don't use them to deliver personally sensitive data. For greater assurance, implement an email verification step before production prospect submissions. Tokens can be revoked using `revoked_at=now()`.
 
-Current UI does not implement rate limiting, admin authentication, a consent withdrawal process, or an automated deletion schedule. These are deployment tasks, not reasons to use anonymous, unrestricted database tables. Establish them before broad external rollout.
+An authenticated staff admin interface and database retention configuration have been added since this original setup guide. As verified on October 22, 2026, an active daily `pg_cron` job named `iceworks-capital-private-retention-daily` references 90-day summary, 30-day expired-invitation, and 365-day audit-record rules. Scheduling does not by itself prove every cleanup execution succeeded; review job history and backups periodically. Review current rate limiting, identity assurance, deletion-request handling, and admin access before expanding external usage.
 
 ## PUDI
 The frontend shows only a general market-research overview and whether an invitation has an approved report. It never contains private report records, the calculated PUDI score or the underlying methodology. After explicit consent, the Edge Function stores only the limited summary for staff review; it never sends the PUDI report. Market scores describe potential establishment density, not actual customers, installations, revenues, or earnings.
 
 ## Hosting & versions
-The existing `index.html` lender model and cost defaults remain unchanged. The new features are added to the same `capital-readiness.html` path. Sticky cards shrink as the reader scrolls. The demo link lets Iceworks review the personalized invitation workflow before creating any live financial-submission service.
+The current `index.html` and `capital-readiness.html` provide the Capital Readiness page; the older lender model remains a separate historical file. The public page currently loads three local config files, including the enabled portal connection. Sticky cards shrink as the reader scrolls. The demo link is for layout/personalization review only and is not an authorized financial-performance illustration.
