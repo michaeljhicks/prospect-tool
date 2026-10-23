@@ -46,3 +46,13 @@ This tool is informational, not an eligibility decision or the actual signed sui
 
 ## V1.3 personalized discovery
 The tool now has a responsive sticky financial summary, personalized invitation modal, and a PUDI research teaser. Preview with `?demo=1&first=Jim&market=Tucson`. As of October 22, 2026, secure invitation resolution and consent-based limited summary submission are ON in capital-portal-config.js and the corresponding Supabase service is active. PUDI reports are not automatically unlocked. See `CAPITAL-PORTAL-SETUP.md` and the Supabase schema / Edge Function sources. The optional Financial Snapshot stays in the browser; the limited summary requires explicit consent.
+
+## V1.4 Chart.js progressive single-machine costs (October 22, 2026)
+- Retired the optional Flourish embed, its loader, and its configuration field. The page no longer embeds a third-party Flourish visualization.
+- Replaced the one-machine SVG graph with Chart.js 4.5.1 (pinned UMD script, MIT-licensed) and a custom cost-only progressive reveal driven by easeOutCubic. Files: `capital-chart.js`, `capital-readiness.html` and its mirrored `index.html`.
+- The chart remains a direct-COST illustration. It shows the Month 0 equipment/installation outlay and exact scheduled PM expense steps. There are no lease-collection assumptions, income, profits, payback calculations or prospective owner return claims.
+- Chart.js is loaded from `cdn.jsdelivr.net`. The script request provides the CDN with technical connection information, but the chart does not send financial inputs to the CDN. Privacy language in `capital-privacy.html` now discloses this. The library script is version-pinned with Subresource Integrity and `crossorigin=anonymous`.
+- Controls: equipment/installation cost, cost per PM visit, visits per year, month slider; chart tooltip/summary, replay animation, mobile chart canvas, reduced-motion support, validation and readable fallback if Chart.js is unavailable. No changes to the separate Capital Explorer math, share/consent submissions or PUDI portal.
+- Cost reference inputs remain in `numbers-reference-config.js`. The differing assumptions in `capital-readiness-config.js` remain separate pending reconciliation; the current $245 lease-price card is NOT treated as collected revenue.
+- JavaScript feature implementation and smoke tests are described in `CAPITAL-CHART-IMPLEMENTATION-TESTS.md`. Future red-to-teal investment recovery visualizations need separate FDD Item 19 review and a substantiated methodology; Privacy notices cannot substitute.
+
