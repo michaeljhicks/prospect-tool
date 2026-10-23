@@ -132,6 +132,9 @@
     slider.value = String(months);
     $("unitHorizonLabel").textContent = "Month 0–" + months + " · one machine";
     $("unitReferenceDate").textContent = String(defaults.asOf || "October 2026");
+    $("unitDefaultEquipment").textContent = money(startEquipment);
+    $("unitDefaultPM").textContent = money(startPM);
+    $("unitDefaultFreq").textContent = String(startFreq);
 
     let selectedMonth = months;
     let latest = {equipmentCents: Math.round(startEquipment * 100), visitCents: Math.round(startPM * 100), freq: startFreq};
