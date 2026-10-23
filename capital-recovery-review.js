@@ -1,8 +1,9 @@
-/* Iceworks Capital Recovery Design Review (internal prototype only)
- * This is fictional design-test arithmetic, not an Iceworks forecast.
- * Do not enable this visual on the public prospect page without updated
- * FDD Item 19 disclosure, written substantiation, and franchise-counsel signoff.
- * All inputs remain in browser memory. No persistence or uploads.
+/* Iceworks capital recovery illustration — prospect-copy RELEASE CANDIDATE.
+ * Assumption-driven, hypothetical single-machine cash model (not franchise earnings).
+ * No preselected contribution or implied payback result. Example mode requires a click.
+ * This code is NOT approved for prospect distribution while the Jan 2026 FDD
+ * Item 19 disclaims financial performance representations.
+ * All entries are kept in browser memory only, without transmission or persistence.
  */
 (() => {
   'use strict';
@@ -12,7 +13,7 @@
     if (!root) return;
     const ids = ['recCapital','recContribution','recPM','recFreq','recPaid','recReplay','recMonth',
       'recOutlay','recMonthly','recCrossing','recSelected','recMonthLabel','recWarning',
-      'recCanvas','recFallback','recTip','recTipMonth','recTipValue','recGraph'];
+      'recCanvas','recFallback','recTip','recTipMonth','recTipValue','recGraph','recExample','recDemoNotice'];
     if (ids.some(id => !$(id))) return;
 
     const money = n => new Intl.NumberFormat('en-US', {
@@ -21,7 +22,7 @@
     const toCents = n => Math.round(n*100);
     const months = 108;
     let chart = null, data = [], pieces = [], state = null, progress = 1,
-      frame = 0, selected = 48, started = false;
+      frame = 0, selected = 36;
     const reduceMotion = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches ?? false;
     const warning = $('recWarning');
 
@@ -38,13 +39,14 @@
         const okay = raw !== '' && Number.isFinite(value) && value >= min && value <= max &&
           /^\d+(?:\.\d{1,2})?$/.test(raw) &&
           (id !== 'recPaid' || Number.isInteger(value));
-        el.setAttribute('aria-invalid', String(!okay));
+        el.setAttribute('aria-invalid', String(raw !== '' && !okay));
         if (!okay) valid = false;
         numbers[id] = value;
       }
       const freq = Number($('recFreq').value);
       if (![1,2,3,4].includes(freq)) valid = false;
-      warning.hidden = valid;
+      warning.hidden = valid || $('recContribution').value.trim() === '';
+      if (!valid && !warning.hidden) warning.textContent = 'Please enter valid, nonnegative amounts (up to two decimal places) and a whole number of contribution months.';
       return valid ? {
         capital:toCents(numbers.recCapital),
         contribution:toCents(numbers.recContribution),
@@ -54,9 +56,10 @@
       } : null;
     }
 
-    // The fictional machine stops producing contribution AND scheduled PM expense
-    // after the hypothetical active period. This is a visual design assumption,
-    // not a conclusion about customer retention, removal costs, or asset life.
+    // Contribution and scheduled PM stop after the *assumed* active period.
+    // This represents neither a promised customer term nor actual cash receipts.
+    // No replacement expense, offboard cost or additional franchise operating cost
+    // is included. The user-visible disclosure explains these limitations.
     function atMonth(m,s) {
       const active = Math.min(m,s.paidMonths);
       const visits = Math.floor(active*s.visits/12 + 1e-8);
@@ -97,7 +100,7 @@
       $('recMonthly').textContent = money(state.contribution/100);
       const crossing = firstCrossing(data);
       $('recCrossing').textContent = crossing === null
-        ? 'Not within 108 months'
+        ? 'No crossing in scenario'
         : 'Month '+crossing.toFixed(1);
       $('recSelected').textContent = money(data[selected].y);
       $('recMonthLabel').textContent = String(selected);
@@ -236,9 +239,27 @@
       frame=requestAnimationFrame(tick);
     }
 
+    function clearScenario() {
+      if (frame) cancelAnimationFrame(frame);
+      frame = 0;
+      if (chart) chart.destroy();
+      chart = null; state = null; data = []; pieces = [];
+      $('recCanvas').hidden = true;
+      $('recTip').hidden = true;
+      $('recFallback').hidden = false;
+      $('recReplay').disabled = true;
+      $('recCrossing').textContent = 'Add an assumption';
+      $('recMonthly').textContent = '—';
+      $('recSelected').textContent = '—';
+      $('recOutlay').textContent = money(Number($('recCapital').value) || 0);
+      $('recFallback').textContent = 'Enter a hypothetical monthly cash contribution to draw an editable scenario. No Iceworks income or return is assumed.';
+    }
     function update() {
       const next=inputs();
-      if(!next) return;
+      if(!next) {
+        clearScenario();
+        return;
+      }
       state=next;
       data=series(state);
       pieces=withCrossovers(data);
@@ -248,9 +269,19 @@
       replay();
     }
 
+    $('recExample').addEventListener('click', () => {
+      $('recContribution').value = '175';
+      $('recPaid').value = '108';
+      $('recDemoNotice').hidden = false;
+      update();
+      $('recGraph').scrollIntoView?.({behavior:'smooth',block:'center'});
+    });
     $('recReplay').addEventListener('click',replay);
     for (const id of ['recCapital','recContribution','recPM','recFreq','recPaid'])
-      $(id).addEventListener('input',update);
+      $(id).addEventListener('input',()=>{
+        $('recDemoNotice').hidden = true;
+        update();
+      });
     $('recMonth').addEventListener('input',()=>{
       selected=Number($('recMonth').value);
       renderSummary();
@@ -258,7 +289,6 @@
     });
     $('recCanvas').addEventListener('mouseleave',()=>{$('recTip').hidden=true;});
     update();
-    started=true;
   };
   if (document.readyState==='loading') document.addEventListener('DOMContentLoaded',ready,{once:true});
   else ready();
