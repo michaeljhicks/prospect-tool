@@ -437,6 +437,40 @@ html:focus-within{scroll-behavior:smooth}
 @media(max-width:420px){.rec-inputs{grid-template-columns:1fr}.rec-metrics strong{font-size:17px}}
 @media print{.rec-review-panel{break-inside:avoid}.rec-review-replay,#recMonth,.rec-chart-tip{display:none!important}}
 
+/* Prospect welcome + editorial story refinements (October 2026).
+   Preserves existing Iceworks colors, personalized invitation fields, and the attached page edits. */
+/* The hero receives focus only when the invitation dialog closes. */
+#franchiseBasics:focus{outline:none}
+.welcome-dialog h2{margin-top:0}
+.welcome-dialog #welcomeFootnote{
+  color:#64808e;font-size:12.5px;font-weight:400;line-height:1.65;
+  margin:18px 0 9px;letter-spacing:.003em
+}
+.editorial-header .iceworks-story-grid .iceworks-benefits-title{
+  font-size:13px;font-weight:800;color:var(--ice-deep);margin:19px 0 7px
+}
+.iceworks-story-grid .iceworks-benefits{
+  padding-left:18px;margin:9px 0 23px;list-style:disc
+}
+.iceworks-story-grid .iceworks-benefits li{
+  margin-bottom:13px;padding-left:3px;color:#375769;font-size:13px;line-height:1.62
+}
+.iceworks-story-grid .iceworks-benefits strong{color:var(--ice-deep);font-weight:800}
+@media(max-width:790px){
+ .iceworks-story-grid .iceworks-benefits li{font-size:14px}
+}
+@media(max-width:540px){
+ .welcome-dialog #welcomeFootnote{font-size:12px}
+}
+
+/* Give “Iceworks?” a clearer lowercase w without changing the classic italic treatment. */
+.hero-welcome h2 em{
+ font-family:Georgia,"Iowan Old Style","Times New Roman",serif;
+ font-style:italic;
+ font-weight:400;
+ letter-spacing:-.045em;
+}
+
 </style>
 <script src="capital-readiness-config.js"></script>
 <script src="numbers-reference-config.js"></script>
@@ -449,11 +483,10 @@ html:focus-within{scroll-behavior:smooth}
 
 <div id="welcomeOverlay" class="welcome-overlay" hidden>
   <div class="welcome-dialog" role="dialog" aria-modal="true" aria-labelledby="welcomeTitle" aria-describedby="welcomeMessage">
-    <div class="logo">ICEWORKS FRANCHISE GROUP · PERSONAL INTRODUCTION</div>
     <h2 id="welcomeTitle">Welcome to Iceworks</h2>
     <p id="welcomeMessage">Explore franchise startup funding and costs at your own pace.</p>
     <p id="welcomeFootnote" class="muted">This is a private planning experience until you explicitly choose to share a summary.</p>
-    <button type="button" id="begin">Begin exploring →</button>
+    <button type="button" id="begin">Ready? Giddy up! →</button>
   </div>
 </div>
 <header class="editorial-header">
@@ -464,7 +497,7 @@ html:focus-within{scroll-behavior:smooth}
     </a>
     <div class="nav-links"><a href="#franchiseBasics">Franchise basics</a><a href="#explorer">Explorer</a><a href="#marketAnalysis">Territory</a><a href="capital-privacy.html">Privacy</a></div>
   </nav>
-  <div class="editorial-hero" id="franchiseBasics">
+  <div class="editorial-hero" id="franchiseBasics" tabindex="-1">
   <div class="heavy-rule" aria-hidden="true"></div>
   <div class="eyebrow-spread"><span>01 / ICEWORKS BASICS</span></div>
   <div class="hero-masthead" aria-label="Hey there" id="heroMasthead">
@@ -474,8 +507,8 @@ html:focus-within{scroll-behavior:smooth}
   <div class="hero-story">
     <div class="hero-welcome">
       <h2>What is<br><em>Iceworks?</em></h2>
-      <p>Iceworks is a locally owned commercial ice-machine leasing business. Instead of asking restaurants and other businesses to purchase an expensive ice machine outright, we provide the equipment and ongoing service through a monthly agreement.</p>
-      <p>We're looking for people who want to own a local Iceworks operation and build it gradually—potentially alongside an existing career, where employer obligations and the time required allow. It's business ownership, not a job offer or a promise of part-time earnings.</p>
+      <p>Iceworks is a locally owned, full-service commercial ice machine leasing business. Instead of requiring restaurants, bars, and commercial facilities to purchase expensive equipment outright, we provide turnkey ice equipment along with complete installation, routine maintenance, and prompt repairs through a simple monthly agreement.</p>
+      <p>Designed as a low-overhead, mobile business model, an Iceworks franchise allows you to start without the burden of commercial real estate and scale your fleet gradually. Because our system does not require fixed minimum daily hours from the owner, it offers the operational flexibility to build a scalable, recurring-revenue asset—either hands-on or alongside an existing career with trained management.</p>
     </div>
     <div class="hero-story-aside">
       <h3>Why we're reaching out</h3>
@@ -488,14 +521,30 @@ html:focus-within{scroll-behavior:smooth}
     <div class="education-section-label">THE ICEWORKS BUSINESS MODEL</div>
     <h2 id="iceworksStoryTitle">A service business<br><em>built around ice.</em></h2>
     <div class="iceworks-story-grid">
-      <article><span class="education-number">01 / WHY CUSTOMERS LEASE</span><h3>Equipment comes with responsibilities.</h3>
-        <p>Commercial ice machines and dishwashers can be expensive to purchase and complicated to maintain. Ice equipment also needs regular cleaning and sanitizing, and a malfunction can interrupt a busy kitchen. A monthly lease and service arrangement can simplify those responsibilities for the customer.</p>
+      <article>
+        <span class="education-number">01 / WHY CUSTOMERS LEASE</span>
+        <h3>The ice is essential. The headaches aren't.</h3>
+        <p>Commercial kitchens own most of their equipment outright, but ice machines and dishwashers are often a different story. Both require constant attention to water quality, sanitation, mineral buildup, and mechanical wear. When something breaks, repairs can be expensive, disruptive, and urgent.</p>
+        <p>That's where Iceworks comes in. Rather than tying up capital in equipment and taking on the responsibilities of ownership, customers get reliable ice production backed by professional service and predictable monthly expenses.</p>
+        <p class="iceworks-benefits-title">The benefits are simple:</p>
+        <ul class="iceworks-benefits">
+          <li><strong>Lower Upfront Costs:</strong> Preserve capital for the things that grow the business instead of purchasing expensive equipment.</li>
+          <li><strong>Predictable Expenses:</strong> Replace unexpected repair costs with a manageable monthly lease payment.</li>
+          <li><strong>Maintenance &amp; Repairs:</strong> Routine maintenance and covered repairs are handled by experienced service professionals.</li>
+          <li><strong>Health &amp; Sanitation:</strong> Regular cleaning, sanitizing, and equipment maintenance help support food-safety standards and health-code compliance.</li>
+        </ul>
       </article>
-      <article><span class="education-number">02 / WHY EXPERIENCE MATTERS</span><h3>The hard part isn't only installing it.</h3>
-        <p>There's an old medical-training analogy: learning the steps of a procedure is one thing; knowing what to do when something goes wrong takes years of experience. Commercial ice equipment is much the same. Iceworks has spent years developing its equipment sourcing, field-service relationships, software, and operating systems, so local owners have support when problems arise.</p>
+      <article>
+        <span class="education-number">02 / WHY EXPERIENCE MATTERS</span>
+        <h3>Experience doesn't come in the box.</h3>
+        <p>There's an old story about a surgeon who said, “I could teach you how to remove an appendix in an hour. But teaching you what to do when something goes wrong? That takes years.”</p>
+        <p>Commercial ice equipment isn't so different. Installing a machine is one thing. Knowing how to keep it running, troubleshoot problems, and handle the unexpected is another. Iceworks has spent years building equipment-sourcing relationships, a network of experienced service professionals, specialized software, and operating systems so local owners don't have to figure it all out on their own.</p>
       </article>
-      <article><span class="education-number">03 / WHY LOCAL OWNERSHIP</span><h3>Local relationships matter.</h3>
-        <p>Think of the difference between a company merely passing through town and a local owner who knows the neighborhood, answers the phone, and invests in relationships for the long term. Iceworks is built around locally invested owners, supported by local technicians and centralized Iceworks operations.</p>
+      <article>
+        <span class="education-number">03 / WHY LOCAL OWNERSHIP</span>
+        <h3>When it's your town, it's personal.</h3>
+        <p>Think about the difference between renting a home and owning one. Homeowners have a personal stake in their neighborhood. They get to know their neighbors, take pride in their property, and invest in the community because they're building something of their own.</p>
+        <p>Iceworks believes business ownership works much the same way. There's a difference between a company simply servicing an area and a local owner who knows the community, answers the phone, and builds relationships that last. That's why Iceworks combines the personal investment of local ownership with experienced local technicians and the infrastructure of a centralized support team.</p>
       </article>
     </div>
   </section>
@@ -1072,7 +1121,11 @@ document.addEventListener("keydown",event=>{if(event.key==="Escape"){closeHelp()
 
 
 const initialFocus=()=>{el("begin").addEventListener("click",()=>{
- el("welcomeOverlay").hidden=true;document.body.classList.remove("has-modal");el("cash").focus();
+ el("welcomeOverlay").hidden=true;
+ document.body.classList.remove("has-modal");
+ // Return to page start without triggering the Funding input's native auto-scroll.
+ document.getElementById("franchiseBasics")?.focus({preventScroll:true});
+ window.scrollTo({top:0,behavior:"instant"});
 });
  el("viewShare").addEventListener("click",()=>{
   el("sharePanel").hidden=false;el("sharePanel").scrollIntoView({behavior:"smooth",block:"nearest"});
