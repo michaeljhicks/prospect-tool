@@ -1,0 +1,35 @@
+name: Capital chart regression tests
+
+on:
+  push:
+    branches:
+      - "feature/iceworks-chartjs-step5"
+      - main
+  pull_request:
+    paths:
+      - "capital-chart.js"
+      - "capital-readiness.html"
+      - "index.html"
+      - "numbers-reference-config.js"
+      - "capital-privacy.html"
+      - "tests/capital-chart.test.cjs"
+      - ".github/workflows/chart-tests.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  chart-smoke:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+      - name: Install Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Parse Chart.js controller
+        run: node --check capital-chart.js
+      - name: Run cost, accessibility and fallback regression tests
+        run: node --test tests/capital-chart.test.cjs
