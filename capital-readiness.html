@@ -345,7 +345,28 @@ html:focus-within{scroll-behavior:smooth}
 .numbers-chart-wrap{border-top:1px solid #d4e2e5;padding-top:15px}
 .numbers-chart-title{display:flex;justify-content:space-between;gap:10px;font-size:14px}
 .numbers-chart-title span{font-size:12px;color:#5c7888}
-#unitCostChart{display:block;width:100%;height:auto;margin:12px auto 0;touch-action:pan-y}
+#unitChartCanvasWrap{position:relative;height:335px;margin:16px auto 6px;min-height:260px;isolation:isolate}
+#unitCostCanvas{display:block;width:100%;height:100%;max-height:100%;touch-action:pan-y}
+#unitChartCanvasWrap [hidden],#unitChartValidation[hidden],#unitChartFallback[hidden]{display:none!important}
+.unit-chart-tooltip{position:absolute;z-index:4;pointer-events:none;width:min(218px,calc(100% - 16px));padding:14px 15px;border:1px solid #bfdae0;background:rgba(247,251,250,.98);box-shadow:0 12px 30px rgba(4,40,57,.15);border-radius:8px;color:#073247;font-size:12px;line-height:1.5}
+.unit-chart-tooltip .tip-label{font-size:10px;font-weight:850;letter-spacing:.14em;color:#527280}
+.unit-chart-tooltip .tip-value{display:block;font:900 24px/1.25 var(--ice-display);letter-spacing:-.04em;margin:3px 0 7px}
+.unit-chart-tooltip .tip-breakdown{display:flex;justify-content:space-between;gap:12px;border-top:1px solid #d8e6e8;padding-top:6px;margin-top:5px}
+.numbers-chart-head{display:flex;justify-content:space-between;align-items:start;gap:15px;flex-wrap:wrap}
+.unit-chart-replay{border:1px solid #a4c3cb;background:transparent;color:#073247;cursor:pointer;border-radius:5px;font-family:inherit;font-size:11px;font-weight:800;line-height:1.3;padding:9px 12px;letter-spacing:.02em}
+.unit-chart-replay:hover{background:#e8f3f4}
+.unit-chart-replay:focus-visible{outline:3px solid #0b8297;outline-offset:2px}
+.unit-chart-replay:disabled{opacity:.5;cursor:not-allowed}
+.unit-chart-status{margin:9px 0;font-size:12px;color:#385f6e;line-height:1.6}
+.unit-chart-validation{font-size:12px;font-weight:650;color:#a13239;margin:8px 0}
+.numbers-controls input[aria-invalid="true"]{border-color:#bd4148;outline:2px solid #f0c0c2}
+.unit-chart-understanding{font-size:13px;line-height:1.75;margin:18px 0 11px;color:#3d6675}
+.unit-chart-understanding strong{color:#073247}
+.unit-chart-fallback{border:1px solid #c9dce2;padding:28px;background:#eaf2f3;color:#34576b;font-size:13px;line-height:1.75}
+.unit-chart-disclosure{font-size:12px;line-height:1.75;margin:17px 0 0;color:#426574}
+.unit-chart-disclosure strong{color:#073247}
+@media(max-width:600px){#unitChartCanvasWrap{height:295px}.unit-chart-tooltip{width:195px}}
+@media print{#unitChartCanvasWrap{height:285px}.unit-chart-replay,.unit-chart-tooltip{display:none!important}.unit-chart-disclosure,.unit-chart-understanding{break-inside:avoid}}
 .numbers-legend{display:flex;gap:18px;flex-wrap:wrap;font-size:12px;color:#34576b}
 .numbers-legend span{display:flex;align-items:center;gap:7px}
 .numbers-legend i{display:inline-block;height:4px;width:23px;background:#08344a}
@@ -358,16 +379,16 @@ html:focus-within{scroll-behavior:smooth}
 .numbers-chart-summary small{display:block;color:#40687b;font-size:11px}
 .numbers-chart-summary strong{display:block;font-family:var(--ice-display);letter-spacing:-.035em;font-size:clamp(15px,2.4vw,24px);margin-top:8px;overflow-wrap:anywhere}
 .numbers-caveat{font-size:12px;line-height:1.7;margin-top:20px;color:#4b6a79}
-.flourish-box{border-top:1px solid #cedee3;padding-top:18px;margin-top:24px}
-.flourish-box p{font-size:13px;line-height:1.6}
-#flourishCanvas iframe{width:100%;height:550px;border:none;margin-top:12px}
 @media(max-width:790px){.iceworks-story-grid,.numbers-facts{grid-template-columns:1fr}.iceworks-story-grid article+article{border-left:0;border-top:1px solid var(--ice-rule);padding-left:0}.numbers-intro,.numbers-workspace-head{grid-template-columns:1fr;gap:8px}.numbers-controls{grid-template-columns:1fr}.numbers-chart-summary{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:540px){.numbers-chart-summary strong{font-size:19px}.numbers-index,.education-bottom-rule{font-size:8px}.numbers-fact-value{font-size:32px}.numbers-chart-title{flex-direction:column;gap:3px}}
-@media print{.numbers-controls,.numbers-slider-label,#unitMonth,.flourish-box{display:none}}
+@media print{.numbers-controls,.numbers-slider-label,#unitMonth{display:none}}
 </style>
 <script src="capital-readiness-config.js"></script>
 <script src="numbers-reference-config.js"></script>
 <script src="capital-portal-config.js"></script>
+<!-- Pinned, MIT-licensed Chart.js 4.5.1 UMD; cost inputs stay in the browser. -->
+<script defer src="https://cdn.jsdelivr.net/npm/chart.js@4.5.1/dist/chart.umd.min.js" integrity="sha384-jb8JQMbMoBUzgWatfe6COACi2ljcDdZQ2OxczGA3bGNeWe+6DChMTBJemed7ZnvJ" crossorigin="anonymous"></script>
+<script defer src="capital-chart.js"></script>
 </head><body>
 
 <div id="welcomeOverlay" class="welcome-overlay" hidden>
@@ -429,17 +450,17 @@ html:focus-within{scroll-behavior:smooth}
   <div class="numbers-index"><span>02 / THE NUMBERS</span><span>SINGLE-MACHINE OPERATING REFERENCES</span></div>
   <div class="numbers-intro">
     <h2 id="numbersTitle">The cost of<br><em>one machine.</em></h2>
-    <p>These are reported operating averages—not a forecast of how many leases you'll sign, how much your franchise will earn, or how long an individual customer will stay. Understanding the actual equipment and service obligations is a useful place to start.</p>
+    <p>Explore how the initial equipment purchase, installation, and scheduled maintenance costs add up over time. Adjust the assumptions to see how those costs change for a single commercial ice machine.</p>
   </div>
   <div class="numbers-facts" aria-label="Reported per-machine averages">
-    <article><div class="numbers-fact-title">Average monthly lease charge <span>Customer price reference</span></div><div class="numbers-fact-value" id="unitLeaseRef">$245</div><p>One machine's reported monthly lease rate. This is a price reference, not a forecast of collected revenue.</p></article>
-    <article><div class="numbers-fact-title">Equipment + installation <span>Upfront acquisition and setup</span></div><div class="numbers-fact-value" id="unitEquipmentRef">$6,154.79</div><p>A representative one-time outlay for equipment and installation of a modular unit.</p></article>
-    <article><div class="numbers-fact-title">Preventative maintenance <span>Usually twice each year</span></div><div class="numbers-fact-value" id="unitPMRef">$250</div><p>Reported average per service visit. Regular cleaning, sanitizing, and replacement filters are important ongoing obligations.</p></article>
+    <article><div class="numbers-fact-title">Average monthly lease charge <span>Customer price reference</span></div><div class="numbers-fact-value" id="unitLeaseRef">$245</div><p>A reported monthly lease-price reference for one machine. It is not used in the cost chart and is not a forecast of billed or collected revenue.</p></article>
+    <article><div class="numbers-fact-title">Equipment + installation <span>Upfront acquisition and setup</span></div><div class="numbers-fact-value" id="unitEquipmentRef">$6,154.79</div><p>A reported single-machine cost reference for equipment purchase and installation. Actual costs vary by unit and conditions.</p></article>
+    <article><div class="numbers-fact-title">Preventative maintenance <span>Usually twice each year</span></div><div class="numbers-fact-value" id="unitPMRef">$250</div><p>A reported per-visit maintenance cost. This example starts with two planned visits annually; unscheduled repairs are excluded.</p></article>
   </div>
   <div class="numbers-workspace">
     <div class="numbers-workspace-head">
       <div><span class="education-number">NINE-YEAR COST PLANNING EXAMPLE</span><h3>What does one machine cost to keep in service?</h3></div>
-      <p>Adjust the cost assumptions, then select a month on the graph. The chart adds only the equipment/installation and scheduled preventative-maintenance costs. It deliberately does not calculate franchise sales, gross lease collections, profits, or returns.</p>
+      <p>Change the equipment and maintenance assumptions, then select a month to explore the costs. The illustration includes an initial equipment-and-installation outlay plus scheduled maintenance visits. It does not subtract lease payments or estimate business earnings.</p>
     </div>
     <div class="numbers-controls">
       <label for="unitCostInput">Equipment + installation ($)<input id="unitCostInput" type="number" min="0" max="250000" step="0.01" value="6154.79"></label>
@@ -447,32 +468,36 @@ html:focus-within{scroll-behavior:smooth}
       <label for="unitPMFreq">PM visits per year<select id="unitPMFreq"><option value="1">1</option><option value="2" selected>2</option><option value="3">3</option><option value="4">4</option></select></label>
     </div>
     <div class="numbers-chart-wrap">
-      <div class="numbers-chart-title"><strong>Illustrative cumulative direct costs</strong><span>Month 0–108 · one machine</span></div>
-      <svg id="unitCostChart" viewBox="0 0 920 315" role="img" aria-label="Nine year illustration of equipment and scheduled maintenance outlays; select a month using the slider below">
-       <rect x="0" y="0" width="920" height="315" fill="transparent"></rect>
-       <g id="unitCostGrid"></g><path id="unitEquipmentLine" fill="none" stroke="#08768f" stroke-width="3.2"></path>
-       <path id="unitPMLine" fill="none" stroke="#6c8da3" stroke-width="3.2" stroke-dasharray="8 5"></path>
-       <path id="unitTotalLine" fill="none" stroke="#08344a" stroke-width="4"></path>
-       <g id="unitCostIndicators"></g>
-      </svg>
-      <div class="numbers-legend"><span><i class="legend-total"></i>Total illustrated costs</span><span><i class="legend-equipment"></i>Equipment + installation</span><span><i class="legend-pm"></i>Scheduled PM</span></div>
-      <label class="numbers-slider-label" for="unitMonth">Select any month to inspect the cost illustration</label>
-      <input id="unitMonth" type="range" min="0" max="108" step="1" value="108">
-      <div class="numbers-chart-summary" aria-live="polite">
-        <div><small>Selected month</small><strong id="unitMonthLabel">108</strong></div>
-        <div><small>Equipment + installation</small><strong id="unitCostEquipmentTotal">$6,154.79</strong></div>
-        <div><small>Scheduled maintenance</small><strong id="unitCostPMTotal">$4,500</strong></div>
-        <div><small>Total illustrated outlay</small><strong id="unitCostTotal">$10,654.79</strong></div>
+      <div class="numbers-chart-head">
+        <div class="numbers-chart-title"><strong>Illustrative cumulative direct costs</strong><span id="unitHorizonLabel">Month 0–108 · one machine</span></div>
+        <button id="unitChartReplay" class="unit-chart-replay" type="button" aria-label="Replay the cost chart animation">↻ Replay animation</button>
       </div>
+      <p class="unit-chart-status">Starting references (<span id="unitReferenceDate">October 2026</span>): <span id="unitDefaultEquipment">$6,154.79</span> equipment + installation; <span id="unitDefaultPM">$250.00</span> per maintenance visit; <span id="unitDefaultFreq">2</span> planned visits each year. Your selected values may differ from these references.</p>
+      <p id="unitChartValidation" class="unit-chart-validation" role="status" hidden></p>
+      <div id="unitChartCanvasWrap" role="group" aria-label="Interactive cumulative direct cost illustration, one machine over nine years">
+        <canvas id="unitCostCanvas" role="img" aria-label="A progressive chart of initial equipment and installation spending followed by scheduled maintenance costs. All values are costs below zero. Use the labeled month slider for exact amounts." aria-describedby="unitChartDescription unitChartExclusions"></canvas>
+        <div id="unitChartTooltip" class="unit-chart-tooltip" aria-hidden="true" hidden>
+          <span class="tip-label" id="unitTipMonth">MONTH 108</span>
+          <strong class="tip-value" id="unitTipTotal">$10,654.79</strong>
+          <div class="tip-breakdown"><span>Equipment + install</span><strong id="unitTipEquipment">$6,154.79</strong></div>
+          <div class="tip-breakdown"><span>Scheduled maintenance</span><strong id="unitTipMaintenance">$4,500.00</strong></div>
+          <small>Direct costs to date—not business losses</small>
+        </div>
+        <div id="unitChartFallback" class="unit-chart-fallback" role="status" hidden>The visual chart is unavailable, but the interactive cost totals and month selector below remain available.</div>
+      </div>
+      <div class="numbers-legend"><span><i class="legend-total" style="background:#D64C50"></i>Cumulative direct costs</span><span><i class="legend-equipment" style="background:#D64C50"></i>Initial equipment + installation</span><span><i class="legend-pm"></i>Scheduled maintenance steps</span></div>
+      <label class="numbers-slider-label" for="unitMonth">Select a month to inspect cumulative direct costs</label>
+      <input id="unitMonth" type="range" min="0" max="108" step="1" value="108" aria-describedby="unitChartDescription">
+      <div class="numbers-chart-summary" aria-live="polite">
+        <div><small>Selected month</small><strong id="unitMonthLabel">108 / 108</strong></div>
+        <div><small>Equipment + installation</small><strong id="unitCostEquipmentTotal">$6,154.79</strong></div>
+        <div><small>Scheduled maintenance</small><strong id="unitCostPMTotal">$4,500.00</strong></div>
+        <div><small>Total illustrated direct costs</small><strong id="unitCostTotal">$10,654.79</strong></div>
+      </div>
+      <p id="unitCostEvents" class="unit-chart-status">18 scheduled maintenance visits through month 108.</p>
+      <p id="unitChartDescription" class="unit-chart-understanding"><strong>Understanding the chart:</strong> Amounts below zero represent equipment and maintenance spending—not business losses. The illustration uses the figures you select and shows scheduled maintenance costs when each visit occurs.</p>
     </div>
-    <p class="numbers-caveat"><strong>What this example excludes:</strong> unscheduled repairs, parts not included in PM, customer cancellations, financing costs, royalties, insurance, software, taxes, inflation, equipment replacement and all other franchise expenses. Actual costs may vary. The nine-year horizon is a planning example—not a promised machine life or customer lease duration.</p>
-    <div class="flourish-box" id="flourishBox" hidden>
-      <strong>Additional interactive visualization</strong>
-      <p>Flourish graphics load only when you choose to open them. A published Flourish chart must be reviewed by Iceworks before it is added here.</p>
-      <button id="loadFlourish" type="button" class="ghost">Load interactive Flourish chart</button>
-      <div id="flourishCanvas"></div>
-      <p class="muted"><a id="flourishSource" href="https://flourish.studio/" target="_blank" rel="noopener noreferrer">Chart made with Flourish</a></p>
-    </div>
+    <p id="unitChartExclusions" class="unit-chart-disclosure"><strong>Important information:</strong> This illustration is for cost planning only. It does not estimate customer payments, revenue, profit, investment recovery, or financial returns. It excludes unscheduled repairs, financing, royalties, labor, insurance, taxes, software, equipment replacement, and other business expenses. Actual costs may vary. The nine-year period is an illustrative planning horizon, not a prediction of equipment life or customer contract duration. <a href="capital-privacy.html">How this tool handles your information</a>.</p>
   </div>
 </section>
 <div class="explorer-intro" id="explorer">
@@ -756,110 +781,16 @@ async function portalRequest(action,details){
 }
 
 function initSingleMachineNumbers(){
- const defaults=window.ICEWORKS_UNIT_REFERENCES||{};
- const eln=id=>document.getElementById(id);
- const numberOr=(value,fallback,max)=>{const n=Number(value);return Number.isFinite(n)&&n>=0&&n<=max?n:fallback};
- const money2=v=>new Intl.NumberFormat("en-US",{style:"currency",currency:"USD",maximumFractionDigits:2}).format(v);
- const moneyShort=v=>new Intl.NumberFormat("en-US",{style:"currency",currency:"USD",maximumFractionDigits:0}).format(v);
- const lease=numberOr(defaults.monthlyLeaseRate,245,10000),
-   equip=numberOr(defaults.equipmentAndInstallation,6154.79,250000),
-   pm=numberOr(defaults.preventativeMaintenanceVisit,250,10000),
-   freq=Math.max(1,Math.min(4,Math.round(numberOr(defaults.preventativeMaintenanceVisitsPerYear,2,4))));
- eln("unitLeaseRef").textContent=money2(lease);
- eln("unitEquipmentRef").textContent=money2(equip);
- eln("unitPMRef").textContent=money2(pm);
- eln("unitCostInput").value=equip.toFixed(2);
- eln("unitPMInput").value=pm.toFixed(2);
- eln("unitPMFreq").value=String(freq);
- const svg=eln("unitCostChart"),ns="http://www.w3.org/2000/svg";
- const line=(g,x1,y1,x2,y2,stroke,width=1)=>{
-  const v=document.createElementNS(ns,"line");
-  for(const [name,value] of Object.entries({x1,y1,x2,y2,stroke,"stroke-width":width}))v.setAttribute(name,String(value));
-  g.appendChild(v);
- };
- const label=(g,x,y,value,size=14)=>{
-  const v=document.createElementNS(ns,"text");
-  for(const [name,val] of Object.entries({x,y,"font-size":size,fill:"#486b7a"}))v.setAttribute(name,String(val));
-  v.textContent=value;g.appendChild(v);
- };
- const calculate=(month,expense,visit,visits)=>{
-  // Costs at time zero plus scheduled visits as months advance.
-  const count=Math.floor((month*visits)/12+1e-8);
-  const maintenance=count*visit;
-  return {equip:expense,maintenance,total:expense+maintenance};
- };
- function redraw(){
-  const expense=numberOr(eln("unitCostInput").value,equip,250000);
-  const visit=numberOr(eln("unitPMInput").value,pm,10000);
-  const visits=numberOr(eln("unitPMFreq").value,2,4);
-  const current=Math.max(0,Math.min(108,Number(eln("unitMonth").value)||0));
-  const top=36,bottom=266,left=95,right=882,w=right-left,h=bottom-top;
-  const ceiling=Math.max(expense+Math.floor(108*visits/12)*visit,1)*1.12;
-  const posX=m=>left+m/108*w;
-  const posY=y=>bottom-(y/ceiling)*h;
-  const path=(mode)=>{let d="";for(let m=0;m<=108;m++){
-   const c=calculate(m,expense,visit,visits);
-   d+=(m?" L ":"M ")+posX(m).toFixed(2)+" "+posY(mode==="equip"?c.equip:mode==="pm"?c.maintenance:c.total).toFixed(2);
-  }return d};
-  eln("unitEquipmentLine").setAttribute("d",path("equip"));
-  eln("unitPMLine").setAttribute("d",path("pm"));
-  eln("unitTotalLine").setAttribute("d",path("total"));
-  const grid=eln("unitCostGrid"),indicators=eln("unitCostIndicators");
-  grid.replaceChildren();indicators.replaceChildren();
-  for(let i=0;i<=4;i++){
-    const y=bottom-i/4*h;
-    line(grid,left,y,right,y,"#d4e2e7");
-    label(grid,7,y+5,moneyShort(ceiling*i/4),13);
+ document.addEventListener("DOMContentLoaded",()=>{
+  if(window.IceworksCostChart&&typeof window.IceworksCostChart.init==="function"){
+   window.IceworksCostChart.init();
+  }else{
+   const fallback=document.getElementById("unitChartFallback");
+   if(fallback)fallback.hidden=false;
+   const replay=document.getElementById("unitChartReplay");
+   if(replay)replay.disabled=true;
   }
-  for(let year=0;year<=9;year++){
-   const x=posX(year*12);
-   line(grid,x,bottom,x,bottom+6,"#a5c1ca");
-   label(grid,x-10,bottom+25,year===0?"0":String(year),14);
-  }
-  label(grid,right-55,309,"Years",12);
-  const v=calculate(current,expense,visit,visits);
-  const x=posX(current);
-  line(indicators,x,top,x,bottom,"#075b75",1.3);
-  for(const [n,colour] of [["total","#08344a"],["equip","#08768f"],["maintenance","#6c8da3"]]){
-    const dot=document.createElementNS(ns,"circle");
-    dot.setAttribute("cx",String(x));dot.setAttribute("cy",String(posY(v[n])));
-    dot.setAttribute("r",n==="total"?"7":"5");dot.setAttribute("fill",colour);
-    indicators.appendChild(dot);
-  }
-  eln("unitMonthLabel").textContent=String(current)+" / 108";
-  eln("unitCostEquipmentTotal").textContent=money2(v.equip);
-  eln("unitCostPMTotal").textContent=money2(v.maintenance);
-  eln("unitCostTotal").textContent=money2(v.total);
- }
- for(const id of ["unitCostInput","unitPMInput","unitPMFreq","unitMonth"])eln(id).addEventListener("input",redraw);
- svg.addEventListener("click",e=>{
-  const pt=svg.createSVGPoint();pt.x=e.clientX;pt.y=e.clientY;
-  const matrix=svg.getScreenCTM();if(!matrix)return;
-  const p=pt.matrixTransform(matrix.inverse());
-  const month=Math.round(Math.max(0,Math.min(108,(p.x-95)/787*108)));
-  eln("unitMonth").value=String(month);redraw();
  });
- // Third-party embeds never load unless someone actively opts in.
- const flourish=String(defaults.flourishEmbedUrl||"").trim();
- const id=(flourish.match(/^https:\/\/(?:public\.flourish\.studio|flo\.uri\.sh)\/visualisation\/([0-9]+)(?:\/(?:embed)?)?$/)||[])[1];
- if(id){
-  eln("flourishBox").hidden=false;
-  eln("flourishSource").href="https://public.flourish.studio/visualisation/"+id+"/";
-  eln("loadFlourish").addEventListener("click",()=>{
-    const placeholder=document.createElement("div");
-    placeholder.className="flourish-embed flourish-chart";
-    placeholder.dataset.src="visualisation/"+id;
-    placeholder.setAttribute("aria-label","Interactive Iceworks visualization powered by Flourish");
-    eln("flourishCanvas").replaceChildren(placeholder);
-    const script=document.createElement("script");
-    script.src="https://public.flourish.studio/resources/embed.js";
-    script.async=true;
-    script.onerror=()=>{eln("flourishCanvas").append(document.createTextNode("Unable to load the chart. Open it using the Flourish source link below."))};
-    document.head.appendChild(script);
-    eln("loadFlourish").hidden=true;
-  },{once:true});
- }
- redraw();
 }
 function setHeroName(name){
  const clean=scrub(name,60);
