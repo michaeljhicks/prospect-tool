@@ -353,7 +353,7 @@ html:focus-within{scroll-behavior:smooth}
 .unit-chart-tooltip .tip-value{display:block;font:900 24px/1.25 var(--ice-display);letter-spacing:-.04em;margin:3px 0 7px}
 .unit-chart-tooltip .tip-breakdown{display:flex;justify-content:space-between;gap:12px;border-top:1px solid #d8e6e8;padding-top:6px;margin-top:5px}
 .numbers-chart-head{display:flex;justify-content:space-between;align-items:start;gap:15px;flex-wrap:wrap}
-.unit-chart-replay{border:1px solid #a4c3cb;background:transparent;color:#073247;cursor:pointer;border-radius:5px;font:800 11px/1.3 inherit;padding:9px 12px;letter-spacing:.02em}
+.unit-chart-replay{border:1px solid #a4c3cb;background:transparent;color:#073247;cursor:pointer;border-radius:5px;font-family:inherit;font-size:11px;font-weight:800;line-height:1.3;padding:9px 12px;letter-spacing:.02em}
 .unit-chart-replay:hover{background:#e8f3f4}
 .unit-chart-replay:focus-visible{outline:3px solid #0b8297;outline-offset:2px}
 .unit-chart-replay:disabled{opacity:.5;cursor:not-allowed}
@@ -472,7 +472,7 @@ html:focus-within{scroll-behavior:smooth}
         <div class="numbers-chart-title"><strong>Illustrative cumulative direct costs</strong><span id="unitHorizonLabel">Month 0–108 · one machine</span></div>
         <button id="unitChartReplay" class="unit-chart-replay" type="button" aria-label="Replay the cost chart animation">↻ Replay animation</button>
       </div>
-      <p class="unit-chart-status">Starting references (<span id="unitReferenceDate">October 2026</span>): $6,154.79 equipment + installation; $250 per scheduled maintenance visit; two visits each year. Your selected values may differ from these references.</p>
+      <p class="unit-chart-status">Starting references (<span id="unitReferenceDate">October 2026</span>): <span id="unitDefaultEquipment">$6,154.79</span> equipment + installation; <span id="unitDefaultPM">$250.00</span> per maintenance visit; <span id="unitDefaultFreq">2</span> planned visits each year. Your selected values may differ from these references.</p>
       <p id="unitChartValidation" class="unit-chart-validation" role="status" hidden></p>
       <div id="unitChartCanvasWrap" role="group" aria-label="Interactive cumulative direct cost illustration, one machine over nine years">
         <canvas id="unitCostCanvas" role="img" aria-label="A progressive chart of initial equipment and installation spending followed by scheduled maintenance costs. All values are costs below zero. Use the labeled month slider for exact amounts." aria-describedby="unitChartDescription unitChartExclusions"></canvas>
