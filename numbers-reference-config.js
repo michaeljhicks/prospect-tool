@@ -8,6 +8,5 @@ window.ICEWORKS_UNIT_REFERENCES=Object.freeze({
   equipmentAndInstallation:6154.79,
   preventativeMaintenanceVisit:250,
   preventativeMaintenanceVisitsPerYear:2,
-  illustrativeMonths:108,
-  flourishEmbedUrl:""
+  illustrativeMonths:108
 });
