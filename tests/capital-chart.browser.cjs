@@ -30,29 +30,44 @@ const base = process.env.TEST_BASE_URL || "http://127.0.0.1:8765";
     assert.equal(defaults.end,-10654.79);
     assert.equal(defaults.stepped,"after");
 
-    // The internal recovery design is embedded above the separate cost-only section.
+    // Prospect-copy candidate: no fictional contribution or positive return auto-loads.
     await desktop.locator("#recGraph").scrollIntoViewIfNeeded();
+    assert.equal(await desktop.locator("#recContribution").inputValue(),"");
+    assert.equal(await desktop.locator("#recPaid").inputValue(),"36");
+    assert.equal(await desktop.locator("#recFallback").isVisible(),true);
+    assert.equal(await desktop.locator("#recReplay").isDisabled(),true);
+    assert.equal(await desktop.locator("#recCrossing").textContent(),"Add an assumption");
+
+    // Fictional demo is explicit opt-in, never a default company result.
+    await desktop.locator("#recExample").click();
     await desktop.waitForFunction(() => window.Chart?.getChart(document.getElementById("recCanvas")),{timeout:30000});
-    const recovery = await desktop.evaluate(() => {
+    assert.equal(await desktop.locator("#recDemoNotice").isVisible(),true);
+    const recovery=await desktop.evaluate(()=>{
       const c=window.Chart.getChart(document.getElementById("recCanvas"));
-      return {
-        atZero:c.data.datasets[0].data[0].y,
-        hasPositive:c.data.datasets[1].data.some(p=>p.y>0),
-        hasNegative:c.data.datasets[0].data.some(p=>p.y<0),
-        labels:Array.from(document.querySelectorAll("#recPreview input")).map(x=>x.id)
-      };
+      return {zero:c.data.datasets[0].data[0].y,
+       hasPositive:c.data.datasets[1].data.some(p=>p.y>0),
+       hasNegative:c.data.datasets[0].data.some(p=>p.y<0)};
     });
-    assert.equal(recovery.atZero,-6154.79);
-    assert(recovery.hasPositive && recovery.hasNegative,"Fictional example must cross the zero line");
+    assert.equal(recovery.zero,-6154.79);
+    assert(recovery.hasPositive&&recovery.hasNegative);
     assert.match(await desktop.locator("#recCrossing").textContent(),/^Month 45\./);
+
+    // Reset to a standard-term scenario: no made-up crossing outside active cash months.
     await desktop.locator("#recPaid").fill("36");
-    assert.equal(await desktop.locator("#recCrossing").textContent(),"Not within 108 months");
+    assert.equal(await desktop.locator("#recCrossing").textContent(),"No crossing in scenario");
+    assert.equal(await desktop.locator("#recDemoNotice").isVisible(),false);
     await desktop.locator("#recPaid").fill("108");
     assert.equal(await desktop.locator("#recReplay").isDisabled(),false);
     await desktop.locator("#recReplay").click();
     await desktop.locator("#recCapital").fill("6500");
     assert.equal(await desktop.locator("#recOutlay").textContent(),"$6,500.00");
+    await desktop.locator("#recContribution").fill("-1");
+    assert.equal(await desktop.locator("#recWarning").isVisible(),true);
+    assert.equal(await desktop.locator("#recReplay").isDisabled(),true);
+    assert.equal(await desktop.locator("#recCrossing").textContent(),"Add an assumption");
+    await desktop.locator("#recContribution").fill("175");
     await desktop.locator("#recCapital").fill("6154.79");
+    assert.equal(await desktop.locator("#recWarning").isVisible(),false);
 
     // Replay should visibly reset progress and finish again without modifying inputs.
     await desktop.locator("#unitChartReplay").click();
@@ -84,6 +99,8 @@ const base = process.env.TEST_BASE_URL || "http://127.0.0.1:8765";
     mobile.on("pageerror",e=>errors.push("mobile: "+String(e)));
     await mobile.goto(base+"/capital-readiness.html",{waitUntil:"networkidle",timeout:45000});
     await mobile.locator("#recGraph").scrollIntoViewIfNeeded();
+    assert.equal(await mobile.locator("#recFallback").isVisible(),true);
+    await mobile.locator("#recExample").click();
     await mobile.waitForFunction(() => window.Chart?.getChart(document.getElementById("recCanvas")),{timeout:30000});
     assert.equal(await mobile.locator("#recFallback").isVisible(),false);
     await mobile.locator("#unitChartCanvasWrap").scrollIntoViewIfNeeded();
@@ -103,6 +120,9 @@ const base = process.env.TEST_BASE_URL || "http://127.0.0.1:8765";
     await offline.goto(base+"/capital-readiness.html",{waitUntil:"domcontentloaded",timeout:45000});
     await offline.locator("#unitChartFallback").waitFor({state:"visible",timeout:15000});
     await offline.locator("#recFallback").waitFor({state:"visible",timeout:15000});
+    await offline.locator("#recExample").click();
+    assert.equal(await offline.locator("#recFallback").isVisible(),true);
+    assert.equal(await offline.locator("#recReplay").isDisabled(),true);
     assert.equal(await offline.locator("#unitCostTotal").textContent(),"$10,654.79");
     assert.equal(await offline.locator("#unitChartReplay").isDisabled(),true);
     assert.deepEqual(errors,[], "Uncaught errors in browser: "+errors.join("; "));
