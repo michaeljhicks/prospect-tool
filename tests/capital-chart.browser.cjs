@@ -30,6 +30,30 @@ const base = process.env.TEST_BASE_URL || "http://127.0.0.1:8765";
     assert.equal(defaults.end,-10654.79);
     assert.equal(defaults.stepped,"after");
 
+    // The internal recovery design is embedded above the separate cost-only section.
+    await desktop.locator("#recGraph").scrollIntoViewIfNeeded();
+    await desktop.waitForFunction(() => window.Chart?.getChart(document.getElementById("recCanvas")),{timeout:30000});
+    const recovery = await desktop.evaluate(() => {
+      const c=window.Chart.getChart(document.getElementById("recCanvas"));
+      return {
+        atZero:c.data.datasets[0].data[0].y,
+        hasPositive:c.data.datasets[1].data.some(p=>p.y>0),
+        hasNegative:c.data.datasets[0].data.some(p=>p.y<0),
+        labels:Array.from(document.querySelectorAll("#recPreview input")).map(x=>x.id)
+      };
+    });
+    assert.equal(recovery.atZero,-6154.79);
+    assert(recovery.hasPositive && recovery.hasNegative,"Fictional example must cross the zero line");
+    assert.match(await desktop.locator("#recCrossing").textContent(),/^Month 45\./);
+    await desktop.locator("#recPaid").fill("36");
+    assert.equal(await desktop.locator("#recCrossing").textContent(),"Not within 108 months");
+    await desktop.locator("#recPaid").fill("108");
+    assert.equal(await desktop.locator("#recReplay").isDisabled(),false);
+    await desktop.locator("#recReplay").click();
+    await desktop.locator("#recCapital").fill("6500");
+    assert.equal(await desktop.locator("#recOutlay").textContent(),"$6,500.00");
+    await desktop.locator("#recCapital").fill("6154.79");
+
     // Replay should visibly reset progress and finish again without modifying inputs.
     await desktop.locator("#unitChartReplay").click();
     const early = await desktop.evaluate(() => window.Chart.getChart(document.getElementById("unitCostCanvas")).$iceProgress);
@@ -59,6 +83,9 @@ const base = process.env.TEST_BASE_URL || "http://127.0.0.1:8765";
     });
     mobile.on("pageerror",e=>errors.push("mobile: "+String(e)));
     await mobile.goto(base+"/capital-readiness.html",{waitUntil:"networkidle",timeout:45000});
+    await mobile.locator("#recGraph").scrollIntoViewIfNeeded();
+    await mobile.waitForFunction(() => window.Chart?.getChart(document.getElementById("recCanvas")),{timeout:30000});
+    assert.equal(await mobile.locator("#recFallback").isVisible(),false);
     await mobile.locator("#unitChartCanvasWrap").scrollIntoViewIfNeeded();
     await mobile.waitForFunction(() => window.Chart?.getChart(document.getElementById("unitCostCanvas"))?.$iceProgress === 1,{timeout:30000});
     const dimensions = await mobile.evaluate(() => ({
@@ -75,6 +102,7 @@ const base = process.env.TEST_BASE_URL || "http://127.0.0.1:8765";
     await offline.route("**/chart.umd.min.js",r=>r.abort());
     await offline.goto(base+"/capital-readiness.html",{waitUntil:"domcontentloaded",timeout:45000});
     await offline.locator("#unitChartFallback").waitFor({state:"visible",timeout:15000});
+    await offline.locator("#recFallback").waitFor({state:"visible",timeout:15000});
     assert.equal(await offline.locator("#unitCostTotal").textContent(),"$10,654.79");
     assert.equal(await offline.locator("#unitChartReplay").isDisabled(),true);
     assert.deepEqual(errors,[], "Uncaught errors in browser: "+errors.join("; "));

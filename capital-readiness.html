@@ -382,6 +382,61 @@ html:focus-within{scroll-behavior:smooth}
 @media(max-width:790px){.iceworks-story-grid,.numbers-facts{grid-template-columns:1fr}.iceworks-story-grid article+article{border-left:0;border-top:1px solid var(--ice-rule);padding-left:0}.numbers-intro,.numbers-workspace-head{grid-template-columns:1fr;gap:8px}.numbers-controls{grid-template-columns:1fr}.numbers-chart-summary{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:540px){.numbers-chart-summary strong{font-size:19px}.numbers-index,.education-bottom-rule{font-size:8px}.numbers-fact-value{font-size:32px}.numbers-chart-title{flex-direction:column;gap:3px}}
 @media print{.numbers-controls,.numbers-slider-label,#unitMonth{display:none}}
+
+/* INTERNAL BRANCH REVIEW: fictional recovery journey. Not released to prospects. */
+.rec-review-panel{background:#fff;border-top:6px solid #062f43;border-bottom:1px solid #cfdee2;
+ padding:29px clamp(16px,3vw,32px) 26px;margin:30px 0 38px;box-shadow:0 14px 38px rgba(5,43,64,.045)}
+.rec-review-head{display:flex;justify-content:space-between;gap:18px;align-items:start}
+.rec-eyebrow{font-size:10px;font-weight:900;letter-spacing:.12em;text-transform:uppercase;color:#077991}
+.rec-review-head h3{font-size:clamp(23px,3.3vw,39px);letter-spacing:-.07em;line-height:1.05;margin:9px 0 10px;
+ font-family:var(--ice-display);font-weight:900}
+.rec-review-head p{max-width:590px;color:#436877;font-size:13px;line-height:1.6;margin:0}
+.rec-review-badge{max-width:180px;min-width:160px;padding:12px 15px;background:#062f43;color:#fff;font-size:10px;
+ line-height:1.55;font-weight:840;letter-spacing:.045em}
+.rec-review-warning{margin:17px 0 14px;padding:13px 15px;border-left:3px solid #d64c50;background:#fff3f2;
+ font-size:12px;line-height:1.65;color:#73454a}
+.rec-inputs{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:12px;background:#ecf4f4;padding:18px;margin-top:18px}
+.rec-inputs label{font-size:11px;font-weight:780;color:#163e50;line-height:1.5}
+.rec-inputs input,.rec-inputs select{display:block;width:100%;margin-top:8px;min-width:0;padding:10px;border:1px solid #b2cdd3;
+ background:#fff;color:#073247;font:700 13px/1.3 inherit;border-radius:4px}
+.rec-inputs input:focus-visible,.rec-review-replay:focus-visible{outline:3px solid #04a99f;outline-offset:2px}
+.rec-inputs input[aria-invalid="true"]{outline:2px solid #d64c50}
+#recWarning{font-size:12px;color:#ab333b;font-weight:700;margin:6px 0}
+#recWarning[hidden],#recFallback[hidden],#recTip[hidden]{display:none!important}
+.rec-graph{height:367px;position:relative;margin-top:16px}
+#recCanvas{height:100%;width:100%;display:block}
+#recFallback{height:100%;display:grid;place-content:center;padding:30px;border:1px solid #d1e3e4;
+ background:linear-gradient(140deg,#eaf4f4,#f8faf9);color:#355968;text-align:center;line-height:1.65}
+.rec-chart-tip{position:absolute;pointer-events:none;background:#062f43;color:white;border-radius:7px;padding:12px 15px;
+ transform:translateX(-50%);box-shadow:0 12px 25px #052b4030;font-size:11px;min-width:155px;z-index:2}
+.rec-chart-tip strong{display:block;font-size:20px;margin-top:4px}
+.rec-chart-tip small{color:#b0d6df}
+.rec-legend{display:flex;gap:22px;flex-wrap:wrap;margin-top:5px;color:#426679;font-size:12px}
+.rec-legend i{display:inline-block;width:22px;height:3px;vertical-align:middle;margin-right:8px;background:#d64c50}
+.rec-legend i.positive{background:#09b7a5}
+.rec-review-replay{cursor:pointer;background:#062f43;color:#fff;border:none;border-radius:4px;
+ font-family:inherit;font-size:11px;font-weight:850;padding:11px 13px;white-space:nowrap}
+.rec-review-replay:hover{background:#0b6680}
+.rec-timeline-label{display:block;margin:19px 0 9px;font-size:12px;font-weight:800;color:#073247}
+#recMonth{display:block;width:100%;accent-color:#07979d}
+.rec-metrics{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin-top:20px}
+.rec-metrics>div{background:#edf5f5;border-top:3px solid #afcad1;padding:12px 11px;min-width:0}
+.rec-metrics>div:first-child{border-top-color:#d64c50}
+.rec-metrics>div:nth-child(3){border-top-color:#09b7a5}
+.rec-metrics small{display:block;font-size:10px;line-height:1.4;color:#587788;font-weight:700}
+.rec-metrics strong{display:block;font:900 clamp(16px,2.3vw,24px)/1.15 var(--ice-display);letter-spacing:-.04em;
+ margin-top:8px;overflow-wrap:anywhere;color:#073247}
+.rec-read-more{display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-top:20px;font-size:12px;color:#466879;line-height:1.7}
+.rec-read-more p{margin:7px 0 0}
+.rec-disclaimer{border-top:4px solid #062f43;padding-top:13px}
+.rec-disclaimer strong{color:#073247}
+@media(max-width:900px){.rec-inputs{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media(max-width:700px){.rec-review-panel{padding:19px 15px}.rec-review-head{flex-direction:column}
+ .rec-review-badge{max-width:100%}.rec-inputs{grid-template-columns:1fr 1fr;padding:12px}.rec-graph{height:300px}
+ .rec-metrics{grid-template-columns:1fr 1fr}.rec-read-more{grid-template-columns:1fr;gap:15px}}
+@media(max-width:420px){.rec-inputs{grid-template-columns:1fr}.rec-metrics strong{font-size:17px}}
+@media print{.rec-review-panel{break-inside:avoid}.rec-review-replay,#recMonth,.rec-chart-tip{display:none!important}}
+
 </style>
 <script src="capital-readiness-config.js"></script>
 <script src="numbers-reference-config.js"></script>
@@ -389,6 +444,7 @@ html:focus-within{scroll-behavior:smooth}
 <!-- Pinned, MIT-licensed Chart.js 4.5.1 UMD; cost inputs stay in the browser. -->
 <script defer src="https://cdn.jsdelivr.net/npm/chart.js@4.5.1/dist/chart.umd.min.js" integrity="sha384-jb8JQMbMoBUzgWatfe6COACi2ljcDdZQ2OxczGA3bGNeWe+6DChMTBJemed7ZnvJ" crossorigin="anonymous"></script>
 <script defer src="capital-chart.js"></script>
+<script defer src="capital-recovery-review.js"></script>
 </head><body>
 
 <div id="welcomeOverlay" class="welcome-overlay" hidden>
@@ -457,6 +513,59 @@ html:focus-within{scroll-behavior:smooth}
     <article><div class="numbers-fact-title">Equipment + installation <span>Upfront acquisition and setup</span></div><div class="numbers-fact-value" id="unitEquipmentRef">$6,154.79</div><p>A reported single-machine cost reference for equipment purchase and installation. Actual costs vary by unit and conditions.</p></article>
     <article><div class="numbers-fact-title">Preventative maintenance <span>Usually twice each year</span></div><div class="numbers-fact-value" id="unitPMRef">$250</div><p>A reported per-visit maintenance cost. This example starts with two planned visits annually; unscheduled repairs are excluded.</p></article>
   </div>
+
+  <section class="rec-review-panel" id="recPreview" aria-labelledby="recTitle">
+    <div class="rec-review-head">
+      <div>
+        <div class="rec-eyebrow">Iceworks / Internal signature-chart review</div>
+        <h3 id="recTitle">Capital recovery.<br><em>Illustrated over time.</em></h3>
+        <p>See the red upfront outlay rise toward zero and transition to teal if a fictional contribution scenario crosses it. The illustration is a design study, not a model of Iceworks franchise outcomes.</p>
+      </div>
+      <div class="rec-review-badge">INTERNAL DESIGN REVIEW<br>NOT APPROVED FOR PROSPECTS<br>NOT AN ICEWORKS FORECAST</div>
+    </div>
+    <p class="rec-review-warning"><strong>Fictional example:</strong> $175 monthly contribution and 108 paid months are invented visual test settings. Real lease collections, customer retention, financing and additional expenses are not substantiated here. The current FDD Item 19 does not authorize this as an earnings representation.</p>
+    <div class="rec-inputs">
+      <label for="recCapital">Initial machine + installation ($)
+        <input id="recCapital" type="number" min="0" max="250000" step="0.01" value="6154.79"></label>
+      <label for="recContribution">Fictional monthly contribution ($)
+        <input id="recContribution" type="number" min="0" max="100000" step="0.01" value="175"></label>
+      <label for="recPM">PM cost / visit ($)
+        <input id="recPM" type="number" min="0" max="10000" step="0.01" value="250"></label>
+      <label for="recFreq">PM visits annually
+        <select id="recFreq"><option value="1">1</option><option value="2" selected>2</option><option value="3">3</option><option value="4">4</option></select></label>
+      <label for="recPaid">Fictional paid months (0–108)
+        <input id="recPaid" type="number" min="0" max="108" step="1" value="108"></label>
+    </div>
+    <p id="recWarning" role="status" hidden>Please enter valid nonnegative dollar amounts and a whole number of paid months from 0 to 108.</p>
+    <div class="rec-graph" id="recGraph">
+      <canvas id="recCanvas" role="img" aria-describedby="recDescription recDisclosure"
+        aria-label="Internal hypothetical single-machine cash-contribution chart, negative red outlay rising toward a teal region above zero if assumptions permit."></canvas>
+      <div id="recFallback" hidden role="status">The interactive chart could not load. The scenario details below remain available; no data was transmitted to Iceworks.</div>
+      <div id="recTip" class="rec-chart-tip" hidden aria-hidden="true"><small id="recTipMonth">MONTH 48</small>
+        <strong id="recTipValue">$0</strong><small>Fictional design values</small></div>
+    </div>
+    <div class="rec-legend"><span><i></i>Below-zero modeled balance</span><span><i class="positive"></i>Above-zero modeled balance</span></div>
+    <label for="recMonth" class="rec-timeline-label">Inspect the hypothetical timeline: Month <strong id="recMonthLabel">48</strong> / 108</label>
+    <input id="recMonth" type="range" min="0" max="108" step="1" value="48">
+    <div class="rec-metrics" aria-live="polite">
+      <div><small>Initial equipment outlay</small><strong id="recOutlay">$6,154.79</strong></div>
+      <div><small>Fictional monthly contribution</small><strong id="recMonthly">$175</strong></div>
+      <div><small>Hypothetical zero crossing</small><strong id="recCrossing">Calculating</strong></div>
+      <div><small>Modeled month balance</small><strong id="recSelected">$0</strong></div>
+    </div>
+    <button id="recReplay" type="button" class="rec-review-replay" aria-label="Replay fictional capital recovery chart animation">↻ Replay animation</button>
+    <div class="rec-read-more">
+      <div id="recDescription">
+        <strong>How to read this concept</strong>
+        <p>Month 0 starts with a red equipment-and-installation outlay. The line rises only during the fictional contribution period; scheduled preventive maintenance reduces the balance at modeled service intervals. The teal portion appears only if the assumed numbers cross zero. A machine-cost crossover is not recovery of the entire franchise investment.</p>
+      </div>
+      <div id="recDisclosure" class="rec-disclaimer">
+        <strong>Internal design prototype — do not share with prospects.</strong>
+        <p>The $175 contribution, hypothetical customer duration and future cash movements are invented example values, not an Iceworks guarantee, prediction, historical average, or Item 19 representation. This omits royalties, financing, overhead, customer attrition, collections risk, unscheduled repairs, taxes and additional costs. The January 5, 2026 FDD Item 19 says Iceworks does not make financial performance representations. The public cost-only illustration remains separate below.</p>
+      </div>
+    </div>
+  </section>
+
   <div class="numbers-workspace">
     <div class="numbers-workspace-head">
       <div><span class="education-number">NINE-YEAR COST PLANNING EXAMPLE</span><h3>What does one machine cost to keep in service?</h3></div>

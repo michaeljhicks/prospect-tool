@@ -4,10 +4,12 @@ on:
   push:
     branches:
       - "feature/iceworks-chartjs-step5"
+      - "feature/capital-recovery-review-integration"
       - main
   pull_request:
     paths:
       - "capital-chart.js"
+      - "capital-recovery-review.js"
       - "capital-readiness.html"
       - "index.html"
       - "numbers-reference-config.js"
