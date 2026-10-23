@@ -5,6 +5,7 @@ on:
     branches:
       - "feature/iceworks-chartjs-step5"
       - "feature/capital-recovery-review-integration"
+      - "feature/capital-recovery-prospect-release-candidate"
       - main
   pull_request:
     paths:
